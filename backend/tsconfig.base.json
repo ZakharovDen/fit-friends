@@ -15,8 +15,12 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@backend/authentications": ["libs/account/authentications/src/index.ts"],
       "@backend/core": ["libs/shared/core/src/index.ts"],
-      "@backend/helpers": ["libs/shared/helpers/src/index.ts"]
+      "@backend/data-access": ["libs/shared/data-access/src/index.ts"],
+      "@backend/helpers": ["libs/shared/helpers/src/index.ts"],
+      "@backend/pipes": ["libs/shared/pipes/src/index.ts"],
+      "@backend/user": ["libs/account/user/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

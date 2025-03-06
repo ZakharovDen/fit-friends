@@ -3,3 +3,8 @@ export { AuthUser } from './lib/types/user/auth-user.interface';
 export { UserSex } from './lib/types/user/user-sex.enum';
 export { File } from './lib/types/file.interface';
 export { TokenPayload } from './lib/interfaces/token-payload.interface';
+export { Entity } from './lib/base/entity';
+export { StorableEntity } from './lib/interfaces/storable-entity.interface';
+export { UserRole } from './lib/types/user/user-role.enum';
+export { UserLocation } from './lib/types/user/user-location.enum';
+export { EntityFactory } from './lib/interfaces/entity-factory.interface';
