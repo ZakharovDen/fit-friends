@@ -3,7 +3,7 @@ import { genSalt, hash } from 'bcrypt';
 
 import { AuthUser } from '@backend/core';
 import { UserSchema } from './user.model';
-//import { getMongoConnectionString } from 'c:/projects/2486641-readme-8/project/libs/shared/helpers/src/lib/common';
+import { getMongoConnectionString } from '@backend/helpers';
 import { SALT_ROUNDS } from './user.constant';
 
 const MOCK_USERS = [

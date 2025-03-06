@@ -5,7 +5,7 @@ import { AUTH_USER_EXISTS, AUTH_USER_NOT_FOUND, AUTH_USER_PASSWORD_WRONG } from 
 import { LoginUserDto } from '../dto/login-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { Token, User } from '@backend/core';
-//import { NotifyService } from '@project/account-notify';
+//import { NotifyService } from '@backend/account-notify';
 import { jwtConfig } from '@backend/account-config';
 import { ConfigType } from '@nestjs/config';
 import { createJWTPayload } from '@backend/helpers';

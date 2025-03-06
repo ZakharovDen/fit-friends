@@ -19,7 +19,11 @@ export class UserModel extends Document implements AuthUser {
   @Prop({ required: false })
   public avatar?: string;
 
-  @Prop({ required: true })
+  @Prop({ 
+    required: true, 
+    type: String,
+    enum: UserSex, 
+  })
   sex: UserSex;
 
   @Prop({ required: false })
@@ -28,13 +32,21 @@ export class UserModel extends Document implements AuthUser {
   @Prop({ required: false })
   description?: string;
 
-  @Prop({ required: true })
+  @Prop({ 
+    required: true, 
+    type: String,
+    enum: UserLocation, 
+  })
   location: UserLocation;
 
   @Prop({ required: true })
   backgroundImage: string;
 
-  @Prop({ required: true })
+  @Prop({ 
+    required: true, 
+    type: String,
+    enum: UserRole, 
+  })
   role: UserRole;
 }
 

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
-import { BaseMongoRepository } from '@project/data-access';
+import { BaseMongoRepository } from '@backend/data-access';
 
 import { RefreshTokenEntity } from './refresh-token.entity';
 import { RefreshTokenModel } from './refresh-token.model';
@@ -17,8 +17,8 @@ export class RefreshTokenRepository extends BaseMongoRepository<RefreshTokenEnti
     super(entityFactory, refreshTokenModel);
   }
 
-  public async deleteByTokenId(tokenId: string) {
-    return this.model
+  public async deleteByTokenId(tokenId: string): Promise<void> {
+    this.model
       .deleteOne({ tokenId })
       .exec();
   }
