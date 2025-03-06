@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@backend/account-config": ["libs/account/config/src/index.ts"],
       "@backend/authentications": ["libs/account/authentications/src/index.ts"],
       "@backend/core": ["libs/shared/core/src/index.ts"],
       "@backend/data-access": ["libs/shared/data-access/src/index.ts"],

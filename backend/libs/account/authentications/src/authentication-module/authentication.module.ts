@@ -4,7 +4,7 @@ import { AuthenticationService } from './authentication.service';
 import { UserModule } from '@backend/user';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { getJwtOptions } from '@project/config';
+import { getJwtOptions } from '@backend/account-config';
 import { JwtAccessStrategy } from '../strategies/jwt-access.strategy';
 //import { NotifyModule } from '@project/account-notify';
 import { LocalStrategy } from '../strategies/local.strategy';
