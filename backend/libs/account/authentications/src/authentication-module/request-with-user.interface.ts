@@ -1,5 +1,5 @@
-import { BlogUserEntity } from '@project/blog-user';
+import { UserEntity } from '@backend/user';
 
 export interface RequestWithUser {
-  user?: BlogUserEntity;
+  user?: UserEntity;
 }

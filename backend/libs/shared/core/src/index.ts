@@ -8,3 +8,4 @@ export { StorableEntity } from './lib/interfaces/storable-entity.interface';
 export { UserRole } from './lib/types/user/user-role.enum';
 export { UserLocation } from './lib/types/user/user-location.enum';
 export { EntityFactory } from './lib/interfaces/entity-factory.interface';
+export { Token } from './lib/interfaces/token.interface';

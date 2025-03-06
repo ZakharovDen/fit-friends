@@ -1,9 +1,9 @@
 import mongoose, * as Mongoose from 'mongoose';
 import { genSalt, hash } from 'bcrypt';
 
-import { AuthUser } from '@project/core';
-import { BlogUserSchema } from './user.model';
-import { getMongoConnectionString } from 'c:/projects/2486641-readme-8/project/libs/shared/helpers/src/lib/common';
+import { AuthUser } from '@backend/core';
+import { UserSchema } from './user.model';
+//import { getMongoConnectionString } from 'c:/projects/2486641-readme-8/project/libs/shared/helpers/src/lib/common';
 import { SALT_ROUNDS } from './user.constant';
 
 const MOCK_USERS = [
@@ -25,7 +25,7 @@ const MOCK_USERS = [
 
 const UserEntity =
   (mongoose.models.User as Mongoose.Model<AuthUser>) ||
-  mongoose.model<AuthUser>('accounts', BlogUserSchema);
+  mongoose.model<AuthUser>('accounts', UserSchema);
 
 async function bootstrap() {
   const mongoDbUrl = getMongoConnectionString(

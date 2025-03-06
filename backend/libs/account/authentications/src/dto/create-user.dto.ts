@@ -2,6 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsEmail, IsOptional, IsString, Length } from "class-validator";
 import { AuthenticationValidateMessage, AuthFieldDescription, AuthValidateValue } from "../authentication-module/authentication.constant";
 import 'multer';
+import { UserLocation, UserRole, UserSex } from "@backend/core";
 export class CreateUserDto {
   @ApiProperty(AuthFieldDescription.Email)
   @IsEmail({}, { message: AuthenticationValidateMessage.Email })
@@ -28,4 +29,12 @@ export class CreateUserDto {
   @ApiProperty(AuthFieldDescription.Avatar)
   @IsOptional()
   public avatar?: string;
+
+  public sex: UserSex;
+  public dateOfBirth?: Date;
+  public description?: string;
+  public location: UserLocation;
+  public backgroundImage: string;
+  public role: UserRole;
+
 }

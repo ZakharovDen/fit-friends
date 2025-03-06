@@ -11,9 +11,9 @@ import { Model } from 'mongoose';
 export class UserRepository extends BaseMongoRepository<UserEntity, UserModel> {
   constructor(
     entityFactory: UserFactory,
-    @InjectModel(UserModel.name) blogUserModel: Model<UserModel>
+    @InjectModel(UserModel.name) userModel: Model<UserModel>
   ) {
-    super(entityFactory, blogUserModel);
+    super(entityFactory, userModel);
   }
 
   public async findByEmail(email: string): Promise<UserEntity | null> {
