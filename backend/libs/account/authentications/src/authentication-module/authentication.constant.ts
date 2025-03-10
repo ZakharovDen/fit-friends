@@ -1,3 +1,5 @@
+import { UserLocation, UserRole, UserSex } from "@backend/core";
+
 export const AUTH_USER_EXISTS = 'User with this email exists';
 export const AUTH_USER_NOT_FOUND = 'User not found';
 export const AUTH_USER_PASSWORD_WRONG = 'User password is wrong';
@@ -17,8 +19,12 @@ export const AuthValidateValue = {
     MaxLength: 12,
   },
   Name: {
-    MinLength: 3,
-    MaxLength: 50,
+    MinLength: 1,
+    MaxLength: 15,
+  },
+  Description: {
+    MinLength: 10,
+    MaxLength: 140,
   },
 } as const;
 
@@ -26,6 +32,8 @@ export const AuthenticationValidateMessage = {
   Email: 'The email is not valid',
   Password: `Min length for password is ${AuthValidateValue.Password.MinLength}, max is ${AuthValidateValue.Password.MaxLength}`,
   Name: `Min length for name is ${AuthValidateValue.Name.MinLength}, max is ${AuthValidateValue.Name.MaxLength}`,
+  Description: `Min length for Description is ${AuthValidateValue.Description.MinLength}, max is ${AuthValidateValue.Description.MaxLength}`,
+  
 } as const;
 
 export const AuthFieldDescription = {
@@ -41,4 +49,10 @@ export const AuthFieldDescription = {
   NewPassword: { description: 'Новый пароль', example: 'New_Pa$$w0rD' },
   Password: { description: 'Пароль', example: 'Pa$$w0rD' },
   Avatar: { description: 'Ссылка на аватар пользователя' },
+  Sex: { description: 'Пол', example: UserSex.Female, enum: UserSex },
+  DateOfBirth: { description: 'Дата рождения', example: new Date() },
+  Description: { description: 'Текст с общей информацией', example: 'Текст с общей информацией  о пользователе' },
+  Location: { description: 'Станция метро', example: UserLocation.Petrogradskaya, enum: UserLocation },
+  BackgroundImage:  { description: 'Фоновая картинка для карточки пользователя' },
+  Role:  { description: 'Роль пользователя', example: UserRole.Admin, enum: UserRole },
 } as const;
