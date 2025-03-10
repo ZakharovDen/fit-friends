@@ -8,7 +8,7 @@ import { AxiosExceptionFilter } from './filters/axios-exception.filter';
 import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CheckAnonymousGuard } from './guards/check-anonymous.guard';
 import { CheckAuthGuard } from './guards/check-auth.guard';
-import { InjectUserIdInterceptor, ParseJsonBodyInterceptor } from '@project/interceptors';
+import { InjectUserIdInterceptor, ParseJsonBodyInterceptor } from '@backend/interceptors';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AvatarParams } from './constant';
 import { AppService } from './app.service';
