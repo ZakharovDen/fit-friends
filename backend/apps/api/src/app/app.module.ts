@@ -1,10 +1,19 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
+import { HttpModule } from '@nestjs/axios';
+import { HTTP_CLIENT_MAX_REDIRECTS, HTTP_CLIENT_TIMEOUT } from './app.config';
+import { UsersController } from './users.controller';
+import { CheckAuthGuard } from './guards/check-auth.guard';
+import { BlogController } from './blog.controller';
 import { AppService } from './app.service';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    HttpModule.register({
+      timeout: HTTP_CLIENT_TIMEOUT,
+      maxRedirects: HTTP_CLIENT_MAX_REDIRECTS,
+    }),
+  ],
+  controllers: [UsersController, BlogController],
+  providers: [CheckAuthGuard, AppService],
 })
-export class AppModule {}
+export class AppModule { }

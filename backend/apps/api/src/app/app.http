@@ -1,0 +1,106 @@
+# Login user by email and password
+POST http://localhost:3000/api/users/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "user@notfound.local",
+  "password": "123456"
+}
+
+###
+
+# Get new JWT pair
+POST http://localhost:3000/api/users/refresh HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NzY2ZTE2ZjkwYzAyNjRhNzRhMWY5ZDQiLCJlbWFpbCI6InVzZXJAbm90Zm91bmQubG9jYWwiLCJuYW1lIjoiS2VrcyIsInRva2VuSWQiOiI5ZmMzODUxYy1lNDMwLTQwZjQtODQxNi0xNDJkODhlZTYzZWYiLCJpYXQiOjE3Mzc1MzYzODEsImV4cCI6MTc0MDEyODM4MX0.h5qVjYKF_76SPRFhRULzOQ6E2_KXgkZd7AWVLWnQeH8
+
+###
+
+# Create a new post
+POST http://localhost:3000/api/blog/posts HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2Nzk3MGM2ZTk1NWNlY2NmNmFiYjQyZTgiLCJlbWFpbCI6ImV4YW1wbGVAZW1haWwuY29tIiwibmFtZSI6Ikl2YW5vdiBJdmFuIiwiaWF0IjoxNzM4NTA1OTEyLCJleHAiOjE3Mzg1MDc3MTJ9.aKhWlIKsK-qHri0S6cPBEvLifZvH_EWTT7YYARxbu_U
+Content-Type: application/json
+
+{
+  "type": "text",
+  "tags": [
+    "tag1",
+    "tag2",
+    "tag3",
+    "tag4",
+    "tag5",
+    "tag6",
+    "tag7",
+    "tag8"
+  ],
+  "postDate": "2025-10-02T11:30:23.492Z",
+  "isPublished": false,
+  "isReposted": false,
+  "titleVideo": "Моя видео публикация",
+  "urlVideo": "https://my-videos.com/example-video"
+}
+###
+
+# Delete post
+DELETE http://localhost:3000/api/blog/6a17820e-9181-47e7-ae49-4d91b084f4101 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NzY2ZTE2ZjkwYzAyNjRhNzRhMWY5ZDQiLCJlbWFpbCI6InVzZXJAbm90Zm91bmQubG9jYWwiLCJuYW1lIjoiS2VrcyIsImlhdCI6MTczNzc3NjgxNCwiZXhwIjoxNzM3Nzc3MTE0fQ.764_ksZUkf5nz9bKwqXvTRXlqL7Fy6xSYZ5B1Wb_H3I
+Content-Type: application/json
+
+###
+# Get post
+GET http://localhost:3000/api/blog/1e3cb76b-8ec4-4d23-b930-c186d6fb2d1c HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NzY2ZTE2ZjkwYzAyNjRhNzRhMWY5ZDQiLCJlbWFpbCI6InVzZXJAbm90Zm91bmQubG9jYWwiLCJuYW1lIjoiS2VrcyIsImlhdCI6MTczNzc0MTcyOSwiZXhwIjoxNzM3NzQyMDI5fQ.l7GVE415OOQOUBqE-UxwOrX5KhrA8WuDo26MTfcvX8c
+Content-Type: application/json
+
+###
+# Update post
+PATCH http://localhost:3000/api/blog/posts/1c209ccc-3f6f-49a5-acc1-8117a64e0afe HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2Nzk3MGM2ZTk1NWNlY2NmNmFiYjQyZTgiLCJlbWFpbCI6ImV4YW1wbGVAZW1haWwuY29tIiwibmFtZSI6Ikl2YW5vdiBJdmFuIiwiaWF0IjoxNzM4NTA1OTEyLCJleHAiOjE3Mzg1MDc3MTJ9.aKhWlIKsK-qHri0S6cPBEvLifZvH_EWTT7YYARxbu_U
+Content-Type: application/json
+
+{
+  //"type": "video",
+  "tags": [
+    "Supertag1",
+    "SUper_tag2",
+    "tag3",
+    "tag4",
+    "tag5",
+    "tag6",
+    "tag7",
+    "tag8"
+  ],
+  "postDate": "2025-10-02T11:30:23.492Z",
+  "isPublished": false,
+  "titleVideo": "Моя видео публикация",
+  "urlVideo": "https://my-videos.com/example-video"
+}
+###
+
+PATCH http://localhost:3000/api/blog/posts/1c209ccc-3f6f-49a5-acc1-8117a64e0afe HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2Nzk3MGM2ZTk1NWNlY2NmNmFiYjQyZTgiLCJlbWFpbCI6ImV4YW1wbGVAZW1haWwuY29tIiwibmFtZSI6Ikl2YW5vdiBJdmFuIiwiaWF0IjoxNzM4NTA5ODk4LCJleHAiOjE3Mzg1MTE2OTh9.GKwAQthMPWuWbw-Es8PnCT4dke6hjTWe8aByNAfoWuE
+Content-Type: application/json
+
+{
+  "isPublished": true
+}
+
+###
+POST http://localhost:3000/api/users/register HTTP/1.1
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="jsonData"
+Content-Type: application/json
+
+{
+  "email": "1example@email.com",
+  "name": "Ivanov Ivan",
+  "password": "Pa$w0rD111"
+}
+
+--boundary
+Content-Disposition: form-data; name="avatar"; filename="Screenshot 2025-01-10 233721.png"
+Content-Type: image/png
+
+< C:\Users\user\Pictures\Screenshots\Screenshot 2025-01-10 233721.png
+--boundary--
