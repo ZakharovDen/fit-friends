@@ -9,8 +9,6 @@ import { FileUploaderFactory } from './file-uploader.factory';
 import { MongooseModule } from '@nestjs/mongoose';
 import { FileModel, FileSchema } from './file.model';
 
-//const SERVE_ROOT = '/static';
-
 @Module({
   imports: [
     ServeStaticModule.forRootAsync({
