@@ -75,21 +75,21 @@ export class UsersController {
     return data;
   }
 
-  @ApiOperation({ summary: 'Смена пароля пользователя.' })
-  @ApiResponse({
-    type: UserRdo,
-    status: HttpStatus.OK,
-  })
-  @ApiBearerAuth()
-  @UseGuards(CheckAuthGuard)
-  @UseInterceptors(InjectUserIdInterceptor)
-  @Patch('change-password')
-  public async changePassword(
-    @Body() dto: ChangePasswordDto
-  ) {
-    const { data } = await this.httpService.axiosRef.patch(`${ApplicationServiceURL.Users}/change-password`, dto);
-    return data;
-  }
+  // @ApiOperation({ summary: 'Смена пароля пользователя.' })
+  // @ApiResponse({
+  //   type: UserRdo,
+  //   status: HttpStatus.OK,
+  // })
+  // @ApiBearerAuth()
+  // @UseGuards(CheckAuthGuard)
+  // @UseInterceptors(InjectUserIdInterceptor)
+  // @Patch('change-password')
+  // public async changePassword(
+  //   @Body() dto: ChangePasswordDto
+  // ) {
+  //   const { data } = await this.httpService.axiosRef.patch(`${ApplicationServiceURL.Users}/change-password`, dto);
+  //   return data;
+  // }
 
   @ApiOperation({ summary: 'Авторизация пользователя.' })
   @ApiResponse({
@@ -107,17 +107,17 @@ export class UsersController {
     return data;
   }
 
-  @Post('refresh')
-  @ApiOperation({ summary: 'Получение новой пары токенов.' })
-  @ApiBearerAuth()
-  @UseGuards(CheckAuthGuard)
-  public async refreshToken(@Req() req: Request) {
-    const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Users}/refresh`, null, {
-      headers: {
-        'Authorization': req.headers['authorization']
-      }
-    });
+  // @Post('refresh')
+  // @ApiOperation({ summary: 'Получение новой пары токенов.' })
+  // @ApiBearerAuth()
+  // @UseGuards(CheckAuthGuard)
+  // public async refreshToken(@Req() req: Request) {
+  //   const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Users}/refresh`, null, {
+  //     headers: {
+  //       'Authorization': req.headers['authorization']
+  //     }
+  //   });
 
-    return data;
-  }
+  //   return data;
+  // }
 }
