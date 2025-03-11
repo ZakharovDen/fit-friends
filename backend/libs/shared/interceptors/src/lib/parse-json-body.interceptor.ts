@@ -1,11 +1,12 @@
 import { Injectable, NestInterceptor, ExecutionContext, CallHandler, BadRequestException } from '@nestjs/common';
 import { Request } from 'express';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class ParseJsonBodyInterceptor implements NestInterceptor {
   constructor(private jsonBodyKey?: string) {}
 
-  intercept(context: ExecutionContext, next: CallHandler) {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const request: Request = context.switchToHttp().getRequest();
     const key = this.jsonBodyKey || 'jsonData'
 

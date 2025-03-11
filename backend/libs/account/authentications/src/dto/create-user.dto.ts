@@ -12,7 +12,7 @@ export class CreateUserDto {
   @Length(
     AuthValidateValue.Name.MinLength, 
     AuthValidateValue.Name.MaxLength, 
-    { message: AuthenticationValidateMessage.Password }
+    { message: AuthenticationValidateMessage.Name }
   )
   @IsString()
   public name: string;
@@ -41,9 +41,9 @@ export class CreateUserDto {
 
   @ApiProperty(AuthFieldDescription.Description)
   @Length(
-    AuthValidateValue.Name.MinLength, 
-    AuthValidateValue.Name.MaxLength, 
-    { message: AuthenticationValidateMessage.Password }
+    AuthValidateValue.Description.MinLength, 
+    AuthValidateValue.Description.MaxLength, 
+    { message: AuthenticationValidateMessage.Description }
   )
   @IsString()
   public description: string;

@@ -109,6 +109,8 @@ export class UsersController {
 
   @Post('refresh')
   @ApiOperation({ summary: 'Получение новой пары токенов.' })
+  @ApiBearerAuth()
+  @UseGuards(CheckAuthGuard)
   public async refreshToken(@Req() req: Request) {
     const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Users}/refresh`, null, {
       headers: {

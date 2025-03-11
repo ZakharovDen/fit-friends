@@ -18,9 +18,9 @@ async function bootstrap() {
     .setVersion('1.0')
     .build();
   const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix(GLOBAL_PREFIX);
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup(SPEC_PATH, app, document);
-  app.setGlobalPrefix(GLOBAL_PREFIX);
   const port = process.env.PORT || 3000;
   await app.listen(port);
   Logger.log(`🚀 Application is running on: http://localhost:${port}/${GLOBAL_PREFIX}`);

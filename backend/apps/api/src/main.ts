@@ -10,7 +10,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix(GLOBAL_PREFIX);
   const config = new DocumentBuilder()
-    .setTitle('The «Readme» application')
+    .setTitle('The «Fit friends» application')
     .setDescription('API Gateway service API')
     .setVersion('1.0')
     .addBearerAuth()

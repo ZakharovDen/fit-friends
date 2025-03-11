@@ -1,10 +1,9 @@
 import { HttpService } from "@nestjs/axios";
 import { Injectable } from "@nestjs/common";
 import { ApplicationServiceURL } from "./app.config";
-import { AuthorRdo } from "./rdo/author.rdo";
-import { File, Post } from "@project/core";
+import { File } from "@backend/core";
 import 'multer';
-import { createUrlForFile } from "@project/helpers";
+import { createUrlForFile } from "@backend/helpers";
 import FormData from 'form-data';
 
 @Injectable()
@@ -13,20 +12,20 @@ export class AppService {
       private readonly httpService: HttpService,
     ) { }
   
-  public async appendUser(posts: Post[]): Promise<void> {
-    const usersIds = posts.map((post) => post.userId);
-    const uniqUserIds = new Set(usersIds);
+  // public async appendUser(posts: Post[]): Promise<void> {
+  //   const usersIds = posts.map((post) => post.userId);
+  //   const uniqUserIds = new Set(usersIds);
 
-    const users: AuthorRdo[] = await Promise.all(
-      Array.from(uniqUserIds).map(
-        async (userId) => (await this.httpService.axiosRef.get(`${ApplicationServiceURL.Users}/${userId}`)).data
-      )
-    );
+  //   const users: AuthorRdo[] = await Promise.all(
+  //     Array.from(uniqUserIds).map(
+  //       async (userId) => (await this.httpService.axiosRef.get(`${ApplicationServiceURL.Users}/${userId}`)).data
+  //     )
+  //   );
 
-    posts.forEach((post) => {
-      post['user'] = users.find((user) => user.id === post.userId);
-    });
-  }
+  //   posts.forEach((post) => {
+  //     post['user'] = users.find((user) => user.id === post.userId);
+  //   });
+  // }
 
   public async uploadFile(file: Express.Multer.File) {
     const formData = new FormData();
