@@ -1,7 +1,7 @@
 import { Document } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-import { File } from '@project/core';
+import { File } from '@backend/core';
 
 @Schema({
   collection: 'files',

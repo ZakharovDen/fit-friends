@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
-import { BaseMongoRepository } from '@project/data-access';
+import { BaseMongoRepository } from '@backend/data-access';
 
 import { FileModel } from './file.model';
 import { FileUploaderEntity } from './file-uploader.entity';

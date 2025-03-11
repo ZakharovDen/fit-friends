@@ -11,4 +11,5 @@ export { EntityFactory } from './lib/interfaces/entity-factory.interface';
 export { Token } from './lib/interfaces/token.interface';
 export { RefreshTokenPayload } from './lib/interfaces/refresh-token-payload.interface';
 export { JwtToken } from './lib/interfaces/jwt-token.interface';
-export { PaginationResult } from './lib/interfaces/pagination.interface'
+export { PaginationResult } from './lib/interfaces/pagination.interface';
+export { StoredFile } from './lib/types/stored-file.interface';

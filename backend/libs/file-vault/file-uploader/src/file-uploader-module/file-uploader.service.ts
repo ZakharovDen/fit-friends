@@ -4,15 +4,15 @@ import { ConfigType } from '@nestjs/config';
 import { ensureDir } from 'fs-extra';
 import { writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import dayjs from 'dayjs';
 
-import { FileVaultConfig } from '@project/file-vault-config';
+import { FileVaultConfig } from '@backend/file-vault-config';
 import { randomUUID } from 'node:crypto';
 import { extension } from 'mime-types';
 import { FileUploaderRepository } from './file-uploader.repository';
-import { StoredFile } from '@project/core';
+import { StoredFile } from '@backend/core';
 import { FileUploaderFactory } from './file-uploader.factory';
 import { FileUploaderEntity } from './file-uploader.entity';
+import dayjs = require('dayjs');
 
 @Injectable()
 export class FileUploaderService {

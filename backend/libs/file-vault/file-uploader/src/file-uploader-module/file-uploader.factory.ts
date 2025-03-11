@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { FileUploaderEntity } from './file-uploader.entity';
-import { EntityFactory, File } from '@project/core';
+import { EntityFactory, File } from '@backend/core';
 
 
 @Injectable()
