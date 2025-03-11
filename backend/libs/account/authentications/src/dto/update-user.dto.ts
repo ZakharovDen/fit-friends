@@ -1,0 +1,52 @@
+import { ApiProperty } from "@nestjs/swagger";
+import { IsDateString, IsEnum, IsOptional, IsString, Length } from "class-validator";
+import { AuthenticationValidateMessage, AuthFieldDescription, AuthValidateValue } from "../authentication-module/authentication.constant";
+import 'multer';
+import { UserLocation, UserRole, UserSex } from "@backend/core";
+export class UpdateUserDto {
+  @ApiProperty(AuthFieldDescription.Name)
+  @Length(
+    AuthValidateValue.Name.MinLength, 
+    AuthValidateValue.Name.MaxLength, 
+    { message: AuthenticationValidateMessage.Name }
+  )
+  @IsString()
+  @IsOptional()
+  public name?: string;
+
+  @ApiProperty(AuthFieldDescription.Avatar)
+  @IsOptional()
+  public avatar?: string;
+
+  @ApiProperty(AuthFieldDescription.Sex)
+  @IsEnum(UserSex)
+  @IsOptional()
+  public sex?: UserSex;
+
+  @ApiProperty(AuthFieldDescription.DateOfBirth)
+  @IsDateString()
+  @IsOptional()
+  public dateOfBirth?: Date;
+
+  @ApiProperty(AuthFieldDescription.Description)
+  @Length(
+    AuthValidateValue.Description.MinLength, 
+    AuthValidateValue.Description.MaxLength, 
+    { message: AuthenticationValidateMessage.Description }
+  )
+  @IsString()
+  @IsOptional()
+  public description?: string;
+
+  @ApiProperty(AuthFieldDescription.Location)
+  @IsOptional()
+  public location?: UserLocation;
+
+  @ApiProperty(AuthFieldDescription.BackgroundImage)
+  @IsOptional()
+  public backgroundImage?: string;
+
+  @ApiProperty(AuthFieldDescription.Role)
+  @IsOptional()
+  public role?: UserRole;
+}

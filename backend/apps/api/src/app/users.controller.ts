@@ -1,8 +1,8 @@
 import { HttpService } from '@nestjs/axios';
-import { Body, Controller, FileTypeValidator, Get, HttpStatus, MaxFileSizeValidator, Param, ParseFilePipe, Patch, Post, Req, UploadedFile, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, FileTypeValidator, Get, HttpStatus, MaxFileSizeValidator, Param, 
+        ParseFilePipe, Patch, Post, UploadedFile, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import 'multer';
-import { AuthenticationResponseMessage, ChangePasswordDto, CreateUserDto, LoggedUserRdo, LoginUserDto, UserRdo } from '@backend/authentications';
-
+import { AuthenticationResponseMessage, CreateUserDto, LoggedUserRdo, LoginUserDto, UpdateUserDto, UserRdo } from '@backend/authentications';
 import { ApplicationServiceURL } from './app.config';
 import { AxiosExceptionFilter } from './filters/axios-exception.filter';
 import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -14,6 +14,7 @@ import { AvatarParams } from './constant';
 import { AppService } from './app.service';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { plainToInstance } from 'class-transformer';
+import { UserId } from './decorators/user-id.decorator';
 
 @Controller('users')
 @UseFilters(AxiosExceptionFilter)
@@ -104,6 +105,23 @@ export class UsersController {
   @Post('login')
   public async login(@Body() loginUserDto: LoginUserDto) {
     const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Users}/login`, loginUserDto);
+    return data;
+  }
+
+  @ApiOperation({ summary: 'Редактирование пользователя.' })
+  @ApiResponse({
+    type: UserRdo,
+    status: HttpStatus.OK,
+  })
+  @ApiBearerAuth()
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(InjectUserIdInterceptor)
+  @Patch('edit')
+  public async changePassword(
+    @UserId() userId: string,
+    @Body() dto: UpdateUserDto
+  ) {
+    const { data } = await this.httpService.axiosRef.patch(`${ApplicationServiceURL.Users}/user/${userId}`, dto);
     return data;
   }
 

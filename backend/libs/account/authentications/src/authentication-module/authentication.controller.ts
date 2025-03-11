@@ -12,7 +12,7 @@ import { LocalAuthGuard } from '../guards/local-auth.guard';
 import { RequestWithUser } from './request-with-user.interface';
 import { JwtRefreshGuard } from '../guards/jwt-refresh.guard';
 import { RequestWithTokenPayload } from './request-with-token-payload.interface';
-import { ChangePasswordDto } from '../dto/change-password.dto';
+import { UpdateUserDto } from '../dto/update-user.dto';
 
 @ApiTags('authentication')
 @Controller('auth')
@@ -70,17 +70,6 @@ export class AuthenticationController {
     return fillDto(UserRdo, existUser.toPOJO());
   }
 
-  @ApiOperation({ summary: 'Смена пароля пользователя.' })
-  @ApiResponse({
-    type: UserRdo,
-    status: HttpStatus.OK,
-  })
-  @Patch('change-password')
-  public async changePassword(@Body() dto: ChangePasswordDto) {
-    const user = await this.authService.changePassword(dto);
-    return fillDto(UserRdo, user.toPOJO());
-  }
-
   @ApiOperation({ summary: 'Получение новой пары токенов.' })
   @UseGuards(JwtRefreshGuard)
   @Post('refresh')
@@ -97,5 +86,16 @@ export class AuthenticationController {
   @Post('check')
   public async checkToken(@Req() { user: payload }: RequestWithTokenPayload) {
     return payload;
+  }
+
+  @Patch('/user/:id')
+  @ApiOperation({ summary: 'Редактирование пользователя.' })
+  @ApiResponse({ status: HttpStatus.CREATED, type: UserRdo })
+  public async update(
+    @Param('id') id: string,
+    @Body() dto: UpdateUserDto
+  ) {
+    const user = await this.authService.update(id, dto);
+    return fillDto(UserRdo, user.toPOJO());
   }
 }

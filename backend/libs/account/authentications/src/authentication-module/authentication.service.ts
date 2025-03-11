@@ -10,7 +10,7 @@ import { jwtConfig } from '@backend/account-config';
 import { ConfigType } from '@nestjs/config';
 import { createJWTPayload } from '@backend/helpers';
 import { RefreshTokenService } from '../refresh-token-module/refresh-token.service';
-import { ChangePasswordDto } from '../dto/change-password.dto';
+import { UpdateUserDto } from '../dto/update-user.dto';
 
 @Injectable()
 export class AuthenticationService {
@@ -101,13 +101,10 @@ export class AuthenticationService {
     return existUser;
   }
 
-  public async changePassword(dto: ChangePasswordDto): Promise<UserEntity> {
-    const user = await this.getUser(dto.userId);
-    if (!await user.comparePassword(dto.currentPassword)) {
-      throw new HttpException('Неверный пароль.', HttpStatus.BAD_REQUEST);
-    }
-    await user.setPassword(dto.newPassword);
-    await this.userRepository.update(user);
+  public async update(id: string, dto: UpdateUserDto): Promise<UserEntity> {
+    const user = await this.getUser(id);
+    const updatedUser = Object.assign(user, dto)
+    await this.userRepository.update(updatedUser);
     return user;
   }
 }
