@@ -1,0 +1,20 @@
+{
+  "name": "fit-training",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/fit/fit-training/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/fit/fit-training",
+        "tsConfig": "libs/fit/fit-training/tsconfig.lib.json",
+        "packageJson": "libs/fit/fit-training/package.json",
+        "main": "libs/fit/fit-training/src/index.ts",
+        "assets": ["libs/fit/fit-training/*.md"]
+      }
+    }
+  }
+}
