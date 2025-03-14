@@ -13,3 +13,7 @@ export { RefreshTokenPayload } from './lib/interfaces/refresh-token-payload.inte
 export { JwtToken } from './lib/interfaces/jwt-token.interface';
 export { PaginationResult } from './lib/interfaces/pagination.interface';
 export { StoredFile } from './lib/types/stored-file.interface';
+export { Training } from './lib/types/training/training.interface';
+export { TrainingLevel } from './lib/types/training/training-level.enum';
+export { TrainingType } from './lib/types/training/training-type.enum';
+export { TrainingDuration } from './lib/types/training/training-duration.enum';
