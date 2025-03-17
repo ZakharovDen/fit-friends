@@ -1,4 +1,4 @@
-import { AuthUser, Entity, StorableEntity, UserLocation, UserRole, UserSex } from '@backend/core';
+import { AuthUser, Entity, StorableEntity, UserLocation, UserRole, Sex } from '@backend/core';
 import { compare, genSalt, hash } from 'bcrypt';
 import { SALT_ROUNDS } from './user.constant';
 
@@ -12,7 +12,7 @@ export class UserEntity extends Entity implements StorableEntity<AuthUser>{
   public backgroundImage: string;
   public location: UserLocation;
   public role: UserRole;
-  public sex: UserSex;
+  public sex: Sex;
   public dateOfBirth: Date;
   public description: string;
 

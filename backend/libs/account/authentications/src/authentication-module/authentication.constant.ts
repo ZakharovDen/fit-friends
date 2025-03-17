@@ -1,4 +1,4 @@
-import { UserLocation, UserRole, UserSex } from "@backend/core";
+import { UserLocation, UserRole, Sex } from "@backend/core";
 
 export const AUTH_USER_EXISTS = 'User with this email exists';
 export const AUTH_USER_NOT_FOUND = 'User not found';
@@ -49,7 +49,7 @@ export const AuthFieldDescription = {
   NewPassword: { description: 'Новый пароль', example: 'New_Pa$$w0rD' },
   Password: { description: 'Пароль', example: 'Pa$$w0rD' },
   Avatar: { description: 'Ссылка на аватар пользователя' },
-  Sex: { description: 'Пол', example: UserSex.Female, enum: UserSex },
+  Sex: { description: 'Пол', example: Sex.Female, enum: Sex },
   DateOfBirth: { description: 'Дата рождения', example: new Date() },
   Description: { description: 'Текст с общей информацией', example: 'Текст с общей информацией  о пользователе' },
   Location: { description: 'Станция метро', example: UserLocation.Petrogradskaya, enum: UserLocation },

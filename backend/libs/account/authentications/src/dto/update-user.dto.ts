@@ -2,7 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsDateString, IsEnum, IsOptional, IsString, Length } from "class-validator";
 import { AuthenticationValidateMessage, AuthFieldDescription, AuthValidateValue } from "../authentication-module/authentication.constant";
 import 'multer';
-import { UserLocation, UserRole, UserSex } from "@backend/core";
+import { UserLocation, UserRole, Sex } from "@backend/core";
 export class UpdateUserDto {
   @ApiProperty(AuthFieldDescription.Name)
   @Length(
@@ -19,9 +19,9 @@ export class UpdateUserDto {
   public avatar?: string;
 
   @ApiProperty(AuthFieldDescription.Sex)
-  @IsEnum(UserSex)
+  @IsEnum(Sex)
   @IsOptional()
-  public sex?: UserSex;
+  public sex?: Sex;
 
   @ApiProperty(AuthFieldDescription.DateOfBirth)
   @IsDateString()

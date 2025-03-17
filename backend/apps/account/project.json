@@ -44,6 +44,14 @@
       "options": {
         "passWithNoTests": true
       }
+    },
+    "db:seed": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx ts-node seed.ts",
+        "cwd": "libs/account/user/src/user-module",
+        "envFile": "./apps/account/account.env"
+      }
     }
   }
 }

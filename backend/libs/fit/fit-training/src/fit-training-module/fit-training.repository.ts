@@ -13,4 +13,11 @@ export class FitTrainingRepository extends BasePostgresRepository<FitTrainingEnt
   ) {
     super(entityFactory, client);
   }
+
+  public async save(entity: FitTrainingEntity): Promise<void> {
+    const data = entity.toPOJO();
+    const record = await this.client.training.create({ data });
+
+    entity.id = record.id;
+  }
 }

@@ -1,58 +1,59 @@
 import { Sex, TrainingDuration, TrainingLevel, TrainingType } from "@backend/core";
 import { ApiProperty } from "@nestjs/swagger";
 import { Expose } from "class-transformer";
+import { TrainingFieldDescription } from "../fit-training.constant";
 
 export class FitTrainingRdo {
   @Expose()
-  @ApiProperty()
+  @ApiProperty(TrainingFieldDescription.Id)
   id: string;
 
   @Expose()  
-  @ApiProperty()
+  @ApiProperty(TrainingFieldDescription.UserId)
   userId: string;
 
   @Expose()  
-  @ApiProperty()
+  @ApiProperty(TrainingFieldDescription.Title)
   title: string;
 
   @Expose()  
-  @ApiProperty()
+  @ApiProperty(TrainingFieldDescription.Image)
   image: string;
 
   @Expose()  
-  @ApiProperty()
+  @ApiProperty(TrainingFieldDescription.Level)
   level: TrainingLevel;
 
   @Expose()  
-  @ApiProperty()
+  @ApiProperty(TrainingFieldDescription.Type)
   type: TrainingType;
 
   @Expose()  
-  @ApiProperty()
+  @ApiProperty(TrainingFieldDescription.Duration)
   duration: TrainingDuration;
 
   @Expose()  
-  @ApiProperty()
+  @ApiProperty(TrainingFieldDescription.Price)
   price: number;
 
   @Expose()  
-  @ApiProperty()
+  @ApiProperty(TrainingFieldDescription.Calories)
   calories: number;
 
   @Expose()  
-  @ApiProperty()
+  @ApiProperty(TrainingFieldDescription.Description)
   description: string;
 
   @Expose()  
-  @ApiProperty()
+  @ApiProperty(TrainingFieldDescription.Sex)
   sex: Sex;
 
   @Expose()  
-  @ApiProperty()
+  @ApiProperty(TrainingFieldDescription.Video)
   video: string;
 
   @Expose()  
-  @ApiProperty()
+  @ApiProperty(TrainingFieldDescription.SpecialOffer)
   specialOffer: boolean;
 
   @Expose()  

@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import { AuthFieldDescription } from '../authentication-module/authentication.constant';
-import { UserLocation, UserRole, UserSex } from '@backend/core';
+import { UserLocation, UserRole, Sex } from '@backend/core';
 
 export class LoggedUserRdo {
   @ApiProperty(AuthFieldDescription.Id)
@@ -22,7 +22,7 @@ export class LoggedUserRdo {
 
   @ApiProperty(AuthFieldDescription.Sex)
   @Expose()
-  sex: UserSex;
+  sex: Sex;
 
   @ApiProperty(AuthFieldDescription.DateOfBirth)
   @Expose()
