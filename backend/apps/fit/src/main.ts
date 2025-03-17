@@ -16,8 +16,8 @@ async function bootstrap() {
   app.setGlobalPrefix(GLOBAL_PREFIX);
 
   const config = new DocumentBuilder()
-    .setTitle('The «Blog» service')
-    .setDescription('Blog service API')
+    .setTitle('The «Fit training» service')
+    .setDescription('Fit training service API')
     .setVersion('1.0')
     .build();
 
