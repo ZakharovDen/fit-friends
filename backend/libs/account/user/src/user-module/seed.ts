@@ -1,7 +1,7 @@
 import mongoose, * as Mongoose from 'mongoose';
 import { genSalt, hash } from 'bcrypt';
 
-//import { AuthUser, Sex, UserLocation, UserRole } from '@backend/core';
+import { AuthUser, Sex, UserLocation, UserRole } from '@backend/core';
 import { UserSchema } from './user.model';
 import { getMongoConnectionString } from '@backend/helpers';
 import { SALT_ROUNDS } from './user.constant';
@@ -36,8 +36,8 @@ const MOCK_USERS = [
 ] as const;
 
 const UserEntity =
-  (mongoose.models.User as Mongoose.Model<any>) ||
-  mongoose.model<any>('accounts', UserSchema);
+  (mongoose.models.User as Mongoose.Model<AuthUser>) ||
+  mongoose.model<AuthUser>('accounts', UserSchema);
 
 async function bootstrap() {
   const mongoDbUrl = getMongoConnectionString(
