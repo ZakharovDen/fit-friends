@@ -1,39 +1,10 @@
 import mongoose, * as Mongoose from 'mongoose';
 import { genSalt, hash } from 'bcrypt';
 
-import { AuthUser, Sex, UserLocation, UserRole } from '@backend/core';
+import { AuthUser } from '@backend/core';
 import { UserSchema } from './user.model';
-import { getMongoConnectionString } from '@backend/helpers';
+import { getMongoConnectionString, getUsers } from '@backend/helpers';
 import { SALT_ROUNDS } from './user.constant';
-
-const MOCK_USERS = [
-  {
-    id: '658170cbb954e9f5b905ccf4',
-    email: 'user@local.local',
-    name: 'user',
-    avatar: '',
-    password: 'password123',
-    sex: Sex.Male,
-    dateOfBirth: new Date('07.09.1989'),
-    description: 'Описалово',
-    location: UserLocation.Petrogradskaya,
-    backgroundImage: 'backend\\uploads\\2025\\03\\11aa6d8d-3ebd-4dda-82ca-6012a5709db7.png',
-    role: UserRole.Admin
-  },
-  {
-    id: '6581762309c030b503e30512',
-    email: 'user2@local.local',
-    name: 'user2',
-    avatar: '',
-    password: 'passwordqwer',
-    sex: Sex.Female,
-    dateOfBirth: new Date('01.01.2001'),
-    description: 'Описалово qqq',
-    location: UserLocation.Pionerskaya,
-    backgroundImage: 'backend\\uploads\\2025\\03\\11aa6d8d-3ebd-4dda-82ca-6012a5709db7.png',
-    role: UserRole.User
-  },
-] as const;
 
 const UserEntity =
   (mongoose.models.User as Mongoose.Model<AuthUser>) ||
@@ -54,8 +25,9 @@ async function bootstrap() {
 
   const mongoose = await Mongoose.connect(mongoDbUrl);
   const salt = await genSalt(SALT_ROUNDS);
+  const mockUsers = getUsers();
 
-  for (const mockUser of MOCK_USERS) {
+  for (const mockUser of mockUsers) {
     const { id: _id, email, name, password, avatar, backgroundImage, dateOfBirth, description, location, role, sex } = mockUser;
     const passwordHash = await hash(password, salt);
     await new UserEntity({ 
