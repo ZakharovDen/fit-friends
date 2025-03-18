@@ -1,7 +1,5 @@
-// export const DEFAULT_POST_COUNT_LIMIT = 25;
-// export const DEFAULT_SORT_DIRECTION = SortDirection.Desc;
-// export const DEFAULT_PAGE_COUNT = 1;
-// export const DEFAULT_SORT_FIELD = SortField.PostDate;
+export const DEFAULT_COUNT_BY_PAGE_LIMIT = 5;
+export const DEFAULT_PAGE_COUNT = 1;
 
 import { Sex, TrainingDuration, TrainingLevel, TrainingType } from "@backend/core";
 
@@ -54,9 +52,3 @@ export const TrainingFieldDescription = {
   SpecialOffer: { description: 'Признак специального предложения', example: false },
   Rating: { description: 'Рейтинг тренировки', example: 5 },
 } as const ;
-
-export enum SortField {
-  PostDate = 'Дата публикации',
-  LikesCount = 'Количество лайков',
-  CommentsCount = 'Количество комментариев',
-};

@@ -1,9 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { BasePostgresRepository } from '@backend/data-access'
 import { FitTrainingEntity } from "./fit-training.entity";
-import { Training } from "@backend/core";
+import { PaginationResult, Sex, Training, TrainingDuration, TrainingLevel, TrainingType } from "@backend/core";
 import { FitTrainingFactory } from "./fit-training.factory";
 import { PrismaClientService } from "@backend/fit-models";
+import { FitTrainingQuery } from "./fit-training.query";
 
 @Injectable()
 export class FitTrainingRepository extends BasePostgresRepository<FitTrainingEntity, Training> {
@@ -20,4 +21,31 @@ export class FitTrainingRepository extends BasePostgresRepository<FitTrainingEnt
 
     entity.id = record.id;
   }
+
+  public async findAll(query?: FitTrainingQuery): Promise<PaginationResult<FitTrainingEntity>> {
+    const skip = query?.page && query?.limit ? (query.page - 1) * query.limit : undefined;
+    const take = query?.limit ? query?.limit : undefined;
+    const [documents, trainingCount] = await Promise.all([
+      this.client.training.findMany({ skip, take }),
+      this.client.training.count(),
+    ]);
+    return {
+      entities: documents.map(
+        (document) => this.createEntityFromDocument(
+          {
+            ...document,
+            type: document.type as TrainingType,
+            level: document.level as TrainingLevel,
+            duration: document.duration as TrainingDuration,
+            sex: document.sex as Sex
+          }
+        )
+      ),
+      currentPage: query?.page,
+      totalPages: Math.ceil(trainingCount / take),
+      itemsPerPage: take,
+      totalItems: trainingCount,
+    }
+  }
+
 }
