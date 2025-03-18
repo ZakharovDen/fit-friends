@@ -1,11 +1,11 @@
-import { Body, Controller, Get, HttpStatus, Post, Query, SerializeOptions } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Param, Post, Query, SerializeOptions } from "@nestjs/common";
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FitTrainingService } from "./fit-training.service";
 import { CreateTrainingDto } from "./dto/create-training.dto";
 import { fillDto } from '@backend/helpers';
 import { FitTrainingRdo } from "./rdo/fit-training.rdo";
 import { FitTrainingQuery } from "./fit-training.query";
-import { BlogPostWithPaginationRdo } from "./rdo/fit-training-with-pagination.rdo";
+import { FitTrainingWithPaginationRdo } from "./rdo/fit-training-with-pagination.rdo";
 
 @ApiTags('Тренировки')
 @Controller('trainings')
@@ -25,11 +25,20 @@ export class FitTrainingController {
 
   @Get('/')
   @ApiOperation({ summary: 'Список тренировок.' })
-  @ApiResponse({ status: HttpStatus.OK, type: BlogPostWithPaginationRdo })
-  @SerializeOptions({ type: BlogPostWithPaginationRdo })
-  public async getAll(@Query() query?: FitTrainingQuery) {
-    const trainings = await this.fitTrainingService.getAll(query);
+  @ApiResponse({ status: HttpStatus.OK, type: FitTrainingWithPaginationRdo })
+  @SerializeOptions({ type: FitTrainingWithPaginationRdo })
+  public async findAll(@Query() query?: FitTrainingQuery) {
+    const trainings = await this.fitTrainingService.findAll(query);
     return trainings;
-    //return fillDto(BlogPostWithPaginationRdo, trainings);
   }
+
+  @Get(':id')
+  @ApiOperation({ summary: 'Детальная информация о тренировке.' })
+  @ApiResponse({ status: HttpStatus.OK, type: FitTrainingRdo })
+  @SerializeOptions({ type: FitTrainingRdo })
+  public async findById(@Param('id') id: string) {
+    const training = await this.fitTrainingService.findById(id);
+    return training;
+  }
+
 }

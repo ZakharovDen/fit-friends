@@ -3,6 +3,7 @@ import { FitTrainingRepository } from "./fit-training.repository";
 import { FitTrainingEntity } from "./fit-training.entity";
 import { CreateTrainingDto } from "./dto/create-training.dto";
 import { FitTrainingQuery } from "./fit-training.query";
+import { PaginationResult } from "@backend/core";
 
 @Injectable()
 export class FitTrainingService {
@@ -17,9 +18,13 @@ export class FitTrainingService {
     return newTraining;
   }
 
-  public async getAll(query?: FitTrainingQuery) {
+  public async findAll(query?: FitTrainingQuery): Promise<PaginationResult<FitTrainingEntity>> {
     const result = await this.fitTrainingRepository.findAll(query);
     console.dir(result);
     return result;
+  }
+
+  public async findById(id: string): Promise<FitTrainingEntity> {
+    return await this.fitTrainingRepository.findById(id);
   }
 }

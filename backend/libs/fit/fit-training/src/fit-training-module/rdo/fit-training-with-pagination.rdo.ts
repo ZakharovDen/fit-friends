@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { PaginationRdo } from '@backend/core';
 import { FitTrainingRdo } from './fit-training.rdo';
 
-export class BlogPostWithPaginationRdo extends PaginationRdo {
+export class FitTrainingWithPaginationRdo extends PaginationRdo {
   @Expose()
   @ApiProperty({ description: 'Данные', type: [FitTrainingRdo] })
   @Type(() => FitTrainingRdo)

@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { BasePostgresRepository } from '@backend/data-access'
 import { FitTrainingEntity } from "./fit-training.entity";
 import { PaginationResult, Sex, Training, TrainingDuration, TrainingLevel, TrainingType } from "@backend/core";
@@ -46,6 +46,24 @@ export class FitTrainingRepository extends BasePostgresRepository<FitTrainingEnt
       itemsPerPage: take,
       totalItems: trainingCount,
     }
+  }
+
+  public async findById(id: string): Promise<FitTrainingEntity> {
+    const document = await this.client.training.findUnique({ where: { id } });
+
+    if (!document) {
+      throw new NotFoundException(`Training with id = ${id} not found.`);
+    }
+
+    return this.createEntityFromDocument(
+      {
+        ...document,
+        type: document.type as TrainingType,
+        level: document.level as TrainingLevel,
+        duration: document.duration as TrainingDuration,
+        sex: document.sex as Sex
+      }
+    );
   }
 
 }
