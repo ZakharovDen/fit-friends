@@ -18,3 +18,4 @@ export { TrainingLevel } from './lib/types/training/training-level.enum';
 export { TrainingType } from './lib/types/training/training-type.enum';
 export { TrainingDuration } from './lib/types/training/training-duration.enum';
 export { PaginationRdo } from './lib/rdo/pagination.rdo';
+export { Feedback } from './lib/types/feedback/feedback.interface';

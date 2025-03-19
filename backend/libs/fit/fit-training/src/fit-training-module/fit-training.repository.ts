@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-import { BasePostgresRepository } from '@backend/data-access'
+import { BasePostgresRepository } from '@backend/data-access';
 import { FitTrainingEntity } from "./fit-training.entity";
 import { PaginationResult, Sex, Training, TrainingDuration, TrainingLevel, TrainingType } from "@backend/core";
 import { FitTrainingFactory } from "./fit-training.factory";

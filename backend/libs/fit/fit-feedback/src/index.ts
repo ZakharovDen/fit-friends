@@ -1,1 +1,1 @@
-export * from './lib/fit-feedback';
+export { FitFeedbackModule } from './fit-feedback-module/fit-feedback.module';
