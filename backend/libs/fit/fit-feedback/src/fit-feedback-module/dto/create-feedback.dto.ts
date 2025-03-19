@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { FeedbackFieldDescription, FeedbackValidateMessage, FeedbackValidateValue } from "../fit-feedback.constant";
-import { IsInt, IsMongoId, Length, Max, Min } from 'class-validator';
+import { IsInt, IsMongoId, IsUUID, Length, Max, Min } from 'class-validator';
 
 export class CreateFeedBackDto {
   @ApiProperty(FeedbackFieldDescription.UserId)
@@ -8,7 +8,7 @@ export class CreateFeedBackDto {
   userId: string;
 
   @ApiProperty(FeedbackFieldDescription.TrainingId)
-  @IsMongoId()
+  @IsUUID()
   trainingId: string;
 
   @ApiProperty(FeedbackFieldDescription.Rating)

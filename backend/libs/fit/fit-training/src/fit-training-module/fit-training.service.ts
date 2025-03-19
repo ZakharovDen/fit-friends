@@ -20,7 +20,6 @@ export class FitTrainingService {
 
   public async findAll(query?: FitTrainingQuery): Promise<PaginationResult<FitTrainingEntity>> {
     const result = await this.fitTrainingRepository.findAll(query);
-    console.dir(result);
     return result;
   }
 

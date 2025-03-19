@@ -14,4 +14,8 @@ export class FitFeedbackService {
     await this.fitFeedbackRepository.save(newFeedback);
     return newFeedback;
   }
+
+  public async findByTrainingId(trainingId: string) {
+    return await this.fitFeedbackRepository.findByTrainingId(trainingId);
+  }
 }
