@@ -18,7 +18,6 @@ export class FitTrainingController {
   @ApiOperation({ summary: 'Создание тренировки.' })
   @ApiResponse({ status: HttpStatus.CREATED, type: FitTrainingRdo })
   public async create(@Body() dto: CreateTrainingDto) {
-    console.log('post qqq');
     const training = await this.fitTrainingService.create(dto);
     return fillDto(FitTrainingRdo, training);
   }

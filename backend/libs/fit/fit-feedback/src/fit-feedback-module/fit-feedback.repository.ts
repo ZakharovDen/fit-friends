@@ -13,4 +13,10 @@ export class FitFeedbackRepository extends BasePostgresRepository<FitFeedbackEnt
   ) {
     super(entityFactory, client);
   }
+
+  public async save(entity: FitFeedbackEntity): Promise<void> {
+    const data = entity.toPOJO();
+    const document = await this.client.feedback.create({data});
+    entity.id = document.id;
+  }
 }
