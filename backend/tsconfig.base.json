@@ -24,6 +24,7 @@
       "@backend/fit-config": ["libs/fit/config/src/index.ts"],
       "@backend/fit-feedback": ["libs/fit/fit-feedback/src/index.ts"],
       "@backend/fit-models": ["libs/fit/models/src/index.ts"],
+      "@backend/fit-order": ["libs/fit/fit-order/src/index.ts"],
       "@backend/fit-training": ["libs/fit/fit-training/src/index.ts"],
       "@backend/helpers": ["libs/shared/helpers/src/index.ts"],
       "@backend/interceptors": ["libs/shared/interceptors/src/index.ts"],

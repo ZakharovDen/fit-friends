@@ -1,0 +1,20 @@
+{
+  "name": "fit-order",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/fit/fit-order/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/fit/fit-order",
+        "tsConfig": "libs/fit/fit-order/tsconfig.lib.json",
+        "packageJson": "libs/fit/fit-order/package.json",
+        "main": "libs/fit/fit-order/src/index.ts",
+        "assets": ["libs/fit/fit-order/*.md"]
+      }
+    }
+  }
+}

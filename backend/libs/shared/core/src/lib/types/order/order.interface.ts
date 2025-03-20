@@ -7,6 +7,6 @@ export interface Order {
   count: number;
   amount: number;
   paymentMethod: PaymentMethod;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
