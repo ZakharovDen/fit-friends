@@ -32,6 +32,7 @@ model Training {
   updatedAt    DateTime @updatedAt @map("updated_at")
 
   feedbacks Feedback[]
+  orders    Order[]
 
   @@map("trainings")
 }
@@ -48,4 +49,19 @@ model Feedback {
   training Training @relation(fields: [trainingId], references: [id], onDelete: Cascade)
 
   @@map("feedbacks")
+}
+
+model Order {
+  id            String   @id @default(uuid())
+  trainingId    String   @map("training_id")
+  price         Int
+  count         Int
+  amount        Int
+  paymentMethod String   @map("payment_method")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  training Training @relation(fields: [trainingId], references: [id], onDelete: Cascade)
+
+  @@map("orders")
 }

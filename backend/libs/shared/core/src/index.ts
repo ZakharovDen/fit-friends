@@ -19,3 +19,5 @@ export { TrainingType } from './lib/types/training/training-type.enum';
 export { TrainingDuration } from './lib/types/training/training-duration.enum';
 export { PaginationRdo } from './lib/rdo/pagination.rdo';
 export { Feedback } from './lib/types/feedback/feedback.interface';
+export { Order } from './lib/types/order/order.interface';
+export { PaymentMethod } from './lib/types/order/payment-method.enum';
