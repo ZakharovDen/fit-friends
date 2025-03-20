@@ -4,6 +4,7 @@ import { HTTP_CLIENT_MAX_REDIRECTS, HTTP_CLIENT_TIMEOUT } from './app.config';
 import { UsersController } from './users.controller';
 import { CheckAuthGuard } from './guards/check-auth.guard';
 import { AppService } from './app.service';
+import { FitController } from './fit.controller';
 
 @Module({
   imports: [
@@ -12,7 +13,7 @@ import { AppService } from './app.service';
       maxRedirects: HTTP_CLIENT_MAX_REDIRECTS,
     }),
   ],
-  controllers: [UsersController],
+  controllers: [UsersController, FitController],
   providers: [CheckAuthGuard, AppService],
 })
 export class AppModule { }
