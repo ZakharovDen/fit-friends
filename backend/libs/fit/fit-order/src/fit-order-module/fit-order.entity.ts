@@ -2,6 +2,7 @@ import { Entity, Order, PaymentMethod, StorableEntity } from '@backend/core';
 
 export class FitOrderEntity extends Entity implements StorableEntity<Order> {
   trainingId: string;
+  userId: string;
   price: number;
   count: number;
   amount: number;
@@ -20,6 +21,7 @@ export class FitOrderEntity extends Entity implements StorableEntity<Order> {
 
     this.id = order.id ?? undefined;
     this.trainingId = order.trainingId;
+    this.userId = order.userId;
     this.price = order.price;
     this.count = order.count;
     this.amount = order.amount;
@@ -32,6 +34,7 @@ export class FitOrderEntity extends Entity implements StorableEntity<Order> {
     return {
       id: this.id,
       trainingId: this.trainingId,
+      userId: this.userId,
       price: this.price,
       count: this.count,
       amount: this.amount,

@@ -8,6 +8,9 @@ export class FitOrderRdo {
   @Expose()
   id: string;
 
+  @ApiProperty(OrderFieldDescription.UserId)
+  userId: string;
+
   @ApiProperty(OrderFieldDescription.TrainingId)
   @Expose()
   trainingId: string;

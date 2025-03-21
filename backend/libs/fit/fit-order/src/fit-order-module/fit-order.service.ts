@@ -17,4 +17,8 @@ export class FitOrderService {
     await this.fitOrderRepository.save(newOrder);
     return newOrder;
   }
+
+  public async findAllByUserId(userId: string) {
+    return await this.fitOrderRepository.findAllByUserId(userId);
+  }
 }

@@ -53,6 +53,7 @@ model Feedback {
 
 model Order {
   id            String   @id @default(uuid())
+  userId        String   @map("user_id")
   trainingId    String   @map("training_id")
   price         Int
   count         Int

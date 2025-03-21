@@ -1,4 +1,4 @@
-import { Body, Controller, HttpStatus, Post, SerializeOptions } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Param, Post, SerializeOptions } from "@nestjs/common";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { FitOrderService } from "./fit-order.service";
 import { FitOrderRdo } from "./rdo/fit-order.rdo";
@@ -18,5 +18,14 @@ export class FitOrderController {
   public async create(@Body() dto: CreateOrderDto){
     const order = await this.fitOrderService.create(dto);
     return order;
+  }
+
+  @Get('/:userId')
+  @ApiOperation({ summary: 'Список покупок пользователя.' })
+  @ApiResponse({ status: HttpStatus.CREATED, type: FitOrderRdo })
+  @SerializeOptions({ type: FitOrderRdo })
+  public async findAllByUserId(@Param('userId') userId: string){
+    const orders = await this.fitOrderService.findAllByUserId(userId);
+    return orders;
   }
 }

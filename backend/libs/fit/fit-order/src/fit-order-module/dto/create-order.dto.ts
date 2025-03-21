@@ -1,9 +1,13 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsInt, IsUUID, Max, Min } from 'class-validator';
+import { IsEnum, IsInt, IsMongoId, IsUUID, Max, Min } from 'class-validator';
 import { PaymentMethod } from "@backend/core";
 import { OrderFieldDescription, OrderValidateMessage, OrderValidateValue } from "../fit-order.constant";
 
 export class CreateOrderDto {
+  @ApiProperty(OrderFieldDescription.UserId)
+  @IsMongoId()
+  userId: string;
+
   @ApiProperty(OrderFieldDescription.TrainingId)
   @IsUUID()
   trainingId: string;
