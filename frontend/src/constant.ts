@@ -5,6 +5,7 @@ export enum AppRoute {
   Login = '/sign-in',
   Register = '/sign-up',
   Catalog = '/training-catalog',
+  TrainingCard = '/training/:id',
 }
 
 export enum AuthorizationStatus {

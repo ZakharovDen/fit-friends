@@ -6,6 +6,7 @@ import RegistrationScreen from '../../pages/registration-screen/registration-scr
 import LayoutMain from '../layout-main/layout-main';
 import MainScreen from '../../pages/main-screen/main-screen';
 import TrainingCatalogScreen from '../../pages/training-catalog-screen/training-catalog-screen';
+import TrainingCardScreen from '../../pages/training-card-screen/training-card-screen';
 
 function App(): JSX.Element {
   return (
@@ -22,6 +23,10 @@ function App(): JSX.Element {
           <Route
             path={AppRoute.Catalog}
             element={<TrainingCatalogScreen />}
+          />
+          <Route
+            path={AppRoute.TrainingCard}
+            element={<TrainingCardScreen />}
           />
         </Route>
         <Route
