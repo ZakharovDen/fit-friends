@@ -1,12 +1,13 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AppRoute } from '../../constant';
 import IntroScreen from '../../pages/intro-screen/intro-screen';
-import LoginScreen from '../../pages/login/login-screen';
+import LoginScreen from '../../pages/login-screen/login-screen';
 import RegistrationScreen from '../../pages/registration-screen/registration-screen';
 import LayoutMain from '../layout-main/layout-main';
 import MainScreen from '../../pages/main-screen/main-screen';
 import TrainingCatalogScreen from '../../pages/training-catalog-screen/training-catalog-screen';
 import TrainingCardScreen from '../../pages/training-card-screen/training-card-screen';
+import AccountScreen from '../../pages/account-screen/account-screen';
 
 function App(): JSX.Element {
   return (
@@ -27,6 +28,10 @@ function App(): JSX.Element {
           <Route
             path={AppRoute.TrainingCard}
             element={<TrainingCardScreen />}
+          />
+          <Route
+            path={AppRoute.Account}
+            element={<AccountScreen />}
           />
         </Route>
         <Route
