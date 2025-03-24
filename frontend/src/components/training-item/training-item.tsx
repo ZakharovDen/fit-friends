@@ -8,7 +8,7 @@ type TrainingItemProps = {
 }
 
 function TrainingItem({ training, displayMode }: TrainingItemProps): JSX.Element {
-  const { price, title, type, calories, description } = training;
+  const { price, title, type, calories, description, rating } = training;
   const { itemClass } = TrainingItemSettings[displayMode];
   return (
     <li className={itemClass}>
@@ -52,7 +52,7 @@ function TrainingItem({ training, displayMode }: TrainingItemProps): JSX.Element
             <div className="thumbnail-training__rate">
               <svg width="16" height="16" aria-hidden="true">
                 <use xlinkHref="#icon-star"></use>
-              </svg><span className="thumbnail-training__rate-value">5</span>
+              </svg><span className="thumbnail-training__rate-value">{rating}</span>
             </div>
           </div>
           <div className="thumbnail-training__text-wrapper">

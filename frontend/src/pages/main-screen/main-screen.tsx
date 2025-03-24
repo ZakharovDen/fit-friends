@@ -6,7 +6,7 @@ import { TrainingDuration } from "../../types/training/training-duration.enum";
 import { TrainingLevel } from "../../types/training/training-level.enum";
 import { TrainingType } from "../../types/training/training-type.enum";
 
-const mockTraining: Training =     {
+const mockTraining: Training = {
   id: "0dfbda7e-fb14-4ca3-ae1d-8e111a777a66",
   userId: "6581762309c030b503e30512",
   title: "full body stretch",
@@ -21,6 +21,7 @@ const mockTraining: Training =     {
   video: "uploads/training-video-1.mp4",
   specialOffer: false,
   createdAt: new Date(),
+  rating: 4.5
 }
 
 function MainScreen(): JSX.Element {

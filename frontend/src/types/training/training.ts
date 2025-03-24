@@ -17,5 +17,6 @@ export type Training = {
   sex: Sex;
   video: string;
   specialOffer: boolean;
+  rating: number;
   createdAt: Date;
 }

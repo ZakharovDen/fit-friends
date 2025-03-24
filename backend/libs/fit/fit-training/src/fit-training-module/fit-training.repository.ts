@@ -58,7 +58,6 @@ export class FitTrainingRepository extends BasePostgresRepository<FitTrainingEnt
 
   public async findById(id: string): Promise<FitTrainingEntity> {
     const document = await this.client.training.findUnique({ where: { id }, include: {feedbacks: true} });
-    //const rating = (await this.client.feedback.aggregate({ _avg: { rating: true }, where: { trainingId: id } }))._avg.rating ?? 0;
 
     if (!document) {
       throw new NotFoundException(`Training with id = ${id} not found.`);
