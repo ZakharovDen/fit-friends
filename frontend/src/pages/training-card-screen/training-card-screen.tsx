@@ -1,12 +1,17 @@
 import { useState } from "react";
 import PopupFeedback from "../../components/popup-feedback/popup-feedback";
 import ReviewItem from "../../components/review-item/review-item";
+import PopupBuy from "../../components/popup-buy/popup-buy";
 
 function TrainingCardScreen(): JSX.Element {
-  const [isPopupVisible, setPopupVisible] = useState<boolean>(false);
+  const [isPopupFeedbackVisible, setPopupFeedbackVisible] = useState<boolean>(false);
+  const [isPopupBuyVisible, setPopupBuyVisible] = useState<boolean>(false);
 
-  const openPopup = () => setPopupVisible(true);
-  const closePopup = () => setPopupVisible(false);
+  const openPopupFeedback = () => setPopupFeedbackVisible(true);
+  const closePopupFeedback = () => setPopupFeedbackVisible(false);
+
+  const openPopupBuy = () => setPopupBuyVisible(true);
+  const closePopupBuy = () => setPopupBuyVisible(false);
   return (
     <main>
       <section className="inner-page">
@@ -23,8 +28,8 @@ function TrainingCardScreen(): JSX.Element {
               <ul className="reviews-side-bar__list">
                 <ReviewItem />
               </ul>
-              <button className="btn btn--medium reviews-side-bar__button" type="button" onClick={openPopup}>Оставить отзыв</button>
-              <PopupFeedback isVisible={isPopupVisible} onClose={closePopup} />
+              <button className="btn btn--medium reviews-side-bar__button" type="button" onClick={openPopupFeedback}>Оставить отзыв</button>
+              <PopupFeedback isVisible={isPopupFeedbackVisible} onClose={closePopupFeedback} />
             </aside>
             <div className="training-card">
               <div className="training-info">
@@ -96,7 +101,8 @@ function TrainingCardScreen(): JSX.Element {
                           </label>
                           <div className="training-info__error">Введите число</div>
                         </div>
-                        <button className="btn training-info__buy" type="button">Купить</button>
+                        <button className="btn training-info__buy" type="button" onClick={openPopupBuy}>Купить</button>
+                        <PopupBuy isVisible={isPopupBuyVisible} onClose={closePopupBuy} />
                       </div>
                     </div>
                   </form>
