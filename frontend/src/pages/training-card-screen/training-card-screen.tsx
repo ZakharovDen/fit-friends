@@ -1,6 +1,12 @@
+import { useState } from "react";
+import PopupFeedback from "../../components/popup-feedback/popup-feedback";
 import ReviewItem from "../../components/review-item/review-item";
 
 function TrainingCardScreen(): JSX.Element {
+  const [isPopupVisible, setPopupVisible] = useState<boolean>(false);
+
+  const openPopup = () => setPopupVisible(true);
+  const closePopup = () => setPopupVisible(false);
   return (
     <main>
       <section className="inner-page">
@@ -17,7 +23,8 @@ function TrainingCardScreen(): JSX.Element {
               <ul className="reviews-side-bar__list">
                 <ReviewItem />
               </ul>
-              <button className="btn btn--medium reviews-side-bar__button" type="button">Оставить отзыв</button>
+              <button className="btn btn--medium reviews-side-bar__button" type="button" onClick={openPopup}>Оставить отзыв</button>
+              <PopupFeedback isVisible={isPopupVisible} onClose={closePopup} />
             </aside>
             <div className="training-card">
               <div className="training-info">
