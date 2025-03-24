@@ -1,4 +1,50 @@
+import { ChangeEvent, FormEvent, useState } from "react";
+import { useAppDispatch } from "../../hooks";
+import { registerAction } from "../../store/user/thunks";
+import { UserRegister } from "../../types/user/user";
+
+// const emptyProduct: UserRegister = {
+
+// }
+
 function RegistrationScreen(): JSX.Element {
+  const dispatch = useAppDispatch();
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewURL, setPreviewURL] = useState<string | null>(null); // URL для превью
+
+  // const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
+  //   evt.preventDefault();
+  //   const form = evt.currentTarget;
+  //   const formData = new FormData(form);
+  //   formData.append('createdAt', (typeof product.createdAt === 'object') ? product.createdAt.toISOString() : product.createdAt);
+  //   formData.append('type', String(formData.get('item-type')));
+  //   formData.append('article', String(formData.get('sku')));
+  //   formData.append('stringsCount', String(formData.get('string-qty')));
+  //   if (product.id) {
+  //     formData.append('id', product.id);
+  //   }
+  //   formData.append('photoPath', product.photoPath);
+  //   dispatch(registerAction(formData));
+  // };
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    const file = files && files[0] ? files[0] : null;
+
+    setSelectedFile(file);
+
+    if (file) {
+      // Создаем URL для предпросмотра изображения
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewURL(reader.result as string); // Преобразуем reader.result в string
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setPreviewURL(null); // Очищаем превью, если файл удален
+    }
+  };
+
   return (
     <main>
       <div className="background-logo">
@@ -21,11 +67,15 @@ function RegistrationScreen(): JSX.Element {
                   <div className="sign-up__load-photo">
                     <div className="input-load-avatar">
                       <label>
-                        <input className="visually-hidden" type="file" accept="image/png, image/jpeg" />
+                        <input className="visually-hidden" type="file" accept="image/png, image/jpeg" onChange={handleFileChange} />
                         <span className="input-load-avatar__btn">
-                          <svg width="20" height="20" aria-hidden="true">
-                            <use xlinkHref="#icon-import"></use>
-                          </svg>
+                          {previewURL ? (
+                            <img src={previewURL} alt="Предпросмотр фото" style={{ width: '100px', height: '100px' }} />
+                          ) : (
+                            <svg width="20" height="20" aria-hidden="true">
+                              <use xlinkHref="#icon-import"></use>
+                            </svg>
+                          )}
                         </span>
                       </label>
                     </div>

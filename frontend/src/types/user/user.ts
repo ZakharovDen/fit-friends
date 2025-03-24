@@ -1,7 +1,17 @@
+import { Sex } from "../sex.enum";
+import { UserLocation } from "./user-location.enum";
+import { UserRole } from "./user-role.enum";
+
 type User = {
-  id: string,
   name: string;
   email: string;
+  avatar?: string;
+  sex: Sex;
+  dateOfBirth?: Date;
+  description?: string;
+  location: UserLocation;
+  backgroundImage: string;
+  role: UserRole;
 }
 
 export type UserData = User & {
@@ -10,4 +20,4 @@ export type UserData = User & {
 
 export type UserAuth = Pick<User, 'email'> & { password: string };
 
-export type UserRegister = Pick<User, 'name'> & UserAuth;
+export type UserRegister =  User &  { password: string };
