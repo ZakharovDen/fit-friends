@@ -1,4 +1,8 @@
+import { Link, useNavigate } from "react-router-dom";
+import { AppRoute } from "../../constant";
+
 function IntroScreen(): JSX.Element {
+  const navigate = useNavigate();
   return (
     <main>
       <div className="intro">
@@ -37,8 +41,14 @@ function IntroScreen(): JSX.Element {
             </picture>
           </div>
           <div className="intro__buttons">
-            <button className="btn intro__button" type="button">Регистрация</button>
-            <p className="intro__text">Есть аккаунт? <a className="intro__link" href="#">Вход</a>
+            <button 
+              className="btn intro__button" 
+              type="button" 
+              onClick={() => { navigate(AppRoute.Register) }}
+            >
+              Регистрация
+            </button>
+            <p className="intro__text">Есть аккаунт? <Link className="intro__link" to={AppRoute.Login}>Вход</Link>
             </p>
           </div>
         </div>
