@@ -3,7 +3,7 @@ import { getToken } from './token';
 import { StatusCodes } from 'http-status-codes';
 import { toast } from 'react-toastify';
 
-const BACKEND_URL = 'http://localhost:5000/api';
+const BACKEND_URL = 'http://localhost:3000/api';
 const REQUEST_TIMEOUT = 5000;
 
 type DetailMessageType = {

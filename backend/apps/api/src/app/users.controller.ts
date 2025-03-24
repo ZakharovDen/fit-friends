@@ -1,6 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Body, Controller, FileTypeValidator, Get, HttpStatus, MaxFileSizeValidator, Param, 
-        ParseFilePipe, Patch, Post, UploadedFile, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
+        ParseFilePipe, Patch, Post, Req, UploadedFile, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import 'multer';
 import { AuthenticationResponseMessage, CreateUserDto, LoggedUserRdo, LoginUserDto, UpdateUserDto, UserRdo } from '@backend/authentications';
 import { ApplicationServiceURL } from './app.config';
@@ -15,6 +15,8 @@ import { AppService } from './app.service';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { plainToInstance } from 'class-transformer';
 import { UserId } from './decorators/user-id.decorator';
+import { JwtAuthGuard } from '@backend/authentications';
+import { RequestWithTokenPayload } from '@backend/authentications';
 
 @Controller('users')
 @UseFilters(AxiosExceptionFilter)
@@ -37,9 +39,6 @@ export class UsersController {
   @Get(':id')
   public async getById(@Param('id') id: string): Promise<UserRdo> {
     const data: UserRdo = (await this.httpService.axiosRef.get(`${ApplicationServiceURL.Users}/${id}`)).data;
-    //const posts: PaginationResult<BlogPost> = (await this.httpService.axiosRef.get(`${ApplicationServiceURL.Blog}`, { params: { userId: id } })).data;
-    //data.countPosts = posts.totalItems;
-    //data.countSubscribers = 0;
     return data;
   }
 
@@ -76,22 +75,6 @@ export class UsersController {
     return data;
   }
 
-  // @ApiOperation({ summary: 'Смена пароля пользователя.' })
-  // @ApiResponse({
-  //   type: UserRdo,
-  //   status: HttpStatus.OK,
-  // })
-  // @ApiBearerAuth()
-  // @UseGuards(CheckAuthGuard)
-  // @UseInterceptors(InjectUserIdInterceptor)
-  // @Patch('change-password')
-  // public async changePassword(
-  //   @Body() dto: ChangePasswordDto
-  // ) {
-  //   const { data } = await this.httpService.axiosRef.patch(`${ApplicationServiceURL.Users}/change-password`, dto);
-  //   return data;
-  // }
-
   @ApiOperation({ summary: 'Авторизация пользователя.' })
   @ApiResponse({
     type: LoggedUserRdo,
@@ -125,17 +108,17 @@ export class UsersController {
     return data;
   }
 
-  // @Post('refresh')
-  // @ApiOperation({ summary: 'Получение новой пары токенов.' })
-  // @ApiBearerAuth()
-  // @UseGuards(CheckAuthGuard)
-  // public async refreshToken(@Req() req: Request) {
-  //   const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Users}/refresh`, null, {
-  //     headers: {
-  //       'Authorization': req.headers['authorization']
-  //     }
-  //   });
-
-  //   return data;
-  // }
+  @ApiOperation({ summary: 'Проверка состояния пользователя' })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Пользователь авторизован' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Пользователь не авторизован' })
+  @ApiBearerAuth()
+  @Post('check')
+  public async checkToken(@Req() req: Request) {
+    const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Users}/check`, null, {
+      headers: {
+        'Authorization': req.headers['authorization']
+      }
+    });
+    return data;
+  }
 }

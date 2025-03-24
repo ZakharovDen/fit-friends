@@ -5,3 +5,5 @@ export { UserRdo } from './rdo/user.rdo';
 export { LoggedUserRdo } from './rdo/logged-user.rdo';
 export { AuthenticationResponseMessage } from './authentication-module/authentication.constant';
 export { UpdateUserDto } from './dto/update-user.dto';
+export { JwtAuthGuard } from './guards/jwt-auth.guard';
+export { RequestWithTokenPayload } from './authentication-module/request-with-token-payload.interface';

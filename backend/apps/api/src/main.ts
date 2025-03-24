@@ -8,6 +8,7 @@ const GLOBAL_PREFIX = 'api';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors();
   app.setGlobalPrefix(GLOBAL_PREFIX);
   const config = new DocumentBuilder()
     .setTitle('The «Fit friends» application')
