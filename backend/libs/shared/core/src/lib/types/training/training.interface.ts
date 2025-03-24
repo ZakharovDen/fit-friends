@@ -17,6 +17,7 @@ export interface Training  {
   sex: Sex;
   video: string;
   specialOffer: boolean;
+  rating: number;
   createdAt?: Date;
   updatedAt?: Date;
 }

@@ -56,6 +56,10 @@ export class FitTrainingRdo {
   @ApiProperty(TrainingFieldDescription.SpecialOffer)
   specialOffer: boolean;
 
+  @Expose()
+  @ApiProperty(TrainingFieldDescription.Rating)
+  rating: number;
+
   @Expose()  
   @ApiProperty()
   createdAt: Date;

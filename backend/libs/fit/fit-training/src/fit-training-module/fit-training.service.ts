@@ -13,7 +13,7 @@ export class FitTrainingService {
   ) { }
 
   public async create(dto: CreateTrainingDto): Promise<FitTrainingEntity> {
-    const newTraining = new FitTrainingEntity(dto);
+    const newTraining = new FitTrainingEntity({...dto, rating: undefined});
     await this.fitTrainingRepository.save(newTraining);
     return newTraining;
   }

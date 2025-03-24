@@ -1,6 +1,6 @@
 import { getDescriptions, getImages, getTitles, getVideos } from './trainings';
 import { getUsers } from './user';
-import { Sex, Training, TrainingDuration, TrainingLevel, TrainingType } from "@backend/core";
+import { Sex, TrainingDuration, TrainingLevel, TrainingType } from "@backend/core";
 
 enum Price {
   Min = 0,
@@ -29,7 +29,7 @@ export class DataGenerator {
     return new Date(randomTime);
   }
 
-  public generateTraining(): Training {
+  public generateTraining() {
     return {
       userId: this.getRandomItem(getUsers()).id,
       title: this.getRandomItem<string>(getTitles()),

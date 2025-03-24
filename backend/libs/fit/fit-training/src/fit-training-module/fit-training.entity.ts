@@ -13,6 +13,7 @@ export class FitTrainingEntity extends Entity implements StorableEntity<Training
   public sex: Sex;
   public video: string;
   public specialOffer: boolean;
+  public rating: number;
   public createdAt?: Date;
   public updatedAt?: Date;
 
@@ -39,6 +40,7 @@ export class FitTrainingEntity extends Entity implements StorableEntity<Training
     this.sex = training.sex;
     this.video = training.video;
     this.specialOffer = training.specialOffer;
+    this.rating = training.rating ?? 0;
     this.createdAt = training.createdAt ?? undefined;
     this.updatedAt = training.updatedAt ?? undefined;
   }
@@ -58,6 +60,7 @@ export class FitTrainingEntity extends Entity implements StorableEntity<Training
       sex: this.sex,
       video: this.video,
       specialOffer: this.specialOffer,
+      rating: this.rating,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
     };
