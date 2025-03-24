@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { AppRoute } from '../../constant';
+import { AppRoute, AuthorizationStatus } from '../../constant';
 import IntroScreen from '../../pages/intro-screen/intro-screen';
 import LoginScreen from '../../pages/login-screen/login-screen';
 import RegistrationScreen from '../../pages/registration-screen/registration-screen';
@@ -8,6 +8,7 @@ import MainScreen from '../../pages/main-screen/main-screen';
 import TrainingCatalogScreen from '../../pages/training-catalog-screen/training-catalog-screen';
 import TrainingCardScreen from '../../pages/training-card-screen/training-card-screen';
 import AccountScreen from '../../pages/account-screen/account-screen';
+import PrivateRoute from '../private-route/private-route';
 
 function App(): JSX.Element {
   return (
@@ -15,7 +16,11 @@ function App(): JSX.Element {
       <Routes>
         <Route
           path={AppRoute.Main}
-          element={<LayoutMain />}
+          element={
+            <PrivateRoute restrictedFor={AuthorizationStatus.NoAuth} redirectTo={AppRoute.Intro}>
+              <LayoutMain />
+            </PrivateRoute>
+          }
         >
           <Route
             path={AppRoute.Main}
@@ -36,15 +41,26 @@ function App(): JSX.Element {
         </Route>
         <Route
           path={AppRoute.Intro}
-          element={<IntroScreen />}
+          element={
+            <PrivateRoute restrictedFor={AuthorizationStatus.Auth} redirectTo={AppRoute.Main}>
+              <IntroScreen />
+            </PrivateRoute>
+          }
         />
         <Route
           path={AppRoute.Login}
-          element={<LoginScreen />}
+          element={
+            <PrivateRoute restrictedFor={AuthorizationStatus.Auth} redirectTo={AppRoute.Main}>
+              <LoginScreen />
+            </PrivateRoute>}
         />
         <Route
           path={AppRoute.Register}
-          element={<RegistrationScreen />}
+          element={
+            <PrivateRoute restrictedFor={AuthorizationStatus.Auth} redirectTo={AppRoute.Main}>
+              <RegistrationScreen />
+            </PrivateRoute>
+          }
         />
       </Routes>
     </BrowserRouter>
