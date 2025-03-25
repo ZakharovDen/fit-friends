@@ -9,6 +9,7 @@ import TrainingCatalogScreen from '../../pages/training-catalog-screen/training-
 import TrainingCardScreen from '../../pages/training-card-screen/training-card-screen';
 import AccountScreen from '../../pages/account-screen/account-screen';
 import PrivateRoute from '../private-route/private-route';
+import QuestionnaireScreen from '../../pages/questionnaire-screen/questionnaire-screen';
 
 function App(): JSX.Element {
   return (
@@ -59,6 +60,14 @@ function App(): JSX.Element {
           element={
             <PrivateRoute restrictedFor={AuthorizationStatus.Auth} redirectTo={AppRoute.Main}>
               <RegistrationScreen />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={AppRoute.Questionnaire}
+          element={
+            <PrivateRoute restrictedFor={AuthorizationStatus.Auth} redirectTo={AppRoute.Main}>
+              <QuestionnaireScreen />
             </PrivateRoute>
           }
         />
