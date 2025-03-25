@@ -7,19 +7,17 @@ import { UserLocation } from "../../types/user/user-location.enum";
 function RegistrationScreen(): JSX.Element {
   const dispatch = useAppDispatch();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [previewURL, setPreviewURL] = useState<string | null>(null); // URL для превью
+  const [previewURL, setPreviewURL] = useState<string | null>(null);
 
-  const [isOpen, setIsOpen] = useState(false); // Состояние открытия/закрытия списка
-  const [selectedLocation, setSelectedLocation] = useState<UserLocation>(); // Выбранная локация
-  const comboboxRef = useRef<HTMLDivElement>(null); // Референс для комбобокса
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState<UserLocation>();
+  const comboboxRef = useRef<HTMLDivElement>(null);
 
-  // Обработчик клика по элементу списка
   const handleLocationSelect = (location: UserLocation) => {
-    setSelectedLocation(location); // Устанавливаем выбранную локацию
-    setIsOpen(false); // Закрываем список
+    setSelectedLocation(location);
+    setIsOpen(false);
   };
 
-  // Закрытие списка при клике вне комбобокса
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (comboboxRef.current && !comboboxRef.current.contains(event.target as Node)) {
@@ -39,6 +37,9 @@ function RegistrationScreen(): JSX.Element {
     const formData = new FormData(form);
     formData.append('location', String(selectedLocation));
     formData.append('dateOfBirth', String(formData.get('birthday')));
+    if (selectedFile) {
+      formData.append('avatar', selectedFile);
+    }
     dispatch(registerAction(formData));
   };
 
@@ -49,14 +50,13 @@ function RegistrationScreen(): JSX.Element {
     setSelectedFile(file);
 
     if (file) {
-      // Создаем URL для предпросмотра изображения
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPreviewURL(reader.result as string); // Преобразуем reader.result в string
+        setPreviewURL(reader.result as string);
       };
       reader.readAsDataURL(file);
     } else {
-      setPreviewURL(null); // Очищаем превью, если файл удален
+      setPreviewURL(null);
     }
   };
 
@@ -114,7 +114,7 @@ function RegistrationScreen(): JSX.Element {
                         <input type="date" name="birthday" max="2099-12-31" /></span>
                       </label>
                     </div>
-                    <div className={`custom-select ${isOpen ? 'is-open ' : ''}${selectedLocation ? 'not-empty ' : ''}`}>
+                    <div className={`custom-select ${isOpen ? 'is-open ' : ''}${selectedLocation ? 'not-empty ' : ''}`} ref={comboboxRef}>
                       <span className="custom-select__label">Ваша локация</span>
                       <button
                         className="custom-select__button"
@@ -136,8 +136,8 @@ function RegistrationScreen(): JSX.Element {
                             key={key}
                             role="option"
                             aria-selected={selectedLocation === location}
-                            onClick={() => handleLocationSelect(location)} // Обрабатываем выбор элемента
-                            style={{ cursor: 'pointer' }} // Делаем курсор указателем при наведении
+                            onClick={() => handleLocationSelect(location)}
+                            style={{ cursor: 'pointer' }}
                           >
                             {location}
                           </li>

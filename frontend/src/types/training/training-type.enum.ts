@@ -9,11 +9,11 @@ export enum TrainingType {
 };
 
 export const TrainingTypeLabel: Record<TrainingType, string> = {
-  [TrainingType.Yoga]: 'йога',
-  [TrainingType.Running]: 'бег',
-  [TrainingType.Boxing]: 'бокс',
-  [TrainingType.Stretching]: 'стрейчинг',
-  [TrainingType.Crossfit]: 'кроссфит',
-  [TrainingType.Aerobics]: 'аэробика',
-  [TrainingType.Pilates]: 'пилатес',
+  [TrainingType.Yoga]: 'Йога',
+  [TrainingType.Running]: 'Бег',
+  [TrainingType.Boxing]: 'Бокс',
+  [TrainingType.Stretching]: 'Стрейчинг',
+  [TrainingType.Crossfit]: 'Кроссфит',
+  [TrainingType.Aerobics]: 'Аэробика',
+  [TrainingType.Pilates]: 'Пилатес',
 };

@@ -5,7 +5,7 @@ export const AuthorFieldDescription = {
 } as const;
 
 export const AvatarParams = {
-  MaxSize: 500000,
+  MaxSize: 1000000,
   FileType: /(jpg|jpeg|png)$/,
 } as const;
 

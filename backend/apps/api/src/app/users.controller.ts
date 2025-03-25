@@ -15,8 +15,6 @@ import { AppService } from './app.service';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { plainToInstance } from 'class-transformer';
 import { UserId } from './decorators/user-id.decorator';
-import { JwtAuthGuard } from '@backend/authentications';
-import { RequestWithTokenPayload } from '@backend/authentications';
 
 @Controller('users')
 @UseFilters(AxiosExceptionFilter)

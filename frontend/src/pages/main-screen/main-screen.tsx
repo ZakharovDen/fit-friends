@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { TrainingItemDisplayMode } from "../../components/training-item/constant";
 import TrainingItem from "../../components/training-item/training-item";
 import { Sex } from "../../types/sex.enum";
@@ -5,6 +6,7 @@ import { Training } from "../../types/training/training";
 import { TrainingDuration } from "../../types/training/training-duration.enum";
 import { TrainingLevel } from "../../types/training/training-level.enum";
 import { TrainingType } from "../../types/training/training-type.enum";
+import { AppRoute } from "../../constant";
 
 const mockTraining: Training = {
   id: "0dfbda7e-fb14-4ca3-ae1d-8e111a777a66",
@@ -25,6 +27,7 @@ const mockTraining: Training = {
 }
 
 function MainScreen(): JSX.Element {
+  const navigate = useNavigate();
   return (
     <main>
       <h1 className="visually-hidden">FitFriends — Время находить тренировки, спортзалы и друзей спортсменов</h1>
@@ -241,7 +244,7 @@ function MainScreen(): JSX.Element {
           <div className="popular-trainings__wrapper">
             <div className="popular-trainings__title-wrapper">
               <h2 className="popular-trainings__title">Популярные тренировки</h2>
-              <button className="btn-flat popular-trainings__button" type="button"><span>Смотреть все</span>
+              <button className="btn-flat popular-trainings__button" type="button" onClick={() => navigate(AppRoute.Catalog)}><span>Смотреть все</span>
                 <svg width="14" height="10" aria-hidden="true">
                   <use xlinkHref="#arrow-right"></use>
                 </svg>

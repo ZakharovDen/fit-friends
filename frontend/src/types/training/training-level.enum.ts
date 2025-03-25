@@ -5,7 +5,7 @@ export enum TrainingLevel {
 };
 
 export const TrainingLevelLabel: Record<TrainingLevel, string> = {
-  [TrainingLevel.Beginner]: 'новичок',
-  [TrainingLevel.Amateur]: 'любитель',
-  [TrainingLevel.Professional]: 'профессионал',
+  [TrainingLevel.Beginner]: 'Новичок',
+  [TrainingLevel.Amateur]: 'Любитель',
+  [TrainingLevel.Professional]: 'Профессионал',
 };
