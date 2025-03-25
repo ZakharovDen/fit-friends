@@ -46,3 +46,4 @@ Thumbs.db
 
 # Static files
 **/uploads/*
+!/uploads/default

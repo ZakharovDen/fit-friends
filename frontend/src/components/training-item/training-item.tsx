@@ -8,7 +8,7 @@ type TrainingItemProps = {
 }
 
 function TrainingItem({ training, displayMode }: TrainingItemProps): JSX.Element {
-  const { price, title, type, calories, description, rating } = training;
+  const { price, title, type, calories, description, rating, image } = training;
   const { itemClass } = TrainingItemSettings[displayMode];
   return (
     <li className={itemClass}>
@@ -18,7 +18,7 @@ function TrainingItem({ training, displayMode }: TrainingItemProps): JSX.Element
             <picture>
               <source
                 type="image/webp"
-                srcSet="img/content/thumbnails/training-02.webp, img/content/thumbnails/training-02@2x.webp 2x"
+                srcSet={`http://localhost:3337/api/files/static/${image}`}
               />
               <img
                 src="img/content/thumbnails/training-02.jpg"
