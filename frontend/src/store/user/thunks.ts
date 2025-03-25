@@ -42,13 +42,13 @@ export const loginAction = createAsyncThunk<UserData, UserAuth, {
 //   },
 // );
 
-export const registerAction = createAsyncThunk<UserData, UserRegister, {
+export const registerAction = createAsyncThunk<UserData, /*UserRegister*/FormData, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }>(
   'user/register',
-  async ({ email, password, name }, { extra: api }) => {
-    const { data } = await api.post<UserData>(APIRoute.Register, { email, password, name });
+  async (formData , { extra: api }) => {
+    const { data } = await api.post<UserData>(APIRoute.Register, formData);
     return data;
   });

@@ -12,7 +12,7 @@ const users = [
     description: 'Описалово',
     location: UserLocation.Petrogradskaya,
     backgroundImage: 'backend\\uploads\\2025\\03\\11aa6d8d-3ebd-4dda-82ca-6012a5709db7.png',
-    role: UserRole.Admin
+    role: UserRole.Coach
   },
   {
     id: '6581762309c030b503e30512',
@@ -25,7 +25,7 @@ const users = [
     description: 'Описалово qqq',
     location: UserLocation.Pionerskaya,
     backgroundImage: 'backend\\uploads\\2025\\03\\11aa6d8d-3ebd-4dda-82ca-6012a5709db7.png',
-    role: UserRole.User
+    role: UserRole.Sportsman
   },
 ];
 

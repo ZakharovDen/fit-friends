@@ -43,8 +43,6 @@ export class AuthenticationService {
     await this.userRepository
       .save(userEntity);
 
-    //await this.notifyService.registerSubscriber({ email: dto.email, name: dto.name });
-
     return userEntity;
   }
 

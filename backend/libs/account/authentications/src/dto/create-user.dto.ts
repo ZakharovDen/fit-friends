@@ -39,22 +39,12 @@ export class CreateUserDto {
   @IsOptional()
   public dateOfBirth?: Date;
 
-  @ApiProperty(AuthFieldDescription.Description)
-  @Length(
-    AuthValidateValue.Description.MinLength, 
-    AuthValidateValue.Description.MaxLength, 
-    { message: AuthenticationValidateMessage.Description }
-  )
-  @IsString()
-  public description: string;
-
   @ApiProperty(AuthFieldDescription.Location)
+  @IsEnum(UserLocation)
   public location: UserLocation;
 
-  @ApiProperty(AuthFieldDescription.BackgroundImage)
-  public backgroundImage: string;
-
   @ApiProperty(AuthFieldDescription.Role)
+  @IsEnum(UserRole)
   public role: UserRole;
 
 }

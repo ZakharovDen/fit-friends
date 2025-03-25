@@ -39,8 +39,8 @@ export class UserModel extends Document implements AuthUser {
   })
   location: UserLocation;
 
-  @Prop({ required: true })
-  backgroundImage: string;
+  @Prop({ required: false, type: String })
+  backgroundImage?: string;
 
   @Prop({ 
     required: true, 

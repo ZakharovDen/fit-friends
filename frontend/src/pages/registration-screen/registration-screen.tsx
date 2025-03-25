@@ -1,31 +1,46 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { useAppDispatch } from "../../hooks";
 import { registerAction } from "../../store/user/thunks";
-import { UserRegister } from "../../types/user/user";
-
-// const emptyProduct: UserRegister = {
-
-// }
+import { SexUserLabel } from "../../types/sex.enum";
+import { UserLocation } from "../../types/user/user-location.enum";
 
 function RegistrationScreen(): JSX.Element {
   const dispatch = useAppDispatch();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewURL, setPreviewURL] = useState<string | null>(null); // URL для превью
 
-  // const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
-  //   evt.preventDefault();
-  //   const form = evt.currentTarget;
-  //   const formData = new FormData(form);
-  //   formData.append('createdAt', (typeof product.createdAt === 'object') ? product.createdAt.toISOString() : product.createdAt);
-  //   formData.append('type', String(formData.get('item-type')));
-  //   formData.append('article', String(formData.get('sku')));
-  //   formData.append('stringsCount', String(formData.get('string-qty')));
-  //   if (product.id) {
-  //     formData.append('id', product.id);
-  //   }
-  //   formData.append('photoPath', product.photoPath);
-  //   dispatch(registerAction(formData));
-  // };
+  const [isOpen, setIsOpen] = useState(false); // Состояние открытия/закрытия списка
+  const [selectedLocation, setSelectedLocation] = useState<UserLocation>(); // Выбранная локация
+  const comboboxRef = useRef<HTMLDivElement>(null); // Референс для комбобокса
+
+  // Обработчик клика по элементу списка
+  const handleLocationSelect = (location: UserLocation) => {
+    setSelectedLocation(location); // Устанавливаем выбранную локацию
+    setIsOpen(false); // Закрываем список
+  };
+
+  // Закрытие списка при клике вне комбобокса
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (comboboxRef.current && !comboboxRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+    const form = evt.currentTarget;
+    const formData = new FormData(form);
+    formData.append('location', String(selectedLocation));
+    formData.append('dateOfBirth', String(formData.get('birthday')));
+    dispatch(registerAction(formData));
+  };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -62,7 +77,7 @@ function RegistrationScreen(): JSX.Element {
               <h1 className="popup-form__title">Регистрация</h1>
             </div>
             <div className="popup-form__form">
-              <form method="get">
+              <form method="get" onSubmit={handleFormSubmit}>
                 <div className="sign-up">
                   <div className="sign-up__load-photo">
                     <div className="input-load-avatar">
@@ -70,7 +85,7 @@ function RegistrationScreen(): JSX.Element {
                         <input className="visually-hidden" type="file" accept="image/png, image/jpeg" onChange={handleFileChange} />
                         <span className="input-load-avatar__btn">
                           {previewURL ? (
-                            <img src={previewURL} alt="Предпросмотр фото" style={{ width: '100px', height: '100px' }} />
+                            <img className="input-load-avatar__btn" src={previewURL} alt="Предпросмотр фото" />
                           ) : (
                             <svg width="20" height="20" aria-hidden="true">
                               <use xlinkHref="#icon-import"></use>
@@ -99,12 +114,34 @@ function RegistrationScreen(): JSX.Element {
                         <input type="date" name="birthday" max="2099-12-31" /></span>
                       </label>
                     </div>
-                    <div className="custom-select custom-select--not-selected"><span className="custom-select__label">Ваша локация</span>
-                      <button className="custom-select__button" type="button" aria-label="Выберите одну из опций"><span className="custom-select__text"></span><span className="custom-select__icon">
-                        <svg width="15" height="6" aria-hidden="true">
-                          <use xlinkHref="#arrow-down"></use>
-                        </svg></span></button>
+                    <div className={`custom-select ${isOpen ? 'is-open ' : ''}${selectedLocation ? 'not-empty ' : ''}`}>
+                      <span className="custom-select__label">Ваша локация</span>
+                      <button
+                        className="custom-select__button"
+                        type="button"
+                        aria-label="Выберите одну из опций"
+                        onClick={() => setIsOpen(!isOpen)}
+                      >
+                        <span className="custom-select__text">{selectedLocation}</span>
+                        <span className="custom-select__icon">
+                          <svg width="15" height="6" aria-hidden="true">
+                            <use xlinkHref="#arrow-down"></use>
+                          </svg>
+                        </span>
+                      </button>
                       <ul className="custom-select__list" role="listbox">
+                        {Object.entries(UserLocation).map(([key, location]) => (
+                          <li
+                            className="custom-select__item"
+                            key={key}
+                            role="option"
+                            aria-selected={selectedLocation === location}
+                            onClick={() => handleLocationSelect(location)} // Обрабатываем выбор элемента
+                            style={{ cursor: 'pointer' }} // Делаем курсор указателем при наведении
+                          >
+                            {location}
+                          </li>
+                        ))}
                       </ul>
                     </div>
                     <div className="custom-input">
@@ -114,27 +151,15 @@ function RegistrationScreen(): JSX.Element {
                     </div>
                     <div className="sign-up__radio"><span className="sign-up__label">Пол</span>
                       <div className="custom-toggle-radio custom-toggle-radio--big">
-                        <div className="custom-toggle-radio__block">
-                          <label>
-                            <input type="radio" name="sex" />
-                            <span className="custom-toggle-radio__icon"></span>
-                            <span className="custom-toggle-radio__label">Мужской</span>
-                          </label>
-                        </div>
-                        <div className="custom-toggle-radio__block">
-                          <label>
-                            <input type="radio" name="sex" checked />
-                            <span className="custom-toggle-radio__icon"></span>
-                            <span className="custom-toggle-radio__label">Женский</span>
-                          </label>
-                        </div>
-                        <div className="custom-toggle-radio__block">
-                          <label>
-                            <input type="radio" name="sex" />
-                            <span className="custom-toggle-radio__icon"></span>
-                            <span className="custom-toggle-radio__label">Неважно</span>
-                          </label>
-                        </div>
+                        {Object.entries(SexUserLabel).map(([key, value]) => (
+                          <div className="custom-toggle-radio__block">
+                            <label key={key}>
+                              <input type="radio" name="sex" value={key} key={key} />
+                              <span className="custom-toggle-radio__icon"></span>
+                              <span className="custom-toggle-radio__label">{value}</span>
+                            </label>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>

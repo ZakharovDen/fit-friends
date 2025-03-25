@@ -54,5 +54,5 @@ export const AuthFieldDescription = {
   Description: { description: 'Текст с общей информацией', example: 'Текст с общей информацией  о пользователе' },
   Location: { description: 'Станция метро', example: UserLocation.Petrogradskaya, enum: UserLocation },
   BackgroundImage:  { description: 'Фоновая картинка для карточки пользователя' },
-  Role:  { description: 'Роль пользователя', example: UserRole.Admin, enum: UserRole },
+  Role:  { description: 'Роль пользователя', example: UserRole.Coach, enum: UserRole },
 } as const;

@@ -42,7 +42,7 @@ export class UsersController {
     return data;
   }
 
-  @Post('register')
+  @Post()
   @ApiOperation({ summary: 'Регистрация пользователя.' })
   @ApiResponse({
     status: HttpStatus.CREATED,
