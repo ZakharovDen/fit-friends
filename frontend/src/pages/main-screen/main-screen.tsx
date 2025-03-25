@@ -1,33 +1,25 @@
 import { useNavigate } from "react-router-dom";
 import { TrainingItemDisplayMode } from "../../components/training-item/constant";
 import TrainingItem from "../../components/training-item/training-item";
-import { Sex } from "../../types/sex.enum";
-import { Training } from "../../types/training/training";
-import { TrainingDuration } from "../../types/training/training-duration.enum";
-import { TrainingLevel } from "../../types/training/training-level.enum";
-import { TrainingType } from "../../types/training/training-type.enum";
 import { AppRoute } from "../../constant";
-
-const mockTraining: Training = {
-  id: "0dfbda7e-fb14-4ca3-ae1d-8e111a777a66",
-  userId: "6581762309c030b503e30512",
-  title: "full body stretch",
-  image: "default/catalog-product-6.png",
-  level: TrainingLevel["Beginner"],
-  type: TrainingType["Pilates"],
-  duration: TrainingDuration["50-80"],
-  price: 1000,
-  calories: 1607,
-  description: "Знаменитый кроссфит комплекс. Синди — универсальная тренировка для развития функциональной силы.",
-  sex: Sex["Male"],
-  video: "uploads/training-video-1.mp4",
-  specialOffer: false,
-  createdAt: new Date(),
-  rating: 4.5
-}
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { getTrainings } from "../../store/training/selectors";
+import { useEffect, useState } from "react";
+import { QueryParams } from "../../types/training/query-params";
+import { fetchTrainingsAction } from "../../store/training/thunks";
 
 function MainScreen(): JSX.Element {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { entities } = useAppSelector(getTrainings);
+  const [queryParams, setQueryParams] = useState<QueryParams>({
+    sortBy: 'createDate',
+    sortOrder: 'asc',
+    page: 1,
+  });
+  useEffect(() => {
+    dispatch(fetchTrainingsAction(queryParams));
+  }, [dispatch, queryParams]);
   return (
     <main>
       <h1 className="visually-hidden">FitFriends — Время находить тренировки, спортзалы и друзей спортсменов</h1>
@@ -263,8 +255,7 @@ function MainScreen(): JSX.Element {
               </div>
             </div>
             <ul className="popular-trainings__list">
-              <TrainingItem displayMode={TrainingItemDisplayMode.Popular} training={mockTraining} />
-              <TrainingItem displayMode={TrainingItemDisplayMode.Popular} training={mockTraining} />
+              {entities.map((training) => <TrainingItem displayMode={TrainingItemDisplayMode.Popular} training={training} />)}
             </ul>
           </div>
         </div>
