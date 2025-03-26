@@ -29,17 +29,17 @@ const descriptions = [
 ]
 
 const images = [
-  'default/training-1.png',
-  'default/training-2.png',
-  'default/training-3.png',
-  'default/training-4.png',
+  '/default/training-1.png',
+  '/default/training-2.png',
+  '/default/training-3.png',
+  '/default/training-4.png',
 ]
 
 const videos = [
-  'default/training-video-0.mp4',
-  'default/training-video-1.mp4',
-  'default/training-video-2.mp4',
-  'default/training-video-3.mp4',
+  '/default/training-video-0.mp4',
+  '/default/training-video-1.mp4',
+  '/default/training-video-2.mp4',
+  '/default/training-video-3.mp4',
 ]
 
 export function getImages() {

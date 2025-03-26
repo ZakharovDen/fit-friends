@@ -18,7 +18,7 @@ function TrainingItem({ training, displayMode }: TrainingItemProps): JSX.Element
             <picture>
               <source
                 type="image/webp"
-                srcSet={`http://localhost:3337/api/files/static/${image}`}
+                srcSet={image}
               />
               <img
                 src="img/content/thumbnails/training-02.jpg"

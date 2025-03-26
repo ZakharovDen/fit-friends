@@ -17,9 +17,12 @@ export class FitController {
   @Get('trainings')
   @ApiOperation({ summary: 'Список тренировок.' })
   @ApiResponse({ status: HttpStatus.OK, type: FitTrainingWithPaginationRdo })
-  public async getAllTrainings(@Query() query?: FitTrainingQuery) {
-    const trainings = (await this.httpService.axiosRef.get(ApplicationServiceURL.FitTrainings, { params: query })).data;
-    return trainings;
+  public async getAllTrainings(@Query() query?: FitTrainingQuery): Promise<FitTrainingWithPaginationRdo> {
+    const trainings: FitTrainingWithPaginationRdo = (await this.httpService.axiosRef.get(ApplicationServiceURL.FitTrainings, { params: query })).data;
+    return {
+      ...trainings, 
+      entities: trainings.entities.map((entity) => ({...entity, image: `${ApplicationServiceURL.File}/static${entity.image}`}))
+    };
   }
 
   @Get('trainings/:id')

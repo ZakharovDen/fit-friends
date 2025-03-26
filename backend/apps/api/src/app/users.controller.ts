@@ -37,7 +37,7 @@ export class UsersController {
   @Get(':id')
   public async getById(@Param('id') id: string): Promise<UserRdo> {
     const data: UserRdo = (await this.httpService.axiosRef.get(`${ApplicationServiceURL.Users}/${id}`)).data;
-    return data;
+    return {...data, avatar: `${ApplicationServiceURL.File}/static${data.avatar}`};
   }
 
   @Post()
