@@ -12,7 +12,7 @@ export const fetchTrainingsAction = createAsyncThunk<TrainingsWithPagination, an
   extra: AxiosInstance;
 }>(
   'data/fetchTrainings',
-  async ({ page, sortBy, sortOrder }: QueryParams, { extra: api }) => {
+  async ({ page, sortBy, sortOrder, limit }: QueryParams, { extra: api }) => {
     console.log('qqq');
     let query = '';
     if (page) {
@@ -23,6 +23,9 @@ export const fetchTrainingsAction = createAsyncThunk<TrainingsWithPagination, an
     }
     if (sortOrder) {
       query += `&sortDirection=${sortOrder}`;
+    }
+    if (limit) {
+      query += `&limit=${limit}`;
     }
     const result = await api.get<TrainingsWithPagination>(`${APIRoute.Trainings}?${query}`);
     return result.data;

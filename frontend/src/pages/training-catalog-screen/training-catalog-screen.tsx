@@ -5,18 +5,29 @@ import { useAppDispatch, useAppSelector } from "../../hooks";
 import { getTrainings } from "../../store/training/selectors";
 import { fetchTrainingsAction } from "../../store/training/thunks";
 import { QueryParams } from "../../types/training/query-params";
+import { COUNT_ITEMS_PER_PAGE }from './constant';
 
 function TrainingCatalogScreen(): JSX.Element {
   const dispatch = useAppDispatch();
-  const { entities } = useAppSelector(getTrainings);
+  const { entities, totalItems } = useAppSelector(getTrainings);
   const [queryParams, setQueryParams] = useState<QueryParams>({
     sortBy: 'createDate',
     sortOrder: 'asc',
     page: 1,
+    limit: COUNT_ITEMS_PER_PAGE
   });
+
   useEffect(() => {
     dispatch(fetchTrainingsAction(queryParams));
   }, [dispatch, queryParams]);
+
+  const handleButtonMoreClick = () => {
+    console.log(totalItems, queryParams.limit)
+    if (totalItems > queryParams.limit) {
+      setQueryParams({...queryParams, limit: queryParams.limit + COUNT_ITEMS_PER_PAGE});
+    }
+  }
+
   return (
     <main>
       <section className="inner-page">
@@ -35,7 +46,7 @@ function TrainingCatalogScreen(): JSX.Element {
                 <FilterSorting />
               </div>
             </div>
-            <TrainingCatalogList trainings={entities} />
+            <TrainingCatalogList trainings={entities} onButtonMoreClick={handleButtonMoreClick} totalItems={totalItems}/>
           </div>
         </div>
       </section>
