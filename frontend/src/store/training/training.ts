@@ -3,7 +3,7 @@ import { NameSpace } from "../const";
 import { deleteTrainingAction, fetchTrainingsAction, getFilterValuesAction, getTrainingAction, postTrainingAction } from "./thunks";
 import { TrainingsWithPagination } from "../../types/training/trainings-with-pagination";
 import { Training } from "../../types/training/training";
-import { AllowedFilterValues } from "../../types/training/allowed-filter-values";
+import { AllowedFilterValues } from "../../types/filter/allowed-filter-values";
 
 export type InitialState = {
   trainings: TrainingsWithPagination;

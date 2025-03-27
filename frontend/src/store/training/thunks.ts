@@ -5,7 +5,7 @@ import { APIRoute } from '../const';
 import { TrainingsWithPagination } from '../../types/training/trainings-with-pagination';
 import { QueryParams } from '../../types/training/query-params';
 import { Training } from '../../types/training/training';
-import { AllowedFilterValues } from '../../types/training/allowed-filter-values';
+import { AllowedFilterValues } from '../../types/filter/allowed-filter-values';
 
 export const fetchTrainingsAction = createAsyncThunk<TrainingsWithPagination, any, {
   dispatch: AppDispatch;
@@ -13,7 +13,7 @@ export const fetchTrainingsAction = createAsyncThunk<TrainingsWithPagination, an
   extra: AxiosInstance;
 }>(
   'data/fetchTrainings',
-  async ({ page, sortBy, sortOrder, limit, minPrice, maxPrice, minCalories, maxCalories, trainingType }: QueryParams, { extra: api }) => {
+  async ({ page, sortBy, sortOrder, limit, minPrice, maxPrice, minCalories, maxCalories, trainingType, isFree }: QueryParams, { extra: api }) => {
     let query = '';
     if (page) {
       query += `&page=${page}`;
@@ -27,12 +27,6 @@ export const fetchTrainingsAction = createAsyncThunk<TrainingsWithPagination, an
     if (limit) {
       query += `&limit=${limit}`;
     }
-    if (minPrice) {
-      query += `&minPrice=${minPrice}`;
-    }
-    if (maxPrice) {
-      query += `&maxPrice=${maxPrice}`;
-    }
     if (minCalories) {
       query += `&minCalories=${minCalories}`;
     }
@@ -44,6 +38,18 @@ export const fetchTrainingsAction = createAsyncThunk<TrainingsWithPagination, an
         query += `&trainingType=${type}`;
       }
     }
+    if (isFree) {
+      query += `&minPrice=${0}`;
+      query += `&maxPrice=${0}`;
+    } else {
+      if (minPrice) {
+        query += `&minPrice=${minPrice}`;
+      }
+      if (maxPrice) {
+        query += `&maxPrice=${maxPrice}`;
+      }  
+    }
+
     const result = await api.get<TrainingsWithPagination>(`${APIRoute.Trainings}?${query}`);
     return result.data;
   },

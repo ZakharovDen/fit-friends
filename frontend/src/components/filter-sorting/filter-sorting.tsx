@@ -2,8 +2,9 @@ import FilterMinMax from "../filter-min-max/filter-min-max";
 import { FilterMinMaxDisplayMode } from "../filter-min-max/constant";
 import { useEffect, useState } from "react";
 import { TrainingType, TrainingTypeLabel } from "../../types/training/training-type.enum";
-import { TrainingFilter } from "../../types/training/training-filter";
-import { AllowedFilterValues } from "../../types/training/allowed-filter-values";
+import { TrainingFilter } from "../../types/filter/training-filter";
+import { AllowedFilterValues } from "../../types/filter/allowed-filter-values";
+import { TrainingSort, TrainingSortLabel } from "../../types/filter/training-sort";
 
 type FilterSortingProps = {
   allowedFilterValues: AllowedFilterValues;
@@ -11,17 +12,15 @@ type FilterSortingProps = {
 }
 
 function FilterSorting({ allowedFilterValues, onFilterChange }: FilterSortingProps): JSX.Element {
-  const [filterValues, setFilterValues] = useState<TrainingFilter>({
-    price: {min: allowedFilterValues.price.min ?? 0, max: allowedFilterValues.price.max ?? 0},
-    calories: {min: allowedFilterValues.calories.min ?? 0, max: allowedFilterValues.calories.max ?? 0},
-    types: []
-  });
+  const defaultFilter: TrainingFilter = {
+    price: { min: allowedFilterValues.price.min ?? 0, max: allowedFilterValues.price.max ?? 0 },
+    calories: { min: allowedFilterValues.calories.min ?? 0, max: allowedFilterValues.calories.max ?? 0 },
+    types: [],
+    sort: TrainingSort.Lower
+  };
+  const [filterValues, setFilterValues] = useState<TrainingFilter>(defaultFilter);
   useEffect(() => {
-    setFilterValues({
-      price: {min: allowedFilterValues.price.min ?? 0, max: allowedFilterValues.price.max ?? 0},
-      calories: {min: allowedFilterValues.calories.min ?? 0, max: allowedFilterValues.calories.max ?? 0},
-      types: []
-    })
+    setFilterValues(defaultFilter)
   }, [allowedFilterValues]);
 
   useEffect(() => {
@@ -40,11 +39,16 @@ function FilterSorting({ allowedFilterValues, onFilterChange }: FilterSortingPro
     const { value, checked } = event.target;
 
     if (checked) {
-      setFilterValues({...filterValues, types: [...filterValues.types, value as TrainingType] });
+      setFilterValues({ ...filterValues, types: [...filterValues.types, value as TrainingType] });
     } else {
-      setFilterValues((filterValues) => ({...filterValues, types: filterValues.types.filter((type) => type !== value)}));
+      setFilterValues((filterValues) => ({ ...filterValues, types: filterValues.types.filter((type) => type !== value) }));
     }
   };
+
+  const handleSortChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    setFilterValues({ ...filterValues, sort: value as TrainingSort });
+  }
 
   return (
     <form className="gym-catalog-form__form">
@@ -100,14 +104,14 @@ function FilterSorting({ allowedFilterValues, onFilterChange }: FilterSortingPro
         <h4 className="gym-catalog-form__block-title">Тип</h4>
         <ul className="gym-catalog-form__check-list">
           {Object.entries(TrainingTypeLabel).map(([key, value]) => (
-            <li className="gym-catalog-form__check-list-item">
-              <div className="custom-toggle custom-toggle--checkbox">
+            <li className="gym-catalog-form__check-list-item" key={key}>
+              <div className="custom-toggle custom-toggle--checkbox" key={key}>
                 <label>
-                  <input 
-                    type="checkbox" 
-                    value={key} 
-                    name="type" 
-                    key={key} 
+                  <input
+                    type="checkbox"
+                    value={key}
+                    name="type"
+                    key={key}
                     checked={filterValues.types.includes(key as TrainingType)} // Проверяем, выбран ли чекбокс
                     onChange={handleTypeChange} // Обработчик изменения состояния
                   />
@@ -126,15 +130,19 @@ function FilterSorting({ allowedFilterValues, onFilterChange }: FilterSortingPro
       <div className="gym-catalog-form__block gym-catalog-form__block--sort">
         <h4 className="gym-catalog-form__title gym-catalog-form__title--sort">Сортировка</h4>
         <div className="btn-radio-sort gym-catalog-form__radio">
-          <label>
-            <input type="radio" name="sort" checked /><span className="btn-radio-sort__label">Дешевле</span>
-          </label>
-          <label>
-            <input type="radio" name="sort" /><span className="btn-radio-sort__label">Дороже</span>
-          </label>
-          <label>
-            <input type="radio" name="sort" /><span className="btn-radio-sort__label">Бесплатные</span>
-          </label>
+          {Object.entries(TrainingSortLabel).map(([key, value]) => (
+            <label key={key}>
+              <input
+                type="radio"
+                name="sort"
+                value={key}
+                key={key}
+                checked={filterValues.sort === key}
+                onChange={handleSortChange}
+              />
+              <span className="btn-radio-sort__label">{value}</span>
+            </label>
+          ))}
         </div>
       </div>
     </form>

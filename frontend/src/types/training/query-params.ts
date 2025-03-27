@@ -12,4 +12,5 @@ export interface QueryParams {
   minRating?: number;
   maxRating?: number;
   trainingType?: TrainingType[];
+  isFree?: boolean;
 }

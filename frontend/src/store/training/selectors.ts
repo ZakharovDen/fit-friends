@@ -1,5 +1,5 @@
 import { State } from '../../types/state';
-import { AllowedFilterValues } from '../../types/training/allowed-filter-values';
+import { AllowedFilterValues } from '../../types/filter/allowed-filter-values';
 import { Training } from '../../types/training/training';
 import { TrainingsWithPagination } from '../../types/training/trainings-with-pagination';
 import { NameSpace } from '../const';

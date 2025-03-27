@@ -11,7 +11,6 @@ export enum DefaultCalories {
   Min = 0
 }
 
-
 import { Sex, TrainingDuration, TrainingLevel, TrainingType } from "@backend/core";
 
 export const TrainingValidateValue = {
@@ -63,3 +62,15 @@ export const TrainingFieldDescription = {
   SpecialOffer: { description: 'Признак специального предложения', example: false },
   Rating: { description: 'Рейтинг тренировки', example: 5 },
 } as const ;
+
+export enum SortDirection {
+  Asc = 'asc',
+  Desc = 'desc',
+}
+
+export enum SortField {
+  Price = 'price',
+};
+
+export const DEFAULT_SORT_DIRECTION = SortDirection.Asc;
+export const DEFAULT_SORT_FIELD = SortField.Price;

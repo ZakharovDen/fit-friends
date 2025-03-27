@@ -1,8 +1,8 @@
 import { Transform } from 'class-transformer';
-import { IsIn, IsNumber, IsOptional } from 'class-validator';
+import { IsEnum, IsIn, IsNumber, IsOptional } from 'class-validator';
 
 import { ApiProperty } from '@nestjs/swagger';
-import { DEFAULT_COUNT_BY_PAGE_LIMIT, DEFAULT_PAGE_COUNT, DefaultCalories, DefaultPrice, DefaultRating } from './fit-training.constant';
+import { DEFAULT_COUNT_BY_PAGE_LIMIT, DEFAULT_PAGE_COUNT, DEFAULT_SORT_DIRECTION, DEFAULT_SORT_FIELD, DefaultCalories, DefaultPrice, DefaultRating, SortDirection, SortField } from './fit-training.constant';
 import { TrainingType } from '@backend/core';
 
 
@@ -17,6 +17,16 @@ export class FitTrainingQuery {
   @Transform(({ value }) => +value || DEFAULT_PAGE_COUNT)
   @IsOptional()
   public page?: number = DEFAULT_PAGE_COUNT;
+
+  @ApiProperty({ description: 'Поле для сортировки', enum: SortField, required: false })
+  @IsEnum(SortField)
+  @IsOptional()
+  public sortField?: SortField = DEFAULT_SORT_FIELD;
+
+  @ApiProperty({ description: 'Направление сортировки', enum: SortDirection, required: false })
+  @IsEnum(SortDirection)
+  @IsOptional()
+  public sortDirection?: SortDirection = DEFAULT_SORT_DIRECTION;
 
   @ApiProperty({ description: 'Цена от', required: false })
   @Transform(({ value }) => +value)
@@ -58,5 +68,4 @@ export class FitTrainingQuery {
   @IsIn(Object.values(TrainingType), { each: true })
   @IsOptional()
   public trainingType?: TrainingType[];
-
 }

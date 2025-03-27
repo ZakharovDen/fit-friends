@@ -6,6 +6,7 @@ import { FitTrainingFactory } from "./fit-training.factory";
 import { PrismaClientService } from "@backend/fit-models";
 import { FitTrainingQuery } from "./fit-training.query";
 import { Feedback, Prisma } from "@prisma/client";
+import { SortField } from "./fit-training.constant";
 
 @Injectable()
 export class FitTrainingRepository extends BasePostgresRepository<FitTrainingEntity, Training> {
@@ -34,6 +35,10 @@ export class FitTrainingRepository extends BasePostgresRepository<FitTrainingEnt
     const skip = query?.page && query?.limit ? (query.page - 1) * query.limit : undefined;
     const take = query?.limit ? query?.limit : undefined;
     const where: Prisma.TrainingWhereInput = {};
+    let orderBy: Prisma.TrainingOrderByWithRelationInput = {};
+    if (query.sortField === SortField.Price) {
+      orderBy = { price: query.sortDirection };
+    }
     where.price = {
       gte: (query?.minPrice) ?? query.minPrice,
       lte: (query?.maxPrice) ?? query.maxPrice,
@@ -76,7 +81,7 @@ export class FitTrainingRepository extends BasePostgresRepository<FitTrainingEnt
     }
 
     const [documents, trainingCount] = await Promise.all([
-      this.client.training.findMany({ where, skip, take, include: { feedbacks: true } }),
+      this.client.training.findMany({ orderBy, where, skip, take, include: { feedbacks: true } }),
       this.client.training.count({ where }),
     ]);
     return {
