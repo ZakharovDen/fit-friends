@@ -5,7 +5,7 @@ import { PaginationResult, Sex, Training, TrainingDuration, TrainingLevel, Train
 import { FitTrainingFactory } from "./fit-training.factory";
 import { PrismaClientService } from "@backend/fit-models";
 import { FitTrainingQuery } from "./fit-training.query";
-import { Feedback } from "@prisma/client";
+import { Feedback, Prisma } from "@prisma/client";
 
 @Injectable()
 export class FitTrainingRepository extends BasePostgresRepository<FitTrainingEntity, Training> {
@@ -32,9 +32,20 @@ export class FitTrainingRepository extends BasePostgresRepository<FitTrainingEnt
   public async findAll(query?: FitTrainingQuery): Promise<PaginationResult<FitTrainingEntity>> {
     const skip = query?.page && query?.limit ? (query.page - 1) * query.limit : undefined;
     const take = query?.limit ? query?.limit : undefined;
+    const where: Prisma.TrainingWhereInput = {};
+    where.price = {
+      gte: (query?.minPrice) ?? query.minPrice,
+      lte: (query?.maxPrice) ?? query.maxPrice,
+    }
+    where.calories = {
+      gte: (query?.minCalories) ?? query.minCalories,
+      lte: (query?.maxCalories) ?? query.maxCalories,
+    }
+    console.dir(where);
+
     const [documents, trainingCount] = await Promise.all([
-      this.client.training.findMany({ skip, take, include: { feedbacks: true } }),
-      this.client.training.count(),
+      this.client.training.findMany({ where, skip, take, include: { feedbacks: true } }),
+      this.client.training.count({ where }),
     ]);
     return {
       entities: documents.map(
@@ -57,7 +68,7 @@ export class FitTrainingRepository extends BasePostgresRepository<FitTrainingEnt
   }
 
   public async findById(id: string): Promise<FitTrainingEntity> {
-    const document = await this.client.training.findUnique({ where: { id }, include: {feedbacks: true} });
+    const document = await this.client.training.findUnique({ where: { id }, include: { feedbacks: true } });
 
     if (!document) {
       throw new NotFoundException(`Training with id = ${id} not found.`);
@@ -73,6 +84,31 @@ export class FitTrainingRepository extends BasePostgresRepository<FitTrainingEnt
         rating: this.getAvgRating(document.feedbacks)
       }
     );
+  }
+
+  public async getFilterValues() {
+    const data = await this.client.training.aggregate(
+      {
+        _min: {
+          price: true,
+          calories: true
+        },
+        _max: {
+          price: true,
+          calories: true
+        }
+      }
+    );
+    return {
+      price: {
+        min: data._min.price,
+        max: data._max.price
+      },
+      calories: {
+        min: data._min.calories,
+        max: data._max.calories
+      },
+    };
   }
 
 }

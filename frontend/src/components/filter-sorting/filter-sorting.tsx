@@ -1,15 +1,61 @@
-function FilterSorting(): JSX.Element {
+import { ChangeEvent, useState } from "react";
+import { FilterValues } from "../../types/training/filter-values";
+
+type FilterSortingProps = {
+  filterValues: FilterValues;
+  onPriceChange?: (newPrice: FilterValues['price']) => void; //  Добавили колбэк
+}
+
+function FilterSorting({ filterValues, onPriceChange }: FilterSortingProps): JSX.Element {
+  const [price, setPrice] = useState<FilterValues['price']>({
+    min: filterValues.price.min,
+    max: filterValues.price.max,
+  });
+
+  const handleMinPriceChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const newMinPrice = parseInt(event.target.value, 10);
+    setPrice(prevPrice => ({
+      ...prevPrice,
+      min: newMinPrice,
+    }));
+
+    // Вызываем колбэк, если он есть, чтобы сообщить родителю об изменении
+    onPriceChange?.({ ...price, min: newMinPrice });
+  };
+
+  const handleMaxPriceChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const newMaxPrice = parseInt(event.target.value, 10);
+    setPrice(prevPrice => ({
+      ...prevPrice,
+      max: newMaxPrice,
+    }));
+      // Вызываем колбэк, если он есть, чтобы сообщить родителю об изменении
+    onPriceChange?.({ ...price, max: newMaxPrice });
+  };
+
   return (
     <form className="gym-catalog-form__form">
       <div className="gym-catalog-form__block gym-catalog-form__block--price">
         <h4 className="gym-catalog-form__block-title">Цена, ₽</h4>
         <div className="filter-price">
           <div className="filter-price__input-text filter-price__input-text--min">
-            <input type="number" id="text-min" name="text-min" value="0" />
+            <input 
+              type="number" 
+              id="text-min" 
+              name="text-min" 
+              value={price.min}
+              onChange={handleMinPriceChange}
+            />
             <label htmlFor="text-min">от</label>
           </div>
           <div className="filter-price__input-text filter-price__input-text--max">
-            <input type="number" id="text-max" name="text-max" value="3200" />
+            <input 
+              type="number" 
+              id="text-max" 
+              name="text-max" 
+              value={price.max}
+              onChange={handleMaxPriceChange}
+            />
             <label htmlFor="text-max">до</label>
           </div>
         </div>

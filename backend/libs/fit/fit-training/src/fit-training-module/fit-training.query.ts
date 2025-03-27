@@ -17,4 +17,27 @@ export class FitTrainingQuery {
   @IsOptional()
   public page?: number = DEFAULT_PAGE_COUNT;
 
+  @ApiProperty({ description: 'Цена от', required: false })
+  @Transform(({ value }) => +value)
+  @IsOptional()
+  @IsNumber()
+  minPrice?: number = 0;
+
+  @ApiProperty({ description: 'Цена до', required: false })
+  @Transform(({ value }) => +value)
+  @IsOptional()
+  @IsNumber()
+  maxPrice?: number;
+
+  @ApiProperty({ description: 'Калории от', required: false })
+  @Transform(({ value }) => +value)
+  @IsOptional()
+  @IsNumber()
+  minCalories?: number = 0;
+
+  @ApiProperty({ description: 'Калории до', required: false })
+  @Transform(({ value }) => +value)
+  @IsOptional()
+  @IsNumber()
+  maxCalories?: number;
 }

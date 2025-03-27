@@ -1,14 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { NameSpace } from "../const";
-import { deleteTrainingAction, fetchTrainingsAction, getTrainingAction, postTrainingAction } from "./thunks";
+import { deleteTrainingAction, fetchTrainingsAction, getFilterValuesAction, getTrainingAction, postTrainingAction } from "./thunks";
 import { TrainingsWithPagination } from "../../types/training/trainings-with-pagination";
 import { Training } from "../../types/training/training";
+import { FilterValues } from "../../types/training/filter-values";
 
 export type InitialState = {
   trainings: TrainingsWithPagination;
   trainingInfo: Training | undefined;
   isTrainingsDataLoading: boolean;
   hasError: boolean;
+  filterValues: FilterValues;
 };
 
 const initialState: InitialState = {
@@ -22,6 +24,10 @@ const initialState: InitialState = {
   trainingInfo: undefined,
   isTrainingsDataLoading: false,
   hasError: false,
+  filterValues: {
+    price: { min: undefined, max: undefined }, 
+    calories: { min: undefined, max: undefined },
+  },
 };
 
 export const training = createSlice({
@@ -77,6 +83,9 @@ export const training = createSlice({
       .addCase(postTrainingAction.rejected, (state) => {
         state.isTrainingsDataLoading = false;
         state.hasError = true;
+      })
+      .addCase(getFilterValuesAction.fulfilled, (state, action) => {
+        state.filterValues = action.payload;
       })
   },
 })

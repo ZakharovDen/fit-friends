@@ -25,6 +25,13 @@ export class FitController {
     };
   }
 
+  @Get('/filter-values')
+  @ApiOperation({ summary: 'Минимальные и максимальные значения для фильтров.' })
+  public async getFilterValues(){
+    const {data} = await this.httpService.axiosRef.get(`${ApplicationServiceURL.FitTrainings}/filter-values`)
+    return data;
+  }
+
   @Get('trainings/:id')
   @ApiOperation({ summary: 'Детальная информация о тренировке.' })
   @ApiResponse({ status: HttpStatus.OK, type: FitTrainingRdo })

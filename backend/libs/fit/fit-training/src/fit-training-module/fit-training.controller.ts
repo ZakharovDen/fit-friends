@@ -31,6 +31,12 @@ export class FitTrainingController {
     return trainings;
   }
 
+  @Get('/filter-values')
+  @ApiOperation({ summary: 'Минимальные и максимальные значения для фильтров.' })
+  public async getFilterValues(){
+    return await this.fitTrainingService.getFilterValues();
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Детальная информация о тренировке.' })
   @ApiResponse({ status: HttpStatus.OK, type: FitTrainingRdo })

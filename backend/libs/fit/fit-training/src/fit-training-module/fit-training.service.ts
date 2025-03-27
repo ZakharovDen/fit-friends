@@ -26,4 +26,9 @@ export class FitTrainingService {
   public async findById(id: string): Promise<FitTrainingEntity> {
     return await this.fitTrainingRepository.findById(id);
   }
+
+  public async getFilterValues() {
+    return await this.fitTrainingRepository.getFilterValues();
+  }
+
 }

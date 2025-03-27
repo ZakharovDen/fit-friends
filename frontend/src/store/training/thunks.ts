@@ -5,6 +5,7 @@ import { APIRoute } from '../const';
 import { TrainingsWithPagination } from '../../types/training/trainings-with-pagination';
 import { QueryParams } from '../../types/training/query-params';
 import { Training } from '../../types/training/training';
+import { FilterValues } from '../../types/training/filter-values';
 
 export const fetchTrainingsAction = createAsyncThunk<TrainingsWithPagination, any, {
   dispatch: AppDispatch;
@@ -64,6 +65,18 @@ export const postTrainingAction = createAsyncThunk<Training, FormData, {
   'data/postTraining',
   async (formData, { extra: api }) => {
     const { data } = await api.post<Training>(`${APIRoute.Trainings}`, formData);
+    return data;
+  },
+);
+
+export const getFilterValuesAction = createAsyncThunk<FilterValues, undefined, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'data/getFilterValues',
+  async (_arg, { extra: api }) => {
+    const { data } = await api.get<FilterValues>(`${APIRoute.Trainings}/filter-values`);
     return data;
   },
 );

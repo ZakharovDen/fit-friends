@@ -2,13 +2,15 @@ import { useState, useEffect } from "react";
 import FilterSorting from "../../components/filter-sorting/filter-sorting";
 import TrainingCatalogList from "../../components/training-catalog/training-catalog-list";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { getTrainings } from "../../store/training/selectors";
-import { fetchTrainingsAction } from "../../store/training/thunks";
+import { getFilterValues, getTrainings } from "../../store/training/selectors";
+import { fetchTrainingsAction, getFilterValuesAction } from "../../store/training/thunks";
 import { QueryParams } from "../../types/training/query-params";
 import { COUNT_ITEMS_PER_PAGE }from './constant';
+import { FilterValues } from "../../types/training/filter-values";
 
 function TrainingCatalogScreen(): JSX.Element {
   const dispatch = useAppDispatch();
+  const filterValues = useAppSelector(getFilterValues);
   const { entities, totalItems } = useAppSelector(getTrainings);
   const [queryParams, setQueryParams] = useState<QueryParams>({
     sortBy: 'createDate',
@@ -16,17 +18,28 @@ function TrainingCatalogScreen(): JSX.Element {
     page: 1,
     limit: COUNT_ITEMS_PER_PAGE
   });
+  
+  useEffect(() => {
+    dispatch(getFilterValuesAction());
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(fetchTrainingsAction(queryParams));
   }, [dispatch, queryParams]);
 
   const handleButtonMoreClick = () => {
+    if (totalItems > queryParams.limit) {
+      setQueryParams({...queryParams, limit: queryParams.limit + COUNT_ITEMS_PER_PAGE});
+    }
+  }
+
+  const handleChangePrice = (priceValues: FilterValues['price']) => {
     console.log(totalItems, queryParams.limit)
     if (totalItems > queryParams.limit) {
       setQueryParams({...queryParams, limit: queryParams.limit + COUNT_ITEMS_PER_PAGE});
     }
   }
+
 
   return (
     <main>
@@ -43,7 +56,7 @@ function TrainingCatalogScreen(): JSX.Element {
                   </svg><span>Назад</span>
                 </button>
                 <h3 className="gym-catalog-form__title">Фильтры</h3>
-                <FilterSorting />
+                <FilterSorting filterValues={filterValues} onPriceChange={handleChangePrice}/>
               </div>
             </div>
             <TrainingCatalogList trainings={entities} onButtonMoreClick={handleButtonMoreClick} totalItems={totalItems}/>
