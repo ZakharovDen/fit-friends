@@ -16,12 +16,12 @@ function FilterSorting({ allowedFilterValues, onFilterChange }: FilterSortingPro
 
   const handleChangePrice = (priceValues: FilterValues['price']) => {
     setFilterValues({...filterValues, price: {min: priceValues.min, max: priceValues.max}});
-    onFilterChange(filterValues);
+    onFilterChange({...filterValues, price: {min: priceValues.min, max: priceValues.max}});
   }
 
   const handleChangeCalories = (caloriesValues: FilterValues['calories']) => {
     setFilterValues({...filterValues, calories: {min: caloriesValues.min, max: caloriesValues.max}});
-    onFilterChange(filterValues);
+    onFilterChange({...filterValues, calories: {min: caloriesValues.min, max: caloriesValues.max}});
   }
 
   return (
