@@ -1,8 +1,9 @@
 import { Transform } from 'class-transformer';
-import { IsNumber, IsOptional } from 'class-validator';
+import { IsIn, IsNumber, IsOptional } from 'class-validator';
 
 import { ApiProperty } from '@nestjs/swagger';
-import { DEFAULT_COUNT_BY_PAGE_LIMIT, DEFAULT_PAGE_COUNT } from './fit-training.constant';
+import { DEFAULT_COUNT_BY_PAGE_LIMIT, DEFAULT_PAGE_COUNT, DefaultCalories, DefaultPrice, DefaultRating } from './fit-training.constant';
+import { TrainingType } from '@backend/core';
 
 
 export class FitTrainingQuery {
@@ -21,7 +22,7 @@ export class FitTrainingQuery {
   @Transform(({ value }) => +value)
   @IsOptional()
   @IsNumber()
-  minPrice?: number = 0;
+  minPrice?: number = DefaultPrice.Min;
 
   @ApiProperty({ description: 'Цена до', required: false })
   @Transform(({ value }) => +value)
@@ -33,11 +34,29 @@ export class FitTrainingQuery {
   @Transform(({ value }) => +value)
   @IsOptional()
   @IsNumber()
-  minCalories?: number = 0;
+  minCalories?: number = DefaultCalories.Min;
 
   @ApiProperty({ description: 'Калории до', required: false })
   @Transform(({ value }) => +value)
   @IsOptional()
   @IsNumber()
   maxCalories?: number;
+
+  @ApiProperty({ description: 'Рейтинг от', required: false })
+  @Transform(({ value }) => +value)
+  @IsOptional()
+  @IsNumber()
+  minRating?: number = DefaultRating.Min;
+
+  @ApiProperty({ description: 'Рейтинг до', required: false })
+  @Transform(({ value }) => +value)
+  @IsOptional()
+  @IsNumber()
+  maxRating?: number = DefaultRating.Max;
+
+  @ApiProperty({ description: 'Тип гитар', required: false, enum: TrainingType })
+  @IsIn(Object.values(TrainingType), { each: true })
+  @IsOptional()
+  public trainingType?: TrainingType[];
+
 }

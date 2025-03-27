@@ -17,9 +17,10 @@ export class FitTrainingRepository extends BasePostgresRepository<FitTrainingEnt
   }
 
   private getAvgRating(feedbacks: Feedback[]): number {
-    return feedbacks.length > 0
+    const rating = feedbacks.length > 0
       ? feedbacks.reduce((sum, feedback) => sum + feedback.rating, 0) / feedbacks.length
-      : 0
+      : 0;
+    return Math.round(rating * 10) / 10;
   }
 
   public async save(entity: FitTrainingEntity): Promise<void> {
@@ -41,7 +42,39 @@ export class FitTrainingRepository extends BasePostgresRepository<FitTrainingEnt
       gte: (query?.minCalories) ?? query.minCalories,
       lte: (query?.maxCalories) ?? query.maxCalories,
     }
-    console.dir(where);
+    if (query?.trainingType) {
+      if (typeof query.trainingType === 'string') {
+        where.type = {
+          equals: query.trainingType
+        }
+      } else {
+        where.type = {
+          in: query.trainingType
+        }
+      }
+    }
+
+    const ratingTrainings = await this.client.feedback.groupBy({
+      by: ['trainingId'],
+      _avg: {
+        rating: true
+      },
+      having: {
+        rating: {
+          _avg: {
+            gte: query.minRating,
+            lte: query.maxRating,
+          },
+        },
+      },
+    });
+    console.dir(ratingTrainings);
+    const trainingIds = ratingTrainings.map((item) => item.trainingId);
+    if (trainingIds.length === 1) {
+      where.id = { equals: trainingIds[0] }
+    } else {
+      where.id = { in: trainingIds }
+    }
 
     const [documents, trainingCount] = await Promise.all([
       this.client.training.findMany({ where, skip, take, include: { feedbacks: true } }),
@@ -57,6 +90,7 @@ export class FitTrainingRepository extends BasePostgresRepository<FitTrainingEnt
             duration: document.duration as TrainingDuration,
             sex: document.sex as Sex,
             rating: this.getAvgRating(document.feedbacks)
+            //rating: Math.round(ratingTrainings.find((item) => item.trainingId === document.id)._avg.rating * 10) / 10
           }
         )
       ),

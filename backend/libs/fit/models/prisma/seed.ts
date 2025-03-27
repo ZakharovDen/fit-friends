@@ -8,7 +8,8 @@ async function seedDb(prismaClient: PrismaClient) {
   await prismaClient.training.deleteMany();
   for (let i = 0; i < TRAININGS_COUNT; i++) {
     const training = dataGenerator.generateTraining();
-    await prismaClient.training.create({ data: training });
+    const feedbacks = dataGenerator.generateFeedbacks();
+    await prismaClient.training.create({ data: {...training, feedbacks: {create: feedbacks}} });
   }
 
   console.info('🤘️ Database was filled');

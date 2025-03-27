@@ -1,5 +1,16 @@
 export const DEFAULT_COUNT_BY_PAGE_LIMIT = 5;
 export const DEFAULT_PAGE_COUNT = 1;
+export enum DefaultPrice {
+  Min = 0
+}
+export enum DefaultRating {
+  Min = 0,
+  Max = 5
+}
+export enum DefaultCalories {
+  Min = 0
+}
+
 
 import { Sex, TrainingDuration, TrainingLevel, TrainingType } from "@backend/core";
 

@@ -1,10 +1,15 @@
-import { getDescriptions, getImages, getTitles, getVideos } from './trainings';
+import { getDescriptions, getFeedbacks, getImages, getTitles, getVideos } from './trainings';
 import { getUsers } from './user';
 import { Sex, TrainingDuration, TrainingLevel, TrainingType } from "@backend/core";
 
 enum Price {
   Min = 0,
   Max = 10000
+}
+
+enum Rating {
+  Min = 0,
+  Max = 5
 }
 
 enum Calories {
@@ -46,4 +51,21 @@ export class DataGenerator {
       createdAt: this.generateRandomDate()
     };
   }
+
+  private generateFeedback() {
+    return {
+      userId: this.getRandomItem(getUsers()).id,
+      rating: this.generateRandomValue(Rating.Min, Rating.Max),
+      text: this.getRandomItem<string>(getFeedbacks()),
+    };
+  }
+
+  public generateFeedbacks() {
+    const feedbacks = [];
+    for (let i = 0; i < this.generateRandomValue(1, 5); i++){
+      feedbacks.push(this.generateFeedback());
+    }
+    return feedbacks;
+  }
+
 }
