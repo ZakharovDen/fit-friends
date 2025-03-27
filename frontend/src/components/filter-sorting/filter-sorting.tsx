@@ -1,64 +1,39 @@
-import { ChangeEvent, useState } from "react";
 import { FilterValues } from "../../types/training/filter-values";
+import FilterMinMax from "../filter-min-max/filter-min-max";
+import { FilterMinMaxDisplayMode } from "../filter-min-max/constant";
+import { useEffect, useState } from "react";
 
 type FilterSortingProps = {
-  filterValues: FilterValues;
-  onPriceChange?: (newPrice: FilterValues['price']) => void; //  Добавили колбэк
+  allowedFilterValues: FilterValues;
+  onFilterChange: (allowedFilterValues: FilterValues) => void; //  Добавили колбэк
 }
 
-function FilterSorting({ filterValues, onPriceChange }: FilterSortingProps): JSX.Element {
-  const [price, setPrice] = useState<FilterValues['price']>({
-    min: filterValues.price.min,
-    max: filterValues.price.max,
-  });
+function FilterSorting({ allowedFilterValues, onFilterChange }: FilterSortingProps): JSX.Element {
+  const [filterValues, setFilterValues] = useState<FilterValues>(allowedFilterValues);
+  useEffect(() => {
+    setFilterValues(allowedFilterValues)
+  }, [allowedFilterValues]);
 
-  const handleMinPriceChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const newMinPrice = parseInt(event.target.value, 10);
-    setPrice(prevPrice => ({
-      ...prevPrice,
-      min: newMinPrice,
-    }));
+  const handleChangePrice = (priceValues: FilterValues['price']) => {
+    setFilterValues({...filterValues, price: {min: priceValues.min, max: priceValues.max}});
+    onFilterChange(filterValues);
+  }
 
-    // Вызываем колбэк, если он есть, чтобы сообщить родителю об изменении
-    onPriceChange?.({ ...price, min: newMinPrice });
-  };
-
-  const handleMaxPriceChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const newMaxPrice = parseInt(event.target.value, 10);
-    setPrice(prevPrice => ({
-      ...prevPrice,
-      max: newMaxPrice,
-    }));
-      // Вызываем колбэк, если он есть, чтобы сообщить родителю об изменении
-    onPriceChange?.({ ...price, max: newMaxPrice });
-  };
+  const handleChangeCalories = (caloriesValues: FilterValues['calories']) => {
+    setFilterValues({...filterValues, calories: {min: caloriesValues.min, max: caloriesValues.max}});
+    onFilterChange(filterValues);
+  }
 
   return (
     <form className="gym-catalog-form__form">
       <div className="gym-catalog-form__block gym-catalog-form__block--price">
         <h4 className="gym-catalog-form__block-title">Цена, ₽</h4>
-        <div className="filter-price">
-          <div className="filter-price__input-text filter-price__input-text--min">
-            <input 
-              type="number" 
-              id="text-min" 
-              name="text-min" 
-              value={price.min}
-              onChange={handleMinPriceChange}
-            />
-            <label htmlFor="text-min">от</label>
-          </div>
-          <div className="filter-price__input-text filter-price__input-text--max">
-            <input 
-              type="number" 
-              id="text-max" 
-              name="text-max" 
-              value={price.max}
-              onChange={handleMaxPriceChange}
-            />
-            <label htmlFor="text-max">до</label>
-          </div>
-        </div>
+        <FilterMinMax 
+          minAllowedValue={allowedFilterValues.price.min ?? 0} 
+          maxAllowedValue={allowedFilterValues.price.max ?? 0} 
+          onChangeFilter={handleChangePrice} 
+          displayMode={FilterMinMaxDisplayMode.Price} 
+        />
         <div className="filter-range">
           <div className="filter-range__scale">
             <div className="filter-range__bar"><span className="visually-hidden">Полоса прокрутки</span></div>
@@ -71,16 +46,12 @@ function FilterSorting({ filterValues, onPriceChange }: FilterSortingProps): JSX
       </div>
       <div className="gym-catalog-form__block gym-catalog-form__block--calories">
         <h4 className="gym-catalog-form__block-title">Калории</h4>
-        <div className="filter-calories">
-          <div className="filter-calories__input-text filter-calories__input-text--min">
-            <input type="number" id="text-min-cal" name="text-min-cal" />
-            <label htmlFor="text-min-cal">от</label>
-          </div>
-          <div className="filter-calories__input-text filter-calories__input-text--max">
-            <input type="number" id="text-max-cal" name="text-max-cal" />
-            <label htmlFor="text-max-cal">до</label>
-          </div>
-        </div>
+        <FilterMinMax 
+          minAllowedValue={allowedFilterValues.calories.min ?? 0} 
+          maxAllowedValue={allowedFilterValues.calories.max ?? 0} 
+          onChangeFilter={handleChangeCalories} 
+          displayMode={FilterMinMaxDisplayMode.Calories} 
+        />
         <div className="filter-range">
           <div className="filter-range__scale">
             <div className="filter-range__bar"><span className="visually-hidden">Полоса прокрутки</span></div>

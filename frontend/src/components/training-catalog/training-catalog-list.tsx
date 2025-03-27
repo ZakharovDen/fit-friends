@@ -35,9 +35,11 @@ function TrainingCatalogList({ trainings, onButtonMoreClick, totalItems }: Train
         {trainings.map((training) => <TrainingItem displayMode={TrainingItemDisplayMode.Catalog} training={training} key={training.id} />)}
       </ul>
       <div className="show-more training-catalog__show-more">
-        {showMoreButton ? (<button className="btn show-more__button show-more__button--more" type="button" onClick={handleButtonMoreClick}>Показать еще</button>) : (<button className="btn show-more__button show-more__button--more" type="button" onClick={handleButtonToTopClick}>Вернуться в начало</button>)}
-        
-        
+        {
+          showMoreButton
+            ? (<button className="btn show-more__button show-more__button--more" type="button" onClick={handleButtonMoreClick}>Показать еще</button>)
+            : (<button className="btn show-more__button show-more__button--more" type="button" onClick={handleButtonToTopClick}>Вернуться в начало</button>)
+        }
       </div>
     </div>
   );

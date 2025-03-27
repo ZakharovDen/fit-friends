@@ -68,7 +68,6 @@ export class FitTrainingRepository extends BasePostgresRepository<FitTrainingEnt
         },
       },
     });
-    console.dir(ratingTrainings);
     const trainingIds = ratingTrainings.map((item) => item.trainingId);
     if (trainingIds.length === 1) {
       where.id = { equals: trainingIds[0] }

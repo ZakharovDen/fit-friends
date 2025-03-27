@@ -10,13 +10,17 @@ import { FilterValues } from "../../types/training/filter-values";
 
 function TrainingCatalogScreen(): JSX.Element {
   const dispatch = useAppDispatch();
-  const filterValues = useAppSelector(getFilterValues);
+  const allowedFilterValues = useAppSelector(getFilterValues);
   const { entities, totalItems } = useAppSelector(getTrainings);
   const [queryParams, setQueryParams] = useState<QueryParams>({
     sortBy: 'createDate',
     sortOrder: 'asc',
     page: 1,
-    limit: COUNT_ITEMS_PER_PAGE
+    limit: COUNT_ITEMS_PER_PAGE,
+    minPrice: allowedFilterValues.price.min ?? 0,
+    maxPrice: allowedFilterValues.price.max ?? 0,
+    minCalories: allowedFilterValues.calories.min ?? 0,
+    maxCalories: allowedFilterValues.calories.max ?? 0,
   });
   
   useEffect(() => {
@@ -33,13 +37,15 @@ function TrainingCatalogScreen(): JSX.Element {
     }
   }
 
-  const handleChangePrice = (priceValues: FilterValues['price']) => {
-    console.log(totalItems, queryParams.limit)
-    if (totalItems > queryParams.limit) {
-      setQueryParams({...queryParams, limit: queryParams.limit + COUNT_ITEMS_PER_PAGE});
-    }
+  const handleChangeFilter = (filterValues: FilterValues) => {
+    setQueryParams({
+      ...queryParams, 
+      minPrice: filterValues.price.min, 
+      maxPrice: filterValues.price.max,
+      minCalories: filterValues.calories.min,
+      maxCalories: filterValues.calories.max,
+    });
   }
-
 
   return (
     <main>
@@ -56,7 +62,7 @@ function TrainingCatalogScreen(): JSX.Element {
                   </svg><span>Назад</span>
                 </button>
                 <h3 className="gym-catalog-form__title">Фильтры</h3>
-                <FilterSorting filterValues={filterValues} onPriceChange={handleChangePrice}/>
+                <FilterSorting allowedFilterValues={allowedFilterValues} onFilterChange={handleChangeFilter}/>
               </div>
             </div>
             <TrainingCatalogList trainings={entities} onButtonMoreClick={handleButtonMoreClick} totalItems={totalItems}/>

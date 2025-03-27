@@ -22,37 +22,37 @@ export class FitTrainingQuery {
   @Transform(({ value }) => +value)
   @IsOptional()
   @IsNumber()
-  minPrice?: number = DefaultPrice.Min;
+  public minPrice?: number = DefaultPrice.Min;
 
   @ApiProperty({ description: 'Цена до', required: false })
   @Transform(({ value }) => +value)
   @IsOptional()
   @IsNumber()
-  maxPrice?: number;
+  public maxPrice?: number;
 
   @ApiProperty({ description: 'Калории от', required: false })
   @Transform(({ value }) => +value)
   @IsOptional()
   @IsNumber()
-  minCalories?: number = DefaultCalories.Min;
+  public minCalories?: number = DefaultCalories.Min;
 
   @ApiProperty({ description: 'Калории до', required: false })
   @Transform(({ value }) => +value)
   @IsOptional()
   @IsNumber()
-  maxCalories?: number;
+  public maxCalories?: number;
 
   @ApiProperty({ description: 'Рейтинг от', required: false })
   @Transform(({ value }) => +value)
   @IsOptional()
   @IsNumber()
-  minRating?: number = DefaultRating.Min;
+  public minRating?: number = DefaultRating.Min;
 
   @ApiProperty({ description: 'Рейтинг до', required: false })
   @Transform(({ value }) => +value)
   @IsOptional()
   @IsNumber()
-  maxRating?: number = DefaultRating.Max;
+  public maxRating?: number = DefaultRating.Max;
 
   @ApiProperty({ description: 'Тип гитар', required: false, enum: TrainingType })
   @IsIn(Object.values(TrainingType), { each: true })

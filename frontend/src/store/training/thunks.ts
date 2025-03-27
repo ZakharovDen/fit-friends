@@ -13,8 +13,7 @@ export const fetchTrainingsAction = createAsyncThunk<TrainingsWithPagination, an
   extra: AxiosInstance;
 }>(
   'data/fetchTrainings',
-  async ({ page, sortBy, sortOrder, limit }: QueryParams, { extra: api }) => {
-    console.log('qqq');
+  async ({ page, sortBy, sortOrder, limit, minPrice, maxPrice, minCalories, maxCalories }: QueryParams, { extra: api }) => {
     let query = '';
     if (page) {
       query += `&page=${page}`;
@@ -28,6 +27,19 @@ export const fetchTrainingsAction = createAsyncThunk<TrainingsWithPagination, an
     if (limit) {
       query += `&limit=${limit}`;
     }
+    if (minPrice) {
+      query += `&minPrice=${minPrice}`;
+    }
+    if (maxPrice) {
+      query += `&maxPrice=${maxPrice}`;
+    }
+    if (minCalories) {
+      query += `&minCalories=${minCalories}`;
+    }
+    if (maxCalories) {
+      query += `&maxCalories=${maxCalories}`;
+    }
+    console.dir(query);
     const result = await api.get<TrainingsWithPagination>(`${APIRoute.Trainings}?${query}`);
     return result.data;
   },
