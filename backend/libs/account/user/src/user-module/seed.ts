@@ -21,7 +21,6 @@ async function bootstrap() {
       username: process.env.MONGO_USER
     }
   );
-  console.log(mongoDbUrl);
 
   const mongoose = await Mongoose.connect(mongoDbUrl);
   const salt = await genSalt(SALT_ROUNDS);

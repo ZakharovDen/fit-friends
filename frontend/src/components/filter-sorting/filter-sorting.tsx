@@ -1,38 +1,60 @@
-import { FilterValues } from "../../types/training/filter-values";
 import FilterMinMax from "../filter-min-max/filter-min-max";
 import { FilterMinMaxDisplayMode } from "../filter-min-max/constant";
 import { useEffect, useState } from "react";
+import { TrainingType, TrainingTypeLabel } from "../../types/training/training-type.enum";
+import { TrainingFilter } from "../../types/training/training-filter";
+import { AllowedFilterValues } from "../../types/training/allowed-filter-values";
 
 type FilterSortingProps = {
-  allowedFilterValues: FilterValues;
-  onFilterChange: (allowedFilterValues: FilterValues) => void; //  Добавили колбэк
+  allowedFilterValues: AllowedFilterValues;
+  onFilterChange: (filterValues: TrainingFilter) => void;
 }
 
 function FilterSorting({ allowedFilterValues, onFilterChange }: FilterSortingProps): JSX.Element {
-  const [filterValues, setFilterValues] = useState<FilterValues>(allowedFilterValues);
+  const [filterValues, setFilterValues] = useState<TrainingFilter>({
+    price: {min: allowedFilterValues.price.min ?? 0, max: allowedFilterValues.price.max ?? 0},
+    calories: {min: allowedFilterValues.calories.min ?? 0, max: allowedFilterValues.calories.max ?? 0},
+    types: []
+  });
   useEffect(() => {
-    setFilterValues(allowedFilterValues)
+    setFilterValues({
+      price: {min: allowedFilterValues.price.min ?? 0, max: allowedFilterValues.price.max ?? 0},
+      calories: {min: allowedFilterValues.calories.min ?? 0, max: allowedFilterValues.calories.max ?? 0},
+      types: []
+    })
   }, [allowedFilterValues]);
 
-  const handleChangePrice = (priceValues: FilterValues['price']) => {
-    setFilterValues({...filterValues, price: {min: priceValues.min, max: priceValues.max}});
-    onFilterChange({...filterValues, price: {min: priceValues.min, max: priceValues.max}});
+  useEffect(() => {
+    onFilterChange(filterValues);
+  }, [filterValues])
+
+  const handleChangePrice = (priceValues: TrainingFilter['price']) => {
+    setFilterValues({ ...filterValues, price: { min: priceValues.min, max: priceValues.max } });
   }
 
-  const handleChangeCalories = (caloriesValues: FilterValues['calories']) => {
-    setFilterValues({...filterValues, calories: {min: caloriesValues.min, max: caloriesValues.max}});
-    onFilterChange({...filterValues, calories: {min: caloriesValues.min, max: caloriesValues.max}});
+  const handleChangeCalories = (caloriesValues: TrainingFilter['calories']) => {
+    setFilterValues({ ...filterValues, calories: { min: caloriesValues.min, max: caloriesValues.max } });
   }
+
+  const handleTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, checked } = event.target;
+
+    if (checked) {
+      setFilterValues({...filterValues, types: [...filterValues.types, value as TrainingType] });
+    } else {
+      setFilterValues((filterValues) => ({...filterValues, types: filterValues.types.filter((type) => type !== value)}));
+    }
+  };
 
   return (
     <form className="gym-catalog-form__form">
       <div className="gym-catalog-form__block gym-catalog-form__block--price">
         <h4 className="gym-catalog-form__block-title">Цена, ₽</h4>
-        <FilterMinMax 
-          minAllowedValue={allowedFilterValues.price.min ?? 0} 
-          maxAllowedValue={allowedFilterValues.price.max ?? 0} 
-          onChangeFilter={handleChangePrice} 
-          displayMode={FilterMinMaxDisplayMode.Price} 
+        <FilterMinMax
+          minAllowedValue={allowedFilterValues.price.min ?? 0}
+          maxAllowedValue={allowedFilterValues.price.max ?? 0}
+          onChangeFilter={handleChangePrice}
+          displayMode={FilterMinMaxDisplayMode.Price}
         />
         <div className="filter-range">
           <div className="filter-range__scale">
@@ -46,11 +68,11 @@ function FilterSorting({ allowedFilterValues, onFilterChange }: FilterSortingPro
       </div>
       <div className="gym-catalog-form__block gym-catalog-form__block--calories">
         <h4 className="gym-catalog-form__block-title">Калории</h4>
-        <FilterMinMax 
-          minAllowedValue={allowedFilterValues.calories.min ?? 0} 
-          maxAllowedValue={allowedFilterValues.calories.max ?? 0} 
-          onChangeFilter={handleChangeCalories} 
-          displayMode={FilterMinMaxDisplayMode.Calories} 
+        <FilterMinMax
+          minAllowedValue={allowedFilterValues.calories.min ?? 0}
+          maxAllowedValue={allowedFilterValues.calories.max ?? 0}
+          onChangeFilter={handleChangeCalories}
+          displayMode={FilterMinMaxDisplayMode.Calories}
         />
         <div className="filter-range">
           <div className="filter-range__scale">
@@ -77,86 +99,28 @@ function FilterSorting({ allowedFilterValues, onFilterChange }: FilterSortingPro
       <div className="gym-catalog-form__block gym-catalog-form__block--type">
         <h4 className="gym-catalog-form__block-title">Тип</h4>
         <ul className="gym-catalog-form__check-list">
-          <li className="gym-catalog-form__check-list-item">
-            <div className="custom-toggle custom-toggle--checkbox">
-              <label>
-                <input type="checkbox" value="type-1" name="type" /><span className="custom-toggle__icon">
-                  <svg width="9" height="6" aria-hidden="true">
-                    <use xlinkHref="#arrow-check"></use>
-                  </svg></span><span className="custom-toggle__label">йога</span>
-              </label>
-            </div>
-          </li>
-          <li className="gym-catalog-form__check-list-item">
-            <div className="custom-toggle custom-toggle--checkbox">
-              <label>
-                <input type="checkbox" value="type-1" name="type" /><span className="custom-toggle__icon">
-                  <svg width="9" height="6" aria-hidden="true">
-                    <use xlinkHref="#arrow-check"></use>
-                  </svg></span><span className="custom-toggle__label">силовые</span>
-              </label>
-            </div>
-          </li>
-          <li className="gym-catalog-form__check-list-item">
-            <div className="custom-toggle custom-toggle--checkbox">
-              <label>
-                <input type="checkbox" value="type" name="type" checked /><span className="custom-toggle__icon">
-                  <svg width="9" height="6" aria-hidden="true">
-                    <use xlinkHref="#arrow-check"></use>
-                  </svg></span><span className="custom-toggle__label">кроссфит</span>
-              </label>
-            </div>
-          </li>
-          <li className="gym-catalog-form__check-list-item">
-            <div className="custom-toggle custom-toggle--checkbox">
-              <label>
-                <input type="checkbox" value="type-1" name="type" checked /><span className="custom-toggle__icon">
-                  <svg width="9" height="6" aria-hidden="true">
-                    <use xlinkHref="#arrow-check"></use>
-                  </svg></span><span className="custom-toggle__label">бокс</span>
-              </label>
-            </div>
-          </li>
-          <li className="gym-catalog-form__check-list-item">
-            <div className="custom-toggle custom-toggle--checkbox">
-              <label>
-                <input type="checkbox" value="type-1" name="type" /><span className="custom-toggle__icon">
-                  <svg width="9" height="6" aria-hidden="true">
-                    <use xlinkHref="#arrow-check"></use>
-                  </svg></span><span className="custom-toggle__label">бег</span>
-              </label>
-            </div>
-          </li>
-          <li className="gym-catalog-form__check-list-item">
-            <div className="custom-toggle custom-toggle--checkbox">
-              <label>
-                <input type="checkbox" value="type-1" name="type" /><span className="custom-toggle__icon">
-                  <svg width="9" height="6" aria-hidden="true">
-                    <use xlinkHref="#arrow-check"></use>
-                  </svg></span><span className="custom-toggle__label">аэробика</span>
-              </label>
-            </div>
-          </li>
-          <li className="gym-catalog-form__check-list-item">
-            <div className="custom-toggle custom-toggle--checkbox">
-              <label>
-                <input type="checkbox" value="type-1" name="type" /><span className="custom-toggle__icon">
-                  <svg width="9" height="6" aria-hidden="true">
-                    <use xlinkHref="#arrow-check"></use>
-                  </svg></span><span className="custom-toggle__label">пилатес</span>
-              </label>
-            </div>
-          </li>
-          <li className="gym-catalog-form__check-list-item">
-            <div className="custom-toggle custom-toggle--checkbox">
-              <label>
-                <input type="checkbox" value="type-1" name="type" /><span className="custom-toggle__icon">
-                  <svg width="9" height="6" aria-hidden="true">
-                    <use xlinkHref="#arrow-check"></use>
-                  </svg></span><span className="custom-toggle__label">стрейчинг</span>
-              </label>
-            </div>
-          </li>
+          {Object.entries(TrainingTypeLabel).map(([key, value]) => (
+            <li className="gym-catalog-form__check-list-item">
+              <div className="custom-toggle custom-toggle--checkbox">
+                <label>
+                  <input 
+                    type="checkbox" 
+                    value={key} 
+                    name="type" 
+                    key={key} 
+                    checked={filterValues.types.includes(key as TrainingType)} // Проверяем, выбран ли чекбокс
+                    onChange={handleTypeChange} // Обработчик изменения состояния
+                  />
+                  <span className="custom-toggle__icon">
+                    <svg width="9" height="6" aria-hidden="true">
+                      <use xlinkHref="#arrow-check"></use>
+                    </svg>
+                  </span>
+                  <span className="custom-toggle__label">{value.toLocaleLowerCase()}</span>
+                </label>
+              </div>
+            </li>
+          ))}
         </ul>
       </div>
       <div className="gym-catalog-form__block gym-catalog-form__block--sort">

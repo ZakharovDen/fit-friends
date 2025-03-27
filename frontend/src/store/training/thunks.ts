@@ -5,7 +5,7 @@ import { APIRoute } from '../const';
 import { TrainingsWithPagination } from '../../types/training/trainings-with-pagination';
 import { QueryParams } from '../../types/training/query-params';
 import { Training } from '../../types/training/training';
-import { FilterValues } from '../../types/training/filter-values';
+import { AllowedFilterValues } from '../../types/training/allowed-filter-values';
 
 export const fetchTrainingsAction = createAsyncThunk<TrainingsWithPagination, any, {
   dispatch: AppDispatch;
@@ -13,7 +13,7 @@ export const fetchTrainingsAction = createAsyncThunk<TrainingsWithPagination, an
   extra: AxiosInstance;
 }>(
   'data/fetchTrainings',
-  async ({ page, sortBy, sortOrder, limit, minPrice, maxPrice, minCalories, maxCalories }: QueryParams, { extra: api }) => {
+  async ({ page, sortBy, sortOrder, limit, minPrice, maxPrice, minCalories, maxCalories, trainingType }: QueryParams, { extra: api }) => {
     let query = '';
     if (page) {
       query += `&page=${page}`;
@@ -39,7 +39,11 @@ export const fetchTrainingsAction = createAsyncThunk<TrainingsWithPagination, an
     if (maxCalories) {
       query += `&maxCalories=${maxCalories}`;
     }
-    console.dir(query);
+    if (trainingType) {
+      for (const type of trainingType) {
+        query += `&trainingType=${type}`;
+      }
+    }
     const result = await api.get<TrainingsWithPagination>(`${APIRoute.Trainings}?${query}`);
     return result.data;
   },
@@ -81,14 +85,14 @@ export const postTrainingAction = createAsyncThunk<Training, FormData, {
   },
 );
 
-export const getFilterValuesAction = createAsyncThunk<FilterValues, undefined, {
+export const getFilterValuesAction = createAsyncThunk<AllowedFilterValues, undefined, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }>(
   'data/getFilterValues',
   async (_arg, { extra: api }) => {
-    const { data } = await api.get<FilterValues>(`${APIRoute.Trainings}/filter-values`);
+    const { data } = await api.get<AllowedFilterValues>(`${APIRoute.Trainings}/filter-values`);
     return data;
   },
 );

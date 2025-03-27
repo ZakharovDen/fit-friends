@@ -43,7 +43,7 @@ function TrainingItem({ training, displayMode }: TrainingItemProps): JSX.Element
           <div className="thumbnail-training__info">
             <ul className="thumbnail-training__hashtags-list">
               <li className="thumbnail-training__hashtags-item">
-                <div className="hashtag thumbnail-training__hashtag"><span>{`#${TrainingTypeLabel[type]}`}</span></div>
+                <div className="hashtag thumbnail-training__hashtag"><span>{`#${TrainingTypeLabel[type].toLowerCase()}`}</span></div>
               </li>
               <li className="thumbnail-training__hashtags-item">
                 <div className="hashtag thumbnail-training__hashtag"><span>{`#${calories}`}</span></div>

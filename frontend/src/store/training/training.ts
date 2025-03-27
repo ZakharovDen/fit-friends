@@ -3,14 +3,14 @@ import { NameSpace } from "../const";
 import { deleteTrainingAction, fetchTrainingsAction, getFilterValuesAction, getTrainingAction, postTrainingAction } from "./thunks";
 import { TrainingsWithPagination } from "../../types/training/trainings-with-pagination";
 import { Training } from "../../types/training/training";
-import { FilterValues } from "../../types/training/filter-values";
+import { AllowedFilterValues } from "../../types/training/allowed-filter-values";
 
 export type InitialState = {
   trainings: TrainingsWithPagination;
   trainingInfo: Training | undefined;
   isTrainingsDataLoading: boolean;
   hasError: boolean;
-  filterValues: FilterValues;
+  filterValues: AllowedFilterValues;
 };
 
 const initialState: InitialState = {

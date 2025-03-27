@@ -1,4 +1,4 @@
-export type FilterValues = {
+export type AllowedFilterValues = {
   price: {
     min: number | undefined;
     max: number | undefined;
@@ -6,5 +6,5 @@ export type FilterValues = {
   calories: {
     min: number | undefined;
     max: number | undefined;
-  }
+  },
 };

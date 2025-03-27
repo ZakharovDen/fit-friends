@@ -2,15 +2,15 @@ import { useState, useEffect } from "react";
 import FilterSorting from "../../components/filter-sorting/filter-sorting";
 import TrainingCatalogList from "../../components/training-catalog/training-catalog-list";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { getFilterValues, getTrainings } from "../../store/training/selectors";
+import { getAllowedFilterValues, getTrainings } from "../../store/training/selectors";
 import { fetchTrainingsAction, getFilterValuesAction } from "../../store/training/thunks";
 import { QueryParams } from "../../types/training/query-params";
 import { COUNT_ITEMS_PER_PAGE }from './constant';
-import { FilterValues } from "../../types/training/filter-values";
+import { TrainingFilter } from "../../types/training/training-filter";
 
 function TrainingCatalogScreen(): JSX.Element {
   const dispatch = useAppDispatch();
-  const allowedFilterValues = useAppSelector(getFilterValues);
+  const allowedFilterValues = useAppSelector(getAllowedFilterValues);
   const { entities, totalItems } = useAppSelector(getTrainings);
   const [queryParams, setQueryParams] = useState<QueryParams>({
     sortBy: 'createDate',
@@ -37,13 +37,14 @@ function TrainingCatalogScreen(): JSX.Element {
     }
   }
 
-  const handleChangeFilter = (filterValues: FilterValues) => {
+  const handleChangeFilter = (filterValues: TrainingFilter) => {
     setQueryParams({
       ...queryParams, 
       minPrice: filterValues.price.min, 
       maxPrice: filterValues.price.max,
       minCalories: filterValues.calories.min,
       maxCalories: filterValues.calories.max,
+      trainingType: filterValues.types
     });
   }
 
