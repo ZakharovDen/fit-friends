@@ -21,7 +21,7 @@ export class FitTrainingRepository extends BasePostgresRepository<FitTrainingEnt
     const rating = feedbacks.length > 0
       ? feedbacks.reduce((sum, feedback) => sum + feedback.rating, 0) / feedbacks.length
       : 0;
-    return Math.round(rating * 10) / 10;
+    return Math.round(rating);
   }
 
   public async save(entity: FitTrainingEntity): Promise<void> {
