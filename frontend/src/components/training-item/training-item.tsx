@@ -1,6 +1,8 @@
+import { Link } from "react-router-dom";
 import { Training } from "../../types/training/training";
 import { TrainingTypeLabel } from "../../types/training/training-type.enum";
 import { TrainingItemDisplayMode, TrainingItemSettings } from "./constant";
+import { AppRoute } from "../../constant";
 
 type TrainingItemProps = {
   training: Training,
@@ -8,8 +10,9 @@ type TrainingItemProps = {
 }
 
 function TrainingItem({ training, displayMode }: TrainingItemProps): JSX.Element {
-  const { price, title, type, calories, description, rating, image } = training;
+  const { price, title, type, calories, description, rating, image, id } = training;
   const { itemClass } = TrainingItemSettings[displayMode];
+  const linkToInfo = AppRoute.TrainingCard.replace(':id', id);
   return (
     <li className={itemClass}>
       <div className="thumbnail-training">
@@ -59,7 +62,7 @@ function TrainingItem({ training, displayMode }: TrainingItemProps): JSX.Element
             <p className="thumbnail-training__text">{description}</p>
           </div>
           <div className="thumbnail-training__button-wrapper">
-            <a className="btn btn--small thumbnail-training__button-catalog" href="#">Подробнее</a>
+            <Link className="btn btn--small thumbnail-training__button-catalog" to={linkToInfo}>Подробнее</Link>
             <a className="btn btn--small btn--outlined thumbnail-training__button-catalog" href="#">Отзывы</a>
           </div>
         </div>

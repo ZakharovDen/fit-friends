@@ -1,11 +1,33 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PopupFeedback from "../../components/popup-feedback/popup-feedback";
 import ReviewItem from "../../components/review-item/review-item";
 import PopupBuy from "../../components/popup-buy/popup-buy";
+import { useParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { getTrainingInfo } from "../../store/training/selectors";
+import { getTrainingAction } from "../../store/training/thunks";
+import { TrainingTypeLabel } from "../../types/training/training-type.enum";
+import { SexTrainingLabel } from "../../types/sex.enum";
 
 function TrainingCardScreen(): JSX.Element {
   const [isPopupFeedbackVisible, setPopupFeedbackVisible] = useState<boolean>(false);
   const [isPopupBuyVisible, setPopupBuyVisible] = useState<boolean>(false);
+  const params = useParams();
+  const dispatch = useAppDispatch();
+  const training = useAppSelector(getTrainingInfo);
+
+  useEffect(() => {
+    const { id } = params;
+    if (id) {
+      dispatch(getTrainingAction(id));
+    }
+  }, [params, dispatch]);
+
+  const hashTags = [];
+  hashTags.push((training?.type) ? TrainingTypeLabel[training?.type].toLowerCase() : '');
+  hashTags.push((training?.sex) ? SexTrainingLabel[training?.sex].replace(' ', '_') : '');
+  hashTags.push((training?.calories) ? `${training?.calories}ккал` : '');
+  hashTags.push((training?.duration) ? `${training?.duration.replace('-', '_')}минут` : '');
 
   const openPopupFeedback = () => setPopupFeedbackVisible(true);
   const closePopupFeedback = () => setPopupFeedbackVisible(false);
@@ -60,13 +82,13 @@ function TrainingCardScreen(): JSX.Element {
                       <div className="training-info__info-wrapper">
                         <div className="training-info__input training-info__input--training">
                           <label><span className="training-info__label">Название тренировки</span>
-                            <input type="text" name="training" value="energy" disabled />
+                            <input type="text" name="training" value={training?.title} disabled />
                           </label>
                           <div className="training-info__error">Обязательное поле</div>
                         </div>
                         <div className="training-info__textarea">
                           <label><span className="training-info__label">Описание тренировки</span>
-                            <textarea name="description" disabled>Упражнения укрепляют мышечный корсет, делают суставы более гибкими, улучшают осанку и&nbsp;координацию.</textarea>
+                            <textarea name="description" disabled>{training?.description}</textarea>
                           </label>
                         </div>
                       </div>
@@ -76,28 +98,21 @@ function TrainingCardScreen(): JSX.Element {
                             <svg width="18" height="18" aria-hidden="true">
                               <use xlinkHref="#icon-star"></use>
                             </svg></span>
-                            <input type="number" name="rating" value="4" disabled />
+                            <input type="number" name="rating" value={training?.rating} disabled />
                           </label>
                         </div>
                         <ul className="training-info__list">
-                          <li className="training-info__item">
-                            <div className="hashtag hashtag--white"><span>#пилатес</span></div>
-                          </li>
-                          <li className="training-info__item">
-                            <div className="hashtag hashtag--white"><span>#для_всех</span></div>
-                          </li>
-                          <li className="training-info__item">
-                            <div className="hashtag hashtag--white"><span>#320ккал</span></div>
-                          </li>
-                          <li className="training-info__item">
-                            <div className="hashtag hashtag--white"><span>#30_50минут</span></div>
-                          </li>
+                          {hashTags.map((item) => (
+                            <li className="training-info__item">
+                              <div className="hashtag hashtag--white"><span>{`#${item}`}</span></div>
+                            </li>
+                          ))}
                         </ul>
                       </div>
                       <div className="training-info__price-wrapper">
                         <div className="training-info__input training-info__input--price">
                           <label><span className="training-info__label">Стоимость</span>
-                            <input type="text" name="price" value="800 ₽" disabled />
+                            <input type="text" name="price" value={`${training?.price} ₽`} disabled />
                           </label>
                           <div className="training-info__error">Введите число</div>
                         </div>

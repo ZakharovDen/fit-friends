@@ -7,5 +7,5 @@ import { NameSpace } from '../const';
 export const getTrainings = (state: State): TrainingsWithPagination => state[NameSpace.Training].trainings;
 export const getTrainingsDataLoadingStatus = (state: State): boolean => state[NameSpace.Training].isTrainingsDataLoading;
 export const getErrorStatus = (state: State): boolean => state[NameSpace.Training].hasError;
-export const getProductInfo = (state: State): Training | undefined => state[NameSpace.Training].trainingInfo;
+export const getTrainingInfo = (state: State): Training | undefined => state[NameSpace.Training].trainingInfo;
 export const getAllowedFilterValues = (state: State): AllowedFilterValues => state[NameSpace.Training].filterValues;
