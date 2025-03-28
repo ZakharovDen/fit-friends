@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Query, UseFilters, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Param, Post, Query, SerializeOptions, UseFilters, UseGuards } from "@nestjs/common";
 import { AxiosExceptionFilter } from "./filters/axios-exception.filter";
 import { HttpService } from "@nestjs/axios";
 import { ApplicationServiceURL } from "./app.config";
@@ -6,6 +6,8 @@ import { ApiBearerAuth, ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { FitTrainingQuery, FitTrainingRdo, FitTrainingWithPaginationRdo } from '@backend/fit-training';
 import { CheckAuthGuard } from "./guards/check-auth.guard";
 import { CreateFeedBackDto, FitFeedBackRdo } from '@backend/fit-feedback';
+import { UserRdo } from "@backend/authentications";
+import { TrainingWithUserRdo } from "./rdo/training-with-user.rdo";
 
 @Controller('fit')
 @UseFilters(AxiosExceptionFilter)
@@ -34,12 +36,15 @@ export class FitController {
 
   @Get('trainings/:id')
   @ApiOperation({ summary: 'Детальная информация о тренировке.' })
-  @ApiResponse({ status: HttpStatus.OK, type: FitTrainingRdo })
+  @ApiResponse({ status: HttpStatus.OK, type: TrainingWithUserRdo })
+  @SerializeOptions({ type: TrainingWithUserRdo })
   @ApiBearerAuth()
   @UseGuards(CheckAuthGuard)
   public async getTrainingById(@Param('id') id: string) {
-    const training = (await this.httpService.axiosRef.get(`${ApplicationServiceURL.FitTrainings}/${id}`)).data;
-    return training;
+    const training: FitTrainingRdo = (await this.httpService.axiosRef.get(`${ApplicationServiceURL.FitTrainings}/${id}`)).data;
+    const user: UserRdo = (await this.httpService.axiosRef.get(`${ApplicationServiceURL.Users}/${training.userId}`)).data;
+    const trainingWithUser: TrainingWithUserRdo = {...training, user: user};
+    return trainingWithUser;
   }
 
   @Post('feedback')
