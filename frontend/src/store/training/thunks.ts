@@ -4,7 +4,7 @@ import { AppDispatch, State } from '../../types/state';
 import { APIRoute } from '../const';
 import { TrainingsWithPagination } from '../../types/training/trainings-with-pagination';
 import { QueryParams } from '../../types/training/query-params';
-import { Training } from '../../types/training/training';
+import { Training, TrainingWithUser } from '../../types/training/training';
 import { AllowedFilterValues } from '../../types/filter/allowed-filter-values';
 
 export const fetchTrainingsAction = createAsyncThunk<TrainingsWithPagination, any, {
@@ -55,14 +55,14 @@ export const fetchTrainingsAction = createAsyncThunk<TrainingsWithPagination, an
   },
 );
 
-export const getTrainingAction = createAsyncThunk<Training, string | undefined, {
+export const getTrainingAction = createAsyncThunk<TrainingWithUser, string | undefined, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }>(
   'data/getTraining',
   async (id, { extra: api }) => {
-    const { data } = await api.get<Training>(`${APIRoute.Trainings}/${id}`);
+    const { data } = await api.get<TrainingWithUser>(`${APIRoute.Trainings}/${id}`);
     return data;
   },
 );

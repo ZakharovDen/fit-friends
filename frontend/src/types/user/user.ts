@@ -2,7 +2,7 @@ import { Sex } from "../sex.enum";
 import { UserLocation } from "./user-location.enum";
 import { UserRole } from "./user-role.enum";
 
-type User = {
+export type User = {
   name: string;
   email: string;
   avatar?: string;

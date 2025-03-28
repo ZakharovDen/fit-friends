@@ -43,7 +43,7 @@ export class FitController {
   public async getTrainingById(@Param('id') id: string) {
     const training: FitTrainingRdo = (await this.httpService.axiosRef.get(`${ApplicationServiceURL.FitTrainings}/${id}`)).data;
     const user: UserRdo = (await this.httpService.axiosRef.get(`${ApplicationServiceURL.Users}/${training.userId}`)).data;
-    const trainingWithUser: TrainingWithUserRdo = {...training, user: user};
+    const trainingWithUser: TrainingWithUserRdo = {...training, user: {...user, avatar: `${ApplicationServiceURL.File}/static${user.avatar}`}};
     return trainingWithUser;
   }
 

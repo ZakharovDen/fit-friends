@@ -2,12 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 import { NameSpace } from "../const";
 import { deleteTrainingAction, fetchTrainingsAction, getFilterValuesAction, getTrainingAction, postTrainingAction } from "./thunks";
 import { TrainingsWithPagination } from "../../types/training/trainings-with-pagination";
-import { Training } from "../../types/training/training";
+import { TrainingWithUser } from "../../types/training/training";
 import { AllowedFilterValues } from "../../types/filter/allowed-filter-values";
 
 export type InitialState = {
   trainings: TrainingsWithPagination;
-  trainingInfo: Training | undefined;
+  trainingInfo: TrainingWithUser | undefined;
   isTrainingsDataLoading: boolean;
   hasError: boolean;
   filterValues: AllowedFilterValues;

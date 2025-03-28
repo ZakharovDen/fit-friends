@@ -62,18 +62,21 @@ function TrainingCardScreen(): JSX.Element {
                       <picture>
                         <source
                           type="image/webp"
-                          srcSet="img/content/avatars/coaches//photo-1.webp, img/content/avatars/coaches//photo-1@2x.webp 2x"
+                          srcSet={training?.user.avatar}
                         />
                         <img
-                          src="img/content/avatars/coaches//photo-1.png"
-                          srcSet="img/content/avatars/coaches//photo-1@2x.png 2x"
+                          src={training?.user.avatar}
+                          srcSet={training?.user.avatar}
                           width="64"
                           height="64"
                           alt="Изображение тренера"
                         />
                       </picture>
                     </div>
-                    <div className="training-info__coach-info"><span className="training-info__label">Тренер</span><span className="training-info__name">Валерия</span></div>
+                    <div className="training-info__coach-info">
+                      <span className="training-info__label">Тренер</span>
+                      <span className="training-info__name">{training?.user.name}</span>
+                    </div>
                   </div>
                 </div>
                 <div className="training-info__main-content">
