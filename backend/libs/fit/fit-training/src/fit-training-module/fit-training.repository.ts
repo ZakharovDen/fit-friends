@@ -84,7 +84,7 @@ export class FitTrainingRepository extends BasePostgresRepository<FitTrainingEnt
       this.client.training.findMany({ orderBy, where, skip, take, include: { feedbacks: true } }),
       this.client.training.count({ where }),
     ]);
-    return {
+    const result = {
       entities: documents.map(
         (document) => this.createEntityFromDocument(
           {
@@ -102,7 +102,11 @@ export class FitTrainingRepository extends BasePostgresRepository<FitTrainingEnt
       totalPages: Math.ceil(trainingCount / take),
       itemsPerPage: take,
       totalItems: trainingCount,
+    };
+    if (query.sortField === SortField.Rating) {
+      result.entities.sort((a, b) => b.rating - a.rating);
     }
+    return result;
   }
 
   public async findById(id: string): Promise<FitTrainingEntity> {

@@ -13,9 +13,10 @@ function MainScreen(): JSX.Element {
   const dispatch = useAppDispatch();
   const { entities } = useAppSelector(getTrainings);
   const [queryParams, setQueryParams] = useState<QueryParams>({
-    sortBy: 'createDate',
-    sortOrder: 'asc',
     page: 1,
+    limit: 20,
+    sortBy: 'rating',
+    sortOrder: 'desc'
   });
   useEffect(() => {
     dispatch(fetchTrainingsAction(queryParams));

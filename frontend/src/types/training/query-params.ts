@@ -1,8 +1,8 @@
 import { TrainingType } from "./training-type.enum";
 
 export interface QueryParams {
-  sortBy: string;
-  sortOrder: 'asc' | 'desc';
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
   page: number;
   limit: number;
   minPrice?: number;

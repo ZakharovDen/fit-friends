@@ -8,6 +8,8 @@ import { QueryParams } from "../../types/training/query-params";
 import { COUNT_ITEMS_PER_PAGE }from './constant';
 import { TrainingFilter } from "../../types/filter/training-filter";
 import { TrainingSort } from "../../types/filter/training-sort";
+import { useNavigate } from "react-router-dom";
+import { AppRoute } from "../../constant";
 
 function TrainingCatalogScreen(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -54,7 +56,9 @@ function TrainingCatalogScreen(): JSX.Element {
       sortOrder: sortOrder,
       isFree: (filterValues.sort === TrainingSort.Free)
     });
-  }
+  };
+
+  const navigate = useNavigate();
 
   return (
     <main>
@@ -65,7 +69,11 @@ function TrainingCatalogScreen(): JSX.Element {
             <div className="gym-catalog-form">
               <h2 className="visually-hidden">Мои тренировки Фильтр</h2>
               <div className="gym-catalog-form__wrapper">
-                <button className="btn-flat btn-flat--underlined gym-catalog-form__btnback" type="button">
+                <button 
+                  className="btn-flat btn-flat--underlined gym-catalog-form__btnback" 
+                  type="button"
+                  onClick={() => navigate(AppRoute.Main)}
+                >
                   <svg width="14" height="10" aria-hidden="true">
                     <use xlinkHref="#arrow-left"></use>
                   </svg><span>Назад</span>

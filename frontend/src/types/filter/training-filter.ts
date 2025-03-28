@@ -12,4 +12,5 @@ export type TrainingFilter = {
   };
   types: TrainingType[];
   sort: TrainingSort;
+  rating: [number, number];
 };

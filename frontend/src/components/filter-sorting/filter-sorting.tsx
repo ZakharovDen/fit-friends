@@ -5,6 +5,7 @@ import { TrainingType, TrainingTypeLabel } from "../../types/training/training-t
 import { TrainingFilter } from "../../types/filter/training-filter";
 import { AllowedFilterValues } from "../../types/filter/allowed-filter-values";
 import { TrainingSort, TrainingSortLabel } from "../../types/filter/training-sort";
+import MultiRangeSlider from 'multi-range-slider-react';
 
 type FilterSortingProps = {
   allowedFilterValues: AllowedFilterValues;
@@ -16,12 +17,13 @@ function FilterSorting({ allowedFilterValues, onFilterChange }: FilterSortingPro
     price: { min: allowedFilterValues.price.min ?? 0, max: allowedFilterValues.price.max ?? 0 },
     calories: { min: allowedFilterValues.calories.min ?? 0, max: allowedFilterValues.calories.max ?? 0 },
     types: [],
-    sort: TrainingSort.Lower
+    sort: TrainingSort.Lower,
+    rating: [1, 5]
   };
   const [filterValues, setFilterValues] = useState<TrainingFilter>(defaultFilter);
-  useEffect(() => {
-    setFilterValues(defaultFilter)
-  }, [allowedFilterValues]);
+  // useEffect(() => {
+  //   setFilterValues(defaultFilter)
+  // }, [allowedFilterValues]);
 
   useEffect(() => {
     onFilterChange(filterValues);
@@ -91,13 +93,23 @@ function FilterSorting({ allowedFilterValues, onFilterChange }: FilterSortingPro
       <div className="gym-catalog-form__block gym-catalog-form__block--rating">
         <h4 className="gym-catalog-form__block-title">Рейтинг</h4>
         <div className="filter-raiting">
-          <div className="filter-raiting__scale">
-            <div className="filter-raiting__bar"><span className="visually-hidden">Полоса прокрутки</span></div>
-          </div>
-          <div className="filter-raiting__control">
-            <button className="filter-raiting__min-toggle"><span className="visually-hidden">Минимальное значение</span></button><span>1</span>
-            <button className="filter-raiting__max-toggle"><span className="visually-hidden">Максимальное значение</span></button><span>5</span>
-          </div>
+        {/* <MultiRangeSlider
+            min={1}
+            max={5}
+            step={1}
+            style={{ border: 'none', boxShadow: 'none', padding: '15px 10px' }}
+            ruler="false"
+            barLeftColor="black"
+            barInnerColor="black"
+            barRightColor="black"
+            thumbLeftColor="black"
+            thumbRightColor="black"
+            minValue={filterValues.rating[0]}
+            maxValue={filterValues.rating[1]}
+            onInput={(evt) => {
+              setFilterValues({ ...filterValues, rating: [evt.minValue, evt.maxValue] });
+            }}
+          /> */}
         </div>
       </div>
       <div className="gym-catalog-form__block gym-catalog-form__block--type">

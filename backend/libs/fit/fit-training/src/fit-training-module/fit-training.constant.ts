@@ -70,6 +70,7 @@ export enum SortDirection {
 
 export enum SortField {
   Price = 'price',
+  Rating = 'rating',
 };
 
 export const DEFAULT_SORT_DIRECTION = SortDirection.Asc;
