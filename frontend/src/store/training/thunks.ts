@@ -98,7 +98,7 @@ export const getFilterValuesAction = createAsyncThunk<AllowedFilterValues, undef
 }>(
   'data/getFilterValues',
   async (_arg, { extra: api }) => {
-    const { data } = await api.get<AllowedFilterValues>(`${APIRoute.Trainings}/filter-values`);
+    const { data } = await api.get<AllowedFilterValues>(`${APIRoute.Fit}/filter-values`);
     return data;
   },
 );

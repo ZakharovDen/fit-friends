@@ -1,1 +1,5 @@
 GET http://localhost:3334/api/trainings?limit=1&page=1 HTTP/1.1
+
+###
+GET http://localhost:3000/api/fit/filter-values HTTP/1.1
+Accept: application/json
