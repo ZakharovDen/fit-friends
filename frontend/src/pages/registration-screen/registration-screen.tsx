@@ -1,35 +1,19 @@
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { useAppDispatch } from "../../hooks";
 import { registerAction } from "../../store/user/thunks";
 import { SexUserLabel } from "../../types/sex.enum";
 import { UserLocation } from "../../types/user/user-location.enum";
+import LocationListBox from "../../components/location-listbox/location-listbox";
 
 function RegistrationScreen(): JSX.Element {
   const dispatch = useAppDispatch();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewURL, setPreviewURL] = useState<string | null>(null);
-
-  const [isOpen, setIsOpen] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<UserLocation>();
-  const comboboxRef = useRef<HTMLDivElement>(null);
 
   const handleLocationSelect = (location: UserLocation) => {
     setSelectedLocation(location);
-    setIsOpen(false);
   };
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (comboboxRef.current && !comboboxRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
 
   const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
@@ -114,36 +98,7 @@ function RegistrationScreen(): JSX.Element {
                         <input type="date" name="birthday" max="2099-12-31" /></span>
                       </label>
                     </div>
-                    <div className={`custom-select ${isOpen ? 'is-open ' : ''}${selectedLocation ? 'not-empty ' : ''}`} ref={comboboxRef}>
-                      <span className="custom-select__label">Ваша локация</span>
-                      <button
-                        className="custom-select__button"
-                        type="button"
-                        aria-label="Выберите одну из опций"
-                        onClick={() => setIsOpen(!isOpen)}
-                      >
-                        <span className="custom-select__text">{selectedLocation}</span>
-                        <span className="custom-select__icon">
-                          <svg width="15" height="6" aria-hidden="true">
-                            <use xlinkHref="#arrow-down"></use>
-                          </svg>
-                        </span>
-                      </button>
-                      <ul className="custom-select__list" role="listbox">
-                        {Object.entries(UserLocation).map(([key, location]) => (
-                          <li
-                            className="custom-select__item"
-                            key={key}
-                            role="option"
-                            aria-selected={selectedLocation === location}
-                            onClick={() => handleLocationSelect(location)}
-                            style={{ cursor: 'pointer' }}
-                          >
-                            {location}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                      <LocationListBox onSelectLocation={handleLocationSelect} selectedLocation={selectedLocation} />
                     <div className="custom-input">
                       <label><span className="custom-input__label">Пароль</span><span className="custom-input__wrapper">
                         <input type="password" name="password" autoComplete="off" /></span>

@@ -1,4 +1,8 @@
+import { useAppSelector } from "../../hooks";
+import { getUser } from "../../store/user/selectors";
+
 function AccountScreen(): JSX.Element {
+  const user = useAppSelector(getUser);
   return (
     <main>
       <section className="inner-page">
@@ -26,12 +30,14 @@ function AccountScreen(): JSX.Element {
                   <h2 className="user-info__title">Обо мне</h2>
                   <div className="custom-input custom-input--readonly user-info__input">
                     <label><span className="custom-input__label">Имя</span><span className="custom-input__wrapper">
-                      <input type="text" name="name" value="Валерия" disabled /></span>
+                      <input type="text" name="name" value={user?.name} disabled /></span>
                     </label>
                   </div>
                   <div className="custom-textarea custom-textarea--readonly user-info__textarea">
                     <label><span className="custom-textarea__label">Описание</span>
-                      <textarea name="description" placeholder=" " disabled>Персональный тренер и инструктор групповых программ с опытом  более 4х лет. Специализация: коррекция фигуры и осанки, снижение веса, восстановление после травм, пилатес.</textarea>
+                      <textarea name="description" placeholder=" " disabled>
+                        {user?.description}
+                      </textarea>
                     </label>
                   </div>
                 </div>
