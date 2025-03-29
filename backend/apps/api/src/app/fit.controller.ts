@@ -8,12 +8,15 @@ import { CheckAuthGuard } from "./guards/check-auth.guard";
 import { CreateFeedBackDto, FitFeedBackRdo } from '@backend/fit-feedback';
 import { UserRdo } from "@backend/authentications";
 import { TrainingWithUserRdo } from "./rdo/training-with-user.rdo";
+import { AppService } from "./app.service";
+import { FeedbackWithUserRdo } from "./rdo/feedback-with-user.rdo";
 
 @Controller('fit')
 @UseFilters(AxiosExceptionFilter)
 export class FitController {
   constructor(
     private readonly httpService: HttpService,
+    private readonly appService: AppService,
   ) { }
 
   @Get('trainings')
@@ -59,11 +62,13 @@ export class FitController {
 
   @Get('feedback/:trainingId')
   @ApiOperation({ summary: 'Список отзывов к тренировке.' })
-  @ApiResponse({ status: HttpStatus.OK, type: [FitFeedBackRdo] })
+  @ApiResponse({ status: HttpStatus.OK, type: [FeedbackWithUserRdo] })
   @ApiBearerAuth()
   @UseGuards(CheckAuthGuard)
+  @SerializeOptions({ type: FeedbackWithUserRdo })
   public async findByTrainingId(@Param('trainingId') trainingId: string){
     const feedbacks = (await this.httpService.axiosRef.get(`${ApplicationServiceURL.FitFeedbacks}/${trainingId}`)).data;
+    await this.appService.appendUser(feedbacks);
     return feedbacks;
   }
 }

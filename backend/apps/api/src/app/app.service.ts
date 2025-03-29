@@ -1,10 +1,11 @@
 import { HttpService } from "@nestjs/axios";
 import { Injectable } from "@nestjs/common";
 import { ApplicationServiceURL } from "./app.config";
-import { File } from "@backend/core";
+import { Feedback, File } from "@backend/core";
 import 'multer';
 import { createUrlForFile } from "@backend/helpers";
 import FormData from 'form-data';
+import { UserRdo } from "@backend/authentications";
 
 @Injectable()
 export class AppService {
@@ -23,5 +24,20 @@ export class AppService {
       }
     );
     return createUrlForFile(fileMetaData, ApplicationServiceURL.File);
+  }
+
+  public async appendUser(feedbacks: Feedback[]): Promise<void> {
+    const usersIds = feedbacks.map((feedback) => feedback.userId);
+    const uniqUserIds = new Set(usersIds);
+
+    const users: UserRdo[] = await Promise.all(
+      Array.from(uniqUserIds).map(
+        async (userId) => (await this.httpService.axiosRef.get(`${ApplicationServiceURL.Users}/${userId}`)).data
+      )
+    );
+
+    feedbacks.forEach((feedback) => {
+      feedback['user'] = users.find((user) => user.id === feedback.userId);
+    });
   }
 }
