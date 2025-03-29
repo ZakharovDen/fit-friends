@@ -7,7 +7,8 @@ export enum AppRoute {
   Catalog = '/training-catalog',
   TrainingCard = '/training/:id',
   Account = '/account',
-  Questionnaire = '/questionnaire'
+  Questionnaire = '/questionnaire',
+  NotFound = '/404',
 }
 
 export enum AuthorizationStatus {

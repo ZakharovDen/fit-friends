@@ -10,11 +10,16 @@ import TrainingCardScreen from '../../pages/training-card-screen/training-card-s
 import AccountScreen from '../../pages/account-screen/account-screen';
 import PrivateRoute from '../private-route/private-route';
 import QuestionnaireScreen from '../../pages/questionnaire-screen/questionnaire-screen';
+import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
 
 function App(): JSX.Element {
   return (
     <BrowserRouter>
       <Routes>
+        <Route 
+          path={AppRoute.NotFound}
+          element={<NotFoundScreen />}
+        />
         <Route
           path={AppRoute.Main}
           element={
@@ -70,6 +75,10 @@ function App(): JSX.Element {
               <QuestionnaireScreen />
             </PrivateRoute>
           }
+        />
+        <Route
+          path="*"
+          element={<NotFoundScreen />}
         />
       </Routes>
     </BrowserRouter>

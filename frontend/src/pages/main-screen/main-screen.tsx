@@ -256,7 +256,7 @@ function MainScreen(): JSX.Element {
               </div>
             </div>
             <ul className="popular-trainings__list">
-              {entities.map((training) => <TrainingItem displayMode={TrainingItemDisplayMode.Popular} training={training} />)}
+              {entities.map((training) => <TrainingItem displayMode={TrainingItemDisplayMode.Popular} training={training} key={training.id} />)}
             </ul>
           </div>
         </div>

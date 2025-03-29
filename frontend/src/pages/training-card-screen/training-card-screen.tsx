@@ -8,10 +8,12 @@ import { getTrainingInfo } from "../../store/training/selectors";
 import { getTrainingAction } from "../../store/training/thunks";
 import { TrainingTypeLabel } from "../../types/training/training-type.enum";
 import { SexTrainingLabel } from "../../types/sex.enum";
+import NotFoundScreen from "../not-found-screen/not-found-screen";
 
 function TrainingCardScreen(): JSX.Element {
   const [isPopupFeedbackVisible, setPopupFeedbackVisible] = useState<boolean>(false);
   const [isPopupBuyVisible, setPopupBuyVisible] = useState<boolean>(false);
+  const [hashTags, setHashTags] = useState<string[]>();
   const params = useParams();
   const dispatch = useAppDispatch();
   const training = useAppSelector(getTrainingInfo);
@@ -23,17 +25,27 @@ function TrainingCardScreen(): JSX.Element {
     }
   }, [params, dispatch]);
 
-  const hashTags = [];
-  hashTags.push((training?.type) ? TrainingTypeLabel[training?.type].toLowerCase() : '');
-  hashTags.push((training?.sex) ? SexTrainingLabel[training?.sex].replace(' ', '_') : '');
-  hashTags.push((training?.calories) ? `${training?.calories}ккал` : '');
-  hashTags.push((training?.duration) ? `${training?.duration.replace('-', '_')}минут` : '');
+  useEffect(() => {
+    if (training) {
+      setHashTags([
+        TrainingTypeLabel[training?.type].toLowerCase(),
+        SexTrainingLabel[training?.sex].replace(' ', '_'),
+        `${training?.calories}ккал`,
+        `${training?.duration.replace('-', '_')}минут`
+      ])
+    }
+  }, [training]);
 
   const openPopupFeedback = () => setPopupFeedbackVisible(true);
   const closePopupFeedback = () => setPopupFeedbackVisible(false);
 
   const openPopupBuy = () => setPopupBuyVisible(true);
   const closePopupBuy = () => setPopupBuyVisible(false);
+
+  if (!training) {
+    return <NotFoundScreen />
+  }
+
   return (
     <main>
       <section className="inner-page">
@@ -105,11 +117,17 @@ function TrainingCardScreen(): JSX.Element {
                           </label>
                         </div>
                         <ul className="training-info__list">
-                          {hashTags.map((item) => (
-                            <li className="training-info__item">
-                              <div className="hashtag hashtag--white"><span>{`#${item}`}</span></div>
-                            </li>
-                          ))}
+                          {(hashTags)
+                            ? hashTags
+                              .map((item) =>
+                              (<li className="training-info__item" key={item}>
+                                <div className="hashtag hashtag--white">
+                                  <span>{`#${item}`}</span>
+                                </div>
+                              </li>)
+                              )
+                            : ''
+                          }
                         </ul>
                       </div>
                       <div className="training-info__price-wrapper">

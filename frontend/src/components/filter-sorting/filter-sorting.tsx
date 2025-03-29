@@ -62,7 +62,7 @@ function FilterSorting({ allowedFilterValues, onFilterChange }: FilterSortingPro
           onChangeFilter={handleChangePrice}
           displayMode={FilterMinMaxDisplayMode.Price}
         />
-        <div className="filter-range">
+        {/* <div className="filter-range">
           <div className="filter-range__scale">
             <div className="filter-range__bar"><span className="visually-hidden">Полоса прокрутки</span></div>
           </div>
@@ -70,7 +70,7 @@ function FilterSorting({ allowedFilterValues, onFilterChange }: FilterSortingPro
             <button className="filter-range__min-toggle"><span className="visually-hidden">Минимальное значение</span></button>
             <button className="filter-range__max-toggle"><span className="visually-hidden">Максимальное значение</span></button>
           </div>
-        </div>
+        </div> */}
       </div>
       <div className="gym-catalog-form__block gym-catalog-form__block--calories">
         <h4 className="gym-catalog-form__block-title">Калории</h4>
@@ -80,7 +80,7 @@ function FilterSorting({ allowedFilterValues, onFilterChange }: FilterSortingPro
           onChangeFilter={handleChangeCalories}
           displayMode={FilterMinMaxDisplayMode.Calories}
         />
-        <div className="filter-range">
+        {/* <div className="filter-range">
           <div className="filter-range__scale">
             <div className="filter-range__bar"><span className="visually-hidden">Полоса прокрутки</span></div>
           </div>
@@ -88,12 +88,12 @@ function FilterSorting({ allowedFilterValues, onFilterChange }: FilterSortingPro
             <button className="filter-range__min-toggle"><span className="visually-hidden">Минимальное значение</span></button>
             <button className="filter-range__max-toggle"><span className="visually-hidden">Максимальное значение</span></button>
           </div>
-        </div>
+        </div> */}
       </div>
-      <div className="gym-catalog-form__block gym-catalog-form__block--rating">
+      {/* <div className="gym-catalog-form__block gym-catalog-form__block--rating">
         <h4 className="gym-catalog-form__block-title">Рейтинг</h4>
         <div className="filter-raiting">
-        {/* <MultiRangeSlider
+        <MultiRangeSlider
             min={1}
             max={5}
             step={1}
@@ -109,9 +109,9 @@ function FilterSorting({ allowedFilterValues, onFilterChange }: FilterSortingPro
             onInput={(evt) => {
               setFilterValues({ ...filterValues, rating: [evt.minValue, evt.maxValue] });
             }}
-          /> */}
+          />
         </div>
-      </div>
+      </div> */}
       <div className="gym-catalog-form__block gym-catalog-form__block--type">
         <h4 className="gym-catalog-form__block-title">Тип</h4>
         <ul className="gym-catalog-form__check-list">
