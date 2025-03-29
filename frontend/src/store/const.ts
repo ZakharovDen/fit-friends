@@ -3,7 +3,7 @@ export enum APIRoute {
   Register = '/users',
   CheckAuth = '/users/check',
   Trainings = '/fit/trainings',
-  Feedbacks = '/fit/feedbacks',
+  Feedbacks = '/fit/feedback',
   Fit = '/fit',
 }
 

@@ -9,7 +9,7 @@ export const getFeedbacksAction = createAsyncThunk<FeedbackWithUser[], string | 
   state: State;
   extra: AxiosInstance;
 }>(
-  'data/getTraining',
+  'data/getFeedbacks',
   async (trainingId, { extra: api }) => {
     const { data } = await api.get<FeedbackWithUser[]>(`${APIRoute.Feedbacks}/${trainingId}`);
     return data;

@@ -2,26 +2,31 @@ import { useEffect, useState } from "react";
 import PopupFeedback from "../../components/popup-feedback/popup-feedback";
 import ReviewItem from "../../components/review-item/review-item";
 import PopupBuy from "../../components/popup-buy/popup-buy";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { getTrainingInfo } from "../../store/training/selectors";
 import { getTrainingAction } from "../../store/training/thunks";
 import { TrainingTypeLabel } from "../../types/training/training-type.enum";
 import { SexTrainingLabel } from "../../types/sex.enum";
 import NotFoundScreen from "../not-found-screen/not-found-screen";
+import { getFeedbacks } from "../../store/feedback/selectors";
+import { getFeedbacksAction } from "../../store/feedback/thunks";
 
 function TrainingCardScreen(): JSX.Element {
   const [isPopupFeedbackVisible, setPopupFeedbackVisible] = useState<boolean>(false);
   const [isPopupBuyVisible, setPopupBuyVisible] = useState<boolean>(false);
   const [hashTags, setHashTags] = useState<string[]>();
   const params = useParams();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const training = useAppSelector(getTrainingInfo);
+  const feedbacks = useAppSelector(getFeedbacks);
 
   useEffect(() => {
     const { id } = params;
     if (id) {
       dispatch(getTrainingAction(id));
+      dispatch(getFeedbacksAction(id));
     }
   }, [params, dispatch]);
 
@@ -53,14 +58,18 @@ function TrainingCardScreen(): JSX.Element {
           <div className="inner-page__wrapper">
             <h1 className="visually-hidden">Карточка тренировки</h1>
             <aside className="reviews-side-bar">
-              <button className="btn-flat btn-flat--underlined reviews-side-bar__back" type="button">
+              <button 
+                className="btn-flat btn-flat--underlined reviews-side-bar__back" 
+                type="button" 
+                onClick={() => navigate(-1)}
+              >
                 <svg width="14" height="10" aria-hidden="true">
                   <use xlinkHref="#arrow-left"></use>
                 </svg><span>Назад</span>
               </button>
               <h2 className="reviews-side-bar__title">Отзывы</h2>
               <ul className="reviews-side-bar__list">
-                <ReviewItem />
+                {(feedbacks.length) ? feedbacks.map((feedback) => <ReviewItem feedback={feedback} key={feedback.id} />) : ''}
               </ul>
               <button className="btn btn--medium reviews-side-bar__button" type="button" onClick={openPopupFeedback}>Оставить отзыв</button>
               <PopupFeedback isVisible={isPopupFeedbackVisible} onClose={closePopupFeedback} />

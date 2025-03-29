@@ -1,4 +1,11 @@
-function ReviewItem(): JSX.Element {
+import { FeedbackWithUser } from "../../types/feedback/feedback";
+
+type ReviewItemProps = {
+  feedback: FeedbackWithUser
+}
+
+function ReviewItem({feedback}: ReviewItemProps): JSX.Element {
+  const {user, text, rating} = feedback;
   return (
     <li className="reviews-side-bar__item">
       <div className="review">
@@ -7,7 +14,7 @@ function ReviewItem(): JSX.Element {
             <picture>
               <source
                 type="image/webp"
-                srcSet="img/content/avatars/users//photo-1.webp, img/content/avatars/users//photo-1@2x.webp 2x" />
+                srcSet={user.avatar} />
               <img
                 src="img/content/avatars/users//photo-1.png"
                 srcSet="img/content/avatars/users//photo-1@2x.png 2x"
@@ -16,14 +23,14 @@ function ReviewItem(): JSX.Element {
                 alt="Изображение пользователя"
               />
             </picture>
-          </div><span className="review__user-name">Никита</span>
+          </div><span className="review__user-name">{user.name}</span>
           <div className="review__rating">
             <svg width="16" height="16" aria-hidden="true">
               <use xlinkHref="#icon-star"></use>
-            </svg><span>5</span>
+            </svg><span>{rating}</span>
           </div>
         </div>
-        <p className="review__comment">Эта тренировка для меня зарядка по&nbsp;утрам, помогает проснуться.</p>
+        <p className="review__comment">{text}</p>
       </div>
     </li>
   );

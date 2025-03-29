@@ -69,6 +69,6 @@ export class FitController {
   public async findByTrainingId(@Param('trainingId') trainingId: string){
     const feedbacks = (await this.httpService.axiosRef.get(`${ApplicationServiceURL.FitFeedbacks}/${trainingId}`)).data;
     await this.appService.appendUser(feedbacks);
-    return feedbacks;
+    return feedbacks.map((feedback) => ({...feedback, user: {...feedback.user, avatar: `${ApplicationServiceURL.File}/static${feedback.user.avatar}`}}));
   }
 }
