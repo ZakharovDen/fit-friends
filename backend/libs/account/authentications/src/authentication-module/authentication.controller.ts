@@ -85,7 +85,8 @@ export class AuthenticationController {
   @UseGuards(JwtAuthGuard)
   @Post('check')
   public async checkToken(@Req() { user: payload }: RequestWithTokenPayload) {
-    return payload;
+    const existUser = await this.authService.getUser(payload.sub);
+    return fillDto(UserRdo, existUser.toPOJO());    
   }
 
   @Patch('/user/:id')

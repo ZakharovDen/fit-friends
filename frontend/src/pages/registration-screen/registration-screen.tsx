@@ -4,6 +4,7 @@ import { registerAction } from "../../store/user/thunks";
 import { SexUserLabel } from "../../types/sex.enum";
 import { UserLocation } from "../../types/user/user-location.enum";
 import LocationListBox from "../../components/location-listbox/location-listbox";
+import { LocationListBoxDisplayMode } from "../../components/location-listbox/constant";
 
 function RegistrationScreen(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -98,7 +99,11 @@ function RegistrationScreen(): JSX.Element {
                         <input type="date" name="birthday" max="2099-12-31" /></span>
                       </label>
                     </div>
-                      <LocationListBox onSelectLocation={handleLocationSelect} selectedLocation={selectedLocation} />
+                    <LocationListBox 
+                      onSelectLocation={handleLocationSelect} 
+                      selectedLocation={selectedLocation} 
+                      displayMode={LocationListBoxDisplayMode.Register} 
+                    />
                     <div className="custom-input">
                       <label><span className="custom-input__label">Пароль</span><span className="custom-input__wrapper">
                         <input type="password" name="password" autoComplete="off" /></span>

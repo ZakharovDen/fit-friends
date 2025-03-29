@@ -3,6 +3,7 @@ import { UserLocation } from "./user-location.enum";
 import { UserRole } from "./user-role.enum";
 
 export type User = {
+  id: string;
   name: string;
   email: string;
   avatar?: string;
@@ -12,11 +13,13 @@ export type User = {
   location: UserLocation;
   backgroundImage: string;
   role: UserRole;
-}
-
-export type UserData = User & {
-  accessToken: string;
+  createdAt?: Date;
 };
+
+export type LoggedUser = User & {
+  accessToken: string;
+  refreshToken: string;
+}
 
 export type UserAuth = Pick<User, 'email'> & { password: string };
 

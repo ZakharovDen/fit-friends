@@ -58,9 +58,9 @@ function TrainingCardScreen(): JSX.Element {
           <div className="inner-page__wrapper">
             <h1 className="visually-hidden">Карточка тренировки</h1>
             <aside className="reviews-side-bar">
-              <button 
-                className="btn-flat btn-flat--underlined reviews-side-bar__back" 
-                type="button" 
+              <button
+                className="btn-flat btn-flat--underlined reviews-side-bar__back"
+                type="button"
                 onClick={() => navigate(-1)}
               >
                 <svg width="14" height="10" aria-hidden="true">
@@ -69,7 +69,7 @@ function TrainingCardScreen(): JSX.Element {
               </button>
               <h2 className="reviews-side-bar__title">Отзывы</h2>
               <ul className="reviews-side-bar__list">
-                {(feedbacks.length) ? feedbacks.map((feedback) => <ReviewItem feedback={feedback} key={feedback.id} />) : ''}
+                {(feedbacks.length) && feedbacks.map((feedback) => <ReviewItem feedback={feedback} key={feedback.id} />)}
               </ul>
               <button className="btn btn--medium reviews-side-bar__button" type="button" onClick={openPopupFeedback}>Оставить отзыв</button>
               <PopupFeedback isVisible={isPopupFeedbackVisible} onClose={closePopupFeedback} />
@@ -126,8 +126,8 @@ function TrainingCardScreen(): JSX.Element {
                           </label>
                         </div>
                         <ul className="training-info__list">
-                          {(hashTags)
-                            ? hashTags
+                          {(hashTags) &&
+                            hashTags
                               .map((item) =>
                               (<li className="training-info__item" key={item}>
                                 <div className="hashtag hashtag--white">
@@ -135,7 +135,6 @@ function TrainingCardScreen(): JSX.Element {
                                 </div>
                               </li>)
                               )
-                            : ''
                           }
                         </ul>
                       </div>

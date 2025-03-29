@@ -1,15 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import { UserLocation } from "../../types/user/user-location.enum";
+import { LocationListBoxDisplayMode, LocationListBoxSettings } from "./constant";
 
 type LocationListBoxProps = {
-  selectedLocation: UserLocation | undefined,
+  selectedLocation: UserLocation | undefined;
   onSelectLocation: (location: UserLocation) => void;
+  readonly?: boolean;
+  displayMode: LocationListBoxDisplayMode;
 }
 
-function LocationListBox({onSelectLocation, selectedLocation}: LocationListBoxProps): JSX.Element {
+function LocationListBox({onSelectLocation, selectedLocation, readonly, displayMode}: LocationListBoxProps): JSX.Element {
   const [isOpen, setIsOpen] = useState(false);
   const comboboxRef = useRef<HTMLDivElement>(null);
-
+  const {className, label} = LocationListBoxSettings[displayMode];
+  console.log(selectedLocation);
   const handleLocationSelect = (location: UserLocation) => {
     onSelectLocation(location);
     setIsOpen(false);
@@ -30,15 +34,17 @@ function LocationListBox({onSelectLocation, selectedLocation}: LocationListBoxPr
 
   return (
     <div 
-      className={`custom-select ${isOpen ? 'is-open ' : ''}${selectedLocation ? 'not-empty ' : ''}`} 
+      className={`custom-select ${readonly && 'custom-select--readonly'} ${isOpen ? 'is-open ' : ''} ${className}`} 
       ref={comboboxRef}
     >
-      <span className="custom-select__label">Ваша локация</span>
+      <span className="custom-select__label">{label}</span>
+      {readonly && <div className="custom-select__placeholder">{selectedLocation}</div>}
       <button
         className="custom-select__button"
         type="button"
         aria-label="Выберите одну из опций"
         onClick={() => setIsOpen(!isOpen)}
+        disabled={readonly}
       >
         <span className="custom-select__text">{selectedLocation}</span>
         <span className="custom-select__icon">

@@ -2,29 +2,29 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
 import { APIRoute } from '../const';
 import { dropToken, saveToken } from '../../services/token';
-import { UserAuth, UserData, UserRegister } from '../../types/user/user';
+import { LoggedUser, User, UserAuth, UserRegister } from '../../types/user/user';
 import { AppDispatch, State } from '../../types/state';
 
-export const checkAuthAction = createAsyncThunk<UserData, undefined, {
+export const checkAuthAction = createAsyncThunk<LoggedUser, undefined, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }>(
   'user/checkAuth',
   async (_arg, { extra: api }) => {
-    const { data } = await api.post<UserData>(APIRoute.CheckAuth);
+    const { data } = await api.post<LoggedUser>(APIRoute.CheckAuth);
     return data;
   },
 );
 
-export const loginAction = createAsyncThunk<UserData, UserAuth, {
+export const loginAction = createAsyncThunk<LoggedUser, UserAuth, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }>(
   'user/login',
   async ({ email, password }, { extra: api }) => {
-    const { data } = await api.post<UserData>(APIRoute.Login, { email, password });
+    const { data } = await api.post<LoggedUser>(APIRoute.Login, { email, password });
     saveToken(data.accessToken);
     return data;
   },
@@ -42,13 +42,13 @@ export const loginAction = createAsyncThunk<UserData, UserAuth, {
 //   },
 // );
 
-export const registerAction = createAsyncThunk<UserData, /*UserRegister*/FormData, {
+export const registerAction = createAsyncThunk<User, /*UserRegister*/FormData, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }>(
   'user/register',
   async (formData , { extra: api }) => {
-    const { data } = await api.post<UserData>(APIRoute.Register, formData);
+    const { data } = await api.post<User>(APIRoute.Register, formData);
     return data;
   });

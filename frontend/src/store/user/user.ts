@@ -2,11 +2,11 @@ import { createSlice } from '@reduxjs/toolkit';
 import { NameSpace } from '../const';
 import { checkAuthAction, loginAction } from './thunks';
 import { AuthorizationStatus } from '../../constant';
-import { UserData } from '../../types/user/user';
+import { User } from '../../types/user/user';
 
 type InitialState = {
   authorizationStatus: AuthorizationStatus;
-  user: UserData | undefined;
+  user: User | undefined;
 };
 
 const initialState: InitialState = {

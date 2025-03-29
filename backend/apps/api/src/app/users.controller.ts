@@ -70,7 +70,7 @@ export class UsersController {
       newUser.avatar = await this.appService.uploadFile(avatar);
     }
     const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Users}/register`, newUser);
-    return data;
+    return {...data, avatar: `${ApplicationServiceURL.File}/static${data.avatar}`};
   }
 
   @ApiOperation({ summary: 'Авторизация пользователя.' })
@@ -86,7 +86,7 @@ export class UsersController {
   @Post('login')
   public async login(@Body() loginUserDto: LoginUserDto) {
     const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Users}/login`, loginUserDto);
-    return data;
+    return {...data, avatar: `${ApplicationServiceURL.File}/static${data.avatar}`};
   }
 
   @ApiOperation({ summary: 'Редактирование пользователя.' })
@@ -103,7 +103,7 @@ export class UsersController {
     @Body() dto: UpdateUserDto
   ) {
     const { data } = await this.httpService.axiosRef.patch(`${ApplicationServiceURL.Users}/user/${userId}`, dto);
-    return data;
+    return {...data, avatar: `${ApplicationServiceURL.File}/static${data.avatar}`};
   }
 
   @ApiOperation({ summary: 'Проверка состояния пользователя' })
@@ -117,6 +117,6 @@ export class UsersController {
         'Authorization': req.headers['authorization']
       }
     });
-    return data;
+    return {...data, avatar: `${ApplicationServiceURL.File}/static${data.avatar}`};;
   }
 }

@@ -1,8 +1,18 @@
+import { useState } from "react";
 import { useAppSelector } from "../../hooks";
 import { getUser } from "../../store/user/selectors";
+import { UserLocation } from "../../types/user/user-location.enum";
+import LocationListBox from "../../components/location-listbox/location-listbox";
+import { LocationListBoxDisplayMode } from "../../components/location-listbox/constant";
 
 function AccountScreen(): JSX.Element {
   const user = useAppSelector(getUser);
+  const [selectedLocation, setSelectedLocation] = useState<UserLocation | undefined>(user?.location);
+  console.log(user?.location);
+  const handleLocationSelect = (location: UserLocation) => {
+    setSelectedLocation(location);
+  };
+
   return (
     <main>
       <section className="inner-page">
@@ -15,7 +25,13 @@ function AccountScreen(): JSX.Element {
                   <label>
                     <input className="visually-hidden" type="file" name="user-photo-1" accept="image/png, image/jpeg" />
                     <span className="input-load-avatar__avatar">
-                      <img src="img/content/user-photo-1.png" srcSet="img/content/user-photo-1@2x.png 2x" width="98" height="98" alt="user photo" />
+                      <img 
+                        src={user?.avatar} 
+                        srcSet="img/content/user-photo-1@2x.png 2x" 
+                        width="98" 
+                        height="98" 
+                        alt="user photo" 
+                      />
                     </span>
                   </label>
                 </div>
@@ -97,15 +113,12 @@ function AccountScreen(): JSX.Element {
                     </div>
                   </div>
                 </div>
-                <div className="custom-select--readonly custom-select user-info__select"><span className="custom-select__label">Локация</span>
-                  <div className="custom-select__placeholder">ст. м. Адмиралтейская</div>
-                  <button className="custom-select__button" type="button" aria-label="Выберите одну из опций" disabled><span className="custom-select__text"></span><span className="custom-select__icon">
-                    <svg width="15" height="6" aria-hidden="true">
-                      <use xlinkHref="#arrow-down"></use>
-                    </svg></span></button>
-                  <ul className="custom-select__list" role="listbox">
-                  </ul>
-                </div>
+                <LocationListBox
+                  onSelectLocation={handleLocationSelect}
+                  selectedLocation={selectedLocation}
+                  readonly={true}
+                  displayMode={LocationListBoxDisplayMode.Account}
+                />
                 <div className="custom-select--readonly custom-select user-info__select"><span className="custom-select__label">Пол</span>
                   <div className="custom-select__placeholder">Женский</div>
                   <button className="custom-select__button" type="button" aria-label="Выберите одну из опций" disabled><span className="custom-select__text"></span><span className="custom-select__icon">
@@ -144,17 +157,22 @@ function AccountScreen(): JSX.Element {
                     </div>
                   </form>
                 </div>
-                <div className="personal-account-user__additional-info"><a className="thumbnail-link thumbnail-link--theme-light" href="#">
-                  <div className="thumbnail-link__icon thumbnail-link__icon--theme-light">
-                    <svg width="30" height="26" aria-hidden="true">
-                      <use xlinkHref="#icon-friends"></use>
-                    </svg>
-                  </div><span className="thumbnail-link__text">Мои друзья</span></a><a className="thumbnail-link thumbnail-link--theme-light" href="#">
+                <div className="personal-account-user__additional-info">
+                  {/* <a className="thumbnail-link thumbnail-link--theme-light" href="#">
+                    <div className="thumbnail-link__icon thumbnail-link__icon--theme-light">
+                      <svg width="30" height="26" aria-hidden="true">
+                        <use xlinkHref="#icon-friends"></use>
+                      </svg>
+                    </div>
+                    <span className="thumbnail-link__text">Мои друзья</span>
+                  </a> */}
+                  <a className="thumbnail-link thumbnail-link--theme-light" href="#">
                     <div className="thumbnail-link__icon thumbnail-link__icon--theme-light">
                       <svg width="30" height="26" aria-hidden="true">
                         <use xlinkHref="#icon-shopping-cart"></use>
                       </svg>
-                    </div><span className="thumbnail-link__text">Мои покупки</span></a>
+                    </div><span className="thumbnail-link__text">Мои покупки</span>
+                  </a>
                   <div className="thumbnail-spec-gym">
                     <div className="thumbnail-spec-gym__image">
                       <picture>
