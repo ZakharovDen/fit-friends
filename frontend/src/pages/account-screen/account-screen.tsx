@@ -7,6 +7,8 @@ import { Sex, SexUserLabel } from "../../types/sex.enum";
 import { TrainingLevel, TrainingLevelLabel } from "../../types/training/training-level.enum";
 import { TrainingType, TrainingTypeLabel } from "../../types/training/training-type.enum";
 import { editUserAction } from "../../store/user/thunks";
+import NotFoundScreen from "../not-found-screen/not-found-screen";
+import { User } from "../../types/user/user";
 
 function isSex(value: string): value is Sex {
   return Object.values(Sex).includes(value as Sex);
@@ -23,79 +25,69 @@ function isLevel(value: string): value is TrainingLevel {
 function AccountScreen(): JSX.Element {
   const dispatch = useAppDispatch();
   const user = useAppSelector(getUser);
+
+  if (!user) {
+    return <NotFoundScreen />
+  }
+
+  const [userData, setUserData] = useState<User>(user);
   const [isEdited, setIsEdited] = useState<boolean>(false);
-  const [location, setLocation] = useState<string | undefined>(user?.location);
-  const [sex, setSex] = useState<string | undefined>(user?.sex);
-  const [level, setLevel] = useState<string | undefined>(user?.questionnaire?.level);
-  const [types, setTypes] = useState<string[]>(user?.questionnaire?.types ?? []);
-  const [name, setName] = useState<string | undefined>(user?.name);
-  const [description, setDescription] = useState<string | undefined>(user?.description);
-  const [isReady, setIsReady] = useState<boolean | undefined>(user?.questionnaire?.isReady);
 
   useEffect(() => {
-    setSex(user?.sex);
-    setLevel(user?.questionnaire?.level);
-    setLocation(user?.location);
-    setName(user?.name);
+    setUserData(user);
   }, [user])
 
   const handleChangeIsReady = () => {
-    if (!isEdited) {
+    if (!isEdited || !userData.questionnaire) {
       return;
     }
-    setIsReady(!isReady);
+    setUserData({...userData, questionnaire: {...userData.questionnaire, isReady: (userData.questionnaire?.isReady) ? false : true}});
   }
 
   const handleChangeName = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    setName(evt.target.value);
+    setUserData({...userData, name: evt.target.value});
   }
 
   const handleChangeDescription = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setDescription(evt.target.value);
+    setUserData({...userData, description: evt.target.value});
   }
 
   const handleLocationSelect = (location: string) => {
     if (isLocation(location)) {
-      setLocation(location);
+      setUserData({...userData, location: location});
     }
   };
 
   const handleSexSelect = (sex: string) => {
     if (isSex(sex)) {
-      setSex(sex);
+      setUserData({...userData, sex: sex});
     }
   }
 
   const handleLevelSelect = (level: string) => {
+    if (!isEdited || !userData.questionnaire) {
+      return;
+    }
     if (isLevel(level)) {
-      setLevel(level);
+      setUserData({...userData, questionnaire: {...userData.questionnaire, level: level}});
     }
   }
 
   const handleTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = event.target;
-    if (!isEdited) {
+    if (!isEdited || !userData.questionnaire) {
       return;
     }
     if (checked) {
-      setTypes([...types, value as TrainingType]);
+      setUserData({...userData, questionnaire: {...userData.questionnaire, types: [...userData.questionnaire.types, value as TrainingType]}});
     } else {
-      setTypes(types.filter((type) => type !== value));
+      setUserData({...userData, questionnaire: {...userData.questionnaire, types: userData.questionnaire.types.filter((type) => type !== value)}});
     }
   }
 
   const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
-    console.log('submit');
     evt.preventDefault();
-    const form = evt.currentTarget;
-    const formData = new FormData(form);
-    console.dir(formData);
-    // formData.append('location', String(selectedLocation));
-    // formData.append('dateOfBirth', String(formData.get('birthday')));
-    // if (selectedFile) {
-    //   formData.append('avatar', selectedFile);
-    // }
-    dispatch(editUserAction(formData));
+    const savedUser = dispatch(editUserAction(userData));
     setIsEdited(false);
   }
 
@@ -148,7 +140,7 @@ function AccountScreen(): JSX.Element {
                       <input
                         type="text"
                         name="name"
-                        value={name}
+                        value={userData.name}
                         disabled={!isEdited}
                         onChange={handleChangeName}
                       /></span>
@@ -157,7 +149,7 @@ function AccountScreen(): JSX.Element {
                   <div className="custom-textarea custom-textarea--readonly user-info__textarea">
                     <label><span className="custom-textarea__label">Описание</span>
                       <textarea name="description" placeholder=" " disabled={!isEdited} onChange={handleChangeDescription}>
-                        {description}
+                        {userData.description}
                       </textarea>
                     </label>
                   </div>
@@ -166,7 +158,7 @@ function AccountScreen(): JSX.Element {
                   <h2 className="user-info__title user-info__title--status">Статус</h2>
                   <div className="custom-toggle custom-toggle--switch user-info__toggle">
                     <label>
-                      <input type="checkbox" name="ready-for-training" checked={isReady} onChange={handleChangeIsReady} /><span className="custom-toggle__icon">
+                      <input type="checkbox" name="ready-for-training" checked={userData.questionnaire?.isReady} onChange={handleChangeIsReady} /><span className="custom-toggle__icon">
                         <svg width="9" height="6" aria-hidden="true">
                           <use xlinkHref="#arrow-check"></use>
                         </svg></span><span className="custom-toggle__label">Готов к тренировке</span>
@@ -184,7 +176,7 @@ function AccountScreen(): JSX.Element {
                             type="checkbox"
                             name="specialization"
                             value={key}
-                            checked={types.includes(key as TrainingType)}
+                            checked={userData.questionnaire?.types.includes(key as TrainingType)}
                             onChange={handleTypeChange}
                             key={key}
                           />
@@ -195,7 +187,7 @@ function AccountScreen(): JSX.Element {
                   </div>
                 </div>
                 <CustomSelect
-                  value={location}
+                  value={userData.location}
                   label={'Локация'}
                   readonly={!isEdited}
                   options={Object.entries(UserLocationLabel).map(([key, value]) => ({ value: key, label: value }))}
@@ -203,7 +195,7 @@ function AccountScreen(): JSX.Element {
                 //placeholder={sex} 
                 />
                 <CustomSelect
-                  value={sex}
+                  value={userData.sex}
                   label={'Пол'}
                   readonly={!isEdited}
                   options={Object.entries(SexUserLabel).map(([key, value]) => ({ value: key, label: value }))}
@@ -211,7 +203,7 @@ function AccountScreen(): JSX.Element {
                 //placeholder={sex} 
                 />
                 <CustomSelect
-                  value={level}
+                  value={userData.questionnaire?.level}
                   label={'Уровень'}
                   readonly={!isEdited}
                   options={Object.entries(TrainingLevelLabel).map(([key, value]) => ({ value: key, label: value }))}

@@ -54,14 +54,14 @@ export const registerAction = createAsyncThunk<User, /*UserRegister*/FormData, {
   }
 );
 
-export const editUserAction = createAsyncThunk<User, FormData, {
+export const editUserAction = createAsyncThunk<User, User, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }>(
   'user/edit',
-  async (formData , { extra: api }) => {
-    const { data } = await api.patch<User>(APIRoute.Users, formData);
+  async (user , { extra: api }) => {
+    const { data } = await api.patch<User>(APIRoute.Users, user);
     return data;
   }
 );
