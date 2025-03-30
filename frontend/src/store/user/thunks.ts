@@ -49,6 +49,31 @@ export const registerAction = createAsyncThunk<User, /*UserRegister*/FormData, {
 }>(
   'user/register',
   async (formData , { extra: api }) => {
-    const { data } = await api.post<User>(APIRoute.Register, formData);
+    const { data } = await api.post<User>(APIRoute.Users, formData);
     return data;
-  });
+  }
+);
+
+export const editUserAction = createAsyncThunk<User, FormData, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'user/edit',
+  async (formData , { extra: api }) => {
+    const { data } = await api.patch<User>(APIRoute.Users, formData);
+    return data;
+  }
+);
+
+export const editQuestionnaireAction = createAsyncThunk<User, FormData, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'user/questionnaire',
+  async (formData , { extra: api }) => {
+    const { data } = await api.patch<User>(APIRoute.Questionnaire, formData);
+    return data;
+  }
+);

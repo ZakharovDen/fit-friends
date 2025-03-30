@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { AuthFieldDescription } from '../authentication-module/authentication.constant';
-import { UserLocation, UserRole, Sex, Questionnaire } from '@backend/core';
+import { UserLocation, UserRole, Sex } from '@backend/core';
 import { QuestionnaireRdo } from './questionnaire.rdo';
 
 export class UserRdo {
@@ -52,5 +52,5 @@ export class UserRdo {
   @Expose()
   @ApiProperty({type: QuestionnaireRdo})
   @Type(() => QuestionnaireRdo)
-  questionnaire?: Questionnaire;
+  questionnaire?: QuestionnaireRdo;
 }

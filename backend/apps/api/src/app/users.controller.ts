@@ -97,7 +97,7 @@ export class UsersController {
   @ApiBearerAuth()
   @UseGuards(CheckAuthGuard)
   @UseInterceptors(InjectUserIdInterceptor)
-  @Patch('edit')
+  @Patch()
   public async changePassword(
     @UserId() userId: string,
     @Body() dto: UpdateUserDto

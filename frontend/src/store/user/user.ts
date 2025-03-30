@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { NameSpace } from '../const';
-import { checkAuthAction, loginAction } from './thunks';
+import { checkAuthAction, editQuestionnaireAction, loginAction } from './thunks';
 import { AuthorizationStatus } from '../../constant';
 import { User } from '../../types/user/user';
 
@@ -35,6 +35,11 @@ export const user = createSlice({
       .addCase(loginAction.rejected, (state) => {
         state.authorizationStatus = AuthorizationStatus.NoAuth;
         state.user = undefined;
+      })
+      .addCase(editQuestionnaireAction.fulfilled, (state, action) => {
+        if (state.user) {
+          state.user.questionnaire = action.payload.questionnaire;
+        }
       });
   },
 });

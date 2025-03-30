@@ -1,10 +1,11 @@
 export enum APIRoute {
-  Login = '/users/login',
-  Register = '/users',
+  Users = '/users',
+  Login = `${Users}/login`,
   CheckAuth = '/users/check',
   Trainings = '/fit/trainings',
   Feedbacks = '/fit/feedback',
   Fit = '/fit',
+  Questionnaire = `${Users}/questionnaire`
 }
 
 export enum NameSpace {

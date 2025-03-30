@@ -24,15 +24,12 @@ export function CustomSelect({
   placeholder = '',
   className = ''
 }: CustomSelectProps) {
-  console.dir(options);
-  console.log(value);
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
 
   const selectedOption = options.find(option => option.value === value);
 
   const handleSelect = (optionValue: string) => {
-    console.log(optionValue);
     onChange?.(optionValue);
     setIsOpen(false);
   };

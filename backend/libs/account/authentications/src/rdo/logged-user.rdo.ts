@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 import { AuthFieldDescription } from '../authentication-module/authentication.constant';
 import { UserLocation, UserRole, Sex } from '@backend/core';
+import { QuestionnaireRdo } from './questionnaire.rdo';
 
 export class LoggedUserRdo {
   @ApiProperty(AuthFieldDescription.Id)
@@ -47,6 +48,11 @@ export class LoggedUserRdo {
   @ApiProperty(AuthFieldDescription.CreatedAt)
   @Expose()
   createdAt?: Date;
+
+  @Expose()
+  @ApiProperty({type: QuestionnaireRdo})
+  @Type(() => QuestionnaireRdo)
+  questionnaire?: QuestionnaireRdo;
 
   @ApiProperty(AuthFieldDescription.AccessToken)
   @Expose()

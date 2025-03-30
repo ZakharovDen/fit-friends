@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
-import { useAppSelector } from "../../hooks";
+import { FormEvent, useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 import { getUser } from "../../store/user/selectors";
 import { UserLocation, UserLocationLabel } from "../../types/user/user-location.enum";
 import { CustomSelect } from "../../components/custom-select/custom-select";
 import { Sex, SexUserLabel } from "../../types/sex.enum";
 import { TrainingLevel, TrainingLevelLabel } from "../../types/training/training-level.enum";
+import { TrainingType, TrainingTypeLabel } from "../../types/training/training-type.enum";
+import { editUserAction } from "../../store/user/thunks";
 
 function isSex(value: string): value is Sex {
   return Object.values(Sex).includes(value as Sex);
@@ -19,36 +21,89 @@ function isLevel(value: string): value is TrainingLevel {
 }
 
 function AccountScreen(): JSX.Element {
-  console.dir(Object.entries(UserLocationLabel).map(([key, value]) => ({value: key, label: value})));
-
+  const dispatch = useAppDispatch();
   const user = useAppSelector(getUser);
-  const [selectedLocation, setSelectedLocation] = useState<string | undefined>(user?.location);
-  const [selectedSex, setSelectedSex] = useState<string | undefined>(user?.sex);
-  const [selectedLevel, setSelectedLevel] = useState<string | undefined>();
+  const [isEdited, setIsEdited] = useState<boolean>(false);
+  const [location, setLocation] = useState<string | undefined>(user?.location);
+  const [sex, setSex] = useState<string | undefined>(user?.sex);
+  const [level, setLevel] = useState<string | undefined>(user?.questionnaire?.level);
+  const [types, setTypes] = useState<string[]>(user?.questionnaire?.types ?? []);
+  const [name, setName] = useState<string | undefined>(user?.name);
+  const [description, setDescription] = useState<string | undefined>(user?.description);
+  const [isReady, setIsReady] = useState<boolean | undefined>(user?.questionnaire?.isReady);
+
+  useEffect(() => {
+    setSex(user?.sex);
+    setLevel(user?.questionnaire?.level);
+    setLocation(user?.location);
+    setName(user?.name);
+  }, [user])
+
+  const handleChangeIsReady = () => {
+    if (!isEdited) {
+      return;
+    }
+    setIsReady(!isReady);
+  }
+
+  const handleChangeName = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    setName(evt.target.value);
+  }
+
+  const handleChangeDescription = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setDescription(evt.target.value);
+  }
 
   const handleLocationSelect = (location: string) => {
     if (isLocation(location)) {
-      console.log(location);
-      setSelectedLocation(location);
+      setLocation(location);
     }
   };
 
-const handleSexSelect = (sex: string) => {
-  if (isSex(sex)) {
-    setSelectedSex(sex);
+  const handleSexSelect = (sex: string) => {
+    if (isSex(sex)) {
+      setSex(sex);
+    }
   }
-}
 
-const handleLevelSelect = (level: string) => {
-  if (isLevel(level)) {
-    setSelectedLevel(level);
+  const handleLevelSelect = (level: string) => {
+    if (isLevel(level)) {
+      setLevel(level);
+    }
   }
-}
 
-useEffect(() => {
-  setSelectedSex(user?.sex);
-  setSelectedLocation(user?.location)
-}, [user])
+  const handleTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, checked } = event.target;
+    if (!isEdited) {
+      return;
+    }
+    if (checked) {
+      setTypes([...types, value as TrainingType]);
+    } else {
+      setTypes(types.filter((type) => type !== value));
+    }
+  }
+
+  const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
+    console.log('submit');
+    evt.preventDefault();
+    const form = evt.currentTarget;
+    const formData = new FormData(form);
+    console.dir(formData);
+    // formData.append('location', String(selectedLocation));
+    // formData.append('dateOfBirth', String(formData.get('birthday')));
+    // if (selectedFile) {
+    //   formData.append('avatar', selectedFile);
+    // }
+    dispatch(editUserAction(formData));
+    setIsEdited(false);
+  }
+
+  const handleEditForm = (evt: React.MouseEvent<HTMLButtonElement>) => {
+    evt.stopPropagation();
+    evt.preventDefault();
+    setIsEdited(true);
+  }
 
   return (
     <main>
@@ -62,34 +117,47 @@ useEffect(() => {
                   <label>
                     <input className="visually-hidden" type="file" name="user-photo-1" accept="image/png, image/jpeg" />
                     <span className="input-load-avatar__avatar">
-                      <img 
-                        src={user?.avatar} 
-                        srcSet="img/content/user-photo-1@2x.png 2x" 
-                        width="98" 
-                        height="98" 
-                        alt="user photo" 
+                      <img
+                        src={user?.avatar}
+                        srcSet="img/content/user-photo-1@2x.png 2x"
+                        width="98"
+                        height="98"
+                        alt="user photo"
                       />
                     </span>
                   </label>
                 </div>
               </div>
-              <form className="user-info__form" action="#" method="post">
-                <button className="btn-flat btn-flat--underlined user-info__edit-button" type="button" aria-label="Редактировать">
-                  <svg width="12" height="12" aria-hidden="true">
-                    <use xlinkHref="#icon-edit"></use>
-                  </svg><span>Редактировать</span>
-                </button>
+              <form className="user-info__form" method="post" onSubmit={handleFormSubmit}>
+                {(isEdited)
+                  ? (<button className="btn-flat btn-flat--underlined user-info-edit__save-button" type="submit" aria-label="Сохранить">
+                    <svg width="12" height="12" aria-hidden="true">
+                      <use xlinkHref="#icon-edit"></use>
+                    </svg><span>Сохранить</span>
+                  </button>)
+                  : (<button className="btn-flat btn-flat--underlined user-info__edit-button" type="button" aria-label="Редактировать" onClick={handleEditForm}>
+                    <svg width="12" height="12" aria-hidden="true">
+                      <use xlinkHref="#icon-edit"></use>
+                    </svg><span>Редактировать</span>
+                  </button>
+                  )}
                 <div className="user-info__section">
                   <h2 className="user-info__title">Обо мне</h2>
                   <div className="custom-input custom-input--readonly user-info__input">
                     <label><span className="custom-input__label">Имя</span><span className="custom-input__wrapper">
-                      <input type="text" name="name" value={user?.name} disabled /></span>
+                      <input
+                        type="text"
+                        name="name"
+                        value={name}
+                        disabled={!isEdited}
+                        onChange={handleChangeName}
+                      /></span>
                     </label>
                   </div>
                   <div className="custom-textarea custom-textarea--readonly user-info__textarea">
                     <label><span className="custom-textarea__label">Описание</span>
-                      <textarea name="description" placeholder=" " disabled>
-                        {user?.description}
+                      <textarea name="description" placeholder=" " disabled={!isEdited} onChange={handleChangeDescription}>
+                        {description}
                       </textarea>
                     </label>
                   </div>
@@ -98,81 +166,57 @@ useEffect(() => {
                   <h2 className="user-info__title user-info__title--status">Статус</h2>
                   <div className="custom-toggle custom-toggle--switch user-info__toggle">
                     <label>
-                      <input type="checkbox" name="ready-for-training" checked /><span className="custom-toggle__icon">
+                      <input type="checkbox" name="ready-for-training" checked={isReady} onChange={handleChangeIsReady} /><span className="custom-toggle__icon">
                         <svg width="9" height="6" aria-hidden="true">
                           <use xlinkHref="#arrow-check"></use>
-                        </svg></span><span className="custom-toggle__label">Готов тренировать</span>
+                        </svg></span><span className="custom-toggle__label">Готов к тренировке</span>
                     </label>
                   </div>
                 </div>
                 <div className="user-info__section">
                   <h2 className="user-info__title user-info__title--specialization">Специализация</h2>
                   <div className="specialization-checkbox user-info__specialization">
-                    <div className="btn-checkbox">
-                      <label>
-                        <input className="visually-hidden" type="checkbox" name="specialization" value="yoga" checked /><span className="btn-checkbox__btn">Йога</span>
-                      </label>
-                    </div>
-                    <div className="btn-checkbox">
-                      <label>
-                        <input className="visually-hidden" type="checkbox" name="specialization" value="running" /><span className="btn-checkbox__btn">Бег</span>
-                      </label>
-                    </div>
-                    <div className="btn-checkbox">
-                      <label>
-                        <input className="visually-hidden" type="checkbox" name="specialization" value="aerobics" checked /><span className="btn-checkbox__btn">Аэробика</span>
-                      </label>
-                    </div>
-                    <div className="btn-checkbox">
-                      <label>
-                        <input className="visually-hidden" type="checkbox" name="specialization" value="boxing" /><span className="btn-checkbox__btn">Бокс</span>
-                      </label>
-                    </div>
-                    <div className="btn-checkbox">
-                      <label>
-                        <input className="visually-hidden" type="checkbox" name="specialization" value="power" /><span className="btn-checkbox__btn">Силовые</span>
-                      </label>
-                    </div>
-                    <div className="btn-checkbox">
-                      <label>
-                        <input className="visually-hidden" type="checkbox" name="specialization" value="pilates" checked /><span className="btn-checkbox__btn">Пилатес</span>
-                      </label>
-                    </div>
-                    <div className="btn-checkbox">
-                      <label>
-                        <input className="visually-hidden" type="checkbox" name="specialization" value="stretching" checked /><span className="btn-checkbox__btn">Стрейчинг</span>
-                      </label>
-                    </div>
-                    <div className="btn-checkbox">
-                      <label>
-                        <input className="visually-hidden" type="checkbox" name="specialization" value="crossfit" /><span className="btn-checkbox__btn">Кроссфит</span>
-                      </label>
-                    </div>
+                    {Object.entries(TrainingTypeLabel).map(([key, value]) => (
+                      <div className="btn-checkbox">
+                        <label>
+                          <input
+                            className="visually-hidden"
+                            type="checkbox"
+                            name="specialization"
+                            value={key}
+                            checked={types.includes(key as TrainingType)}
+                            onChange={handleTypeChange}
+                            key={key}
+                          />
+                          <span className="btn-checkbox__btn">{value}</span>
+                        </label>
+                      </div>
+                    ))}
                   </div>
                 </div>
-                <CustomSelect 
-                  value={selectedLocation} 
-                  label={'Локация'} 
-                  readonly={true}
-                  options={Object.entries(UserLocationLabel).map(([key, value]) => ({value: key, label: value}))}
+                <CustomSelect
+                  value={location}
+                  label={'Локация'}
+                  readonly={!isEdited}
+                  options={Object.entries(UserLocationLabel).map(([key, value]) => ({ value: key, label: value }))}
                   onChange={handleLocationSelect}
-                  //placeholder={selectedSex} 
+                //placeholder={sex} 
                 />
-                <CustomSelect 
-                  value={selectedSex} 
-                  label={'Пол'} 
-                  readonly={true}
-                  options={Object.entries(SexUserLabel).map(([key, value]) => ({value: key, label: value}))}
+                <CustomSelect
+                  value={sex}
+                  label={'Пол'}
+                  readonly={!isEdited}
+                  options={Object.entries(SexUserLabel).map(([key, value]) => ({ value: key, label: value }))}
                   onChange={handleSexSelect}
-                  //placeholder={selectedSex} 
+                //placeholder={sex} 
                 />
-                <CustomSelect 
-                  value={selectedLevel} 
-                  label={'Уровень'} 
-                  readonly={true}
-                  options={Object.entries(TrainingLevelLabel).map(([key, value]) => ({value: key, label: value}))}
+                <CustomSelect
+                  value={level}
+                  label={'Уровень'}
+                  readonly={!isEdited}
+                  options={Object.entries(TrainingLevelLabel).map(([key, value]) => ({ value: key, label: value }))}
                   onChange={handleLevelSelect}
-                  //placeholder={selectedSex} 
+                //placeholder={sex} 
                 />
               </form>
             </section>

@@ -1,6 +1,18 @@
 import { Sex } from "../sex.enum";
+import { TrainingDuration } from "../training/training-duration.enum";
+import { TrainingLevel } from "../training/training-level.enum";
+import { TrainingType } from "../training/training-type.enum";
 import { UserLocation } from "./user-location.enum";
 import { UserRole } from "./user-role.enum";
+
+export type Questionnaire = {
+  level: TrainingLevel;
+  types: TrainingType[];
+  duration: TrainingDuration;
+  caloriesTotal: number;
+  caloriesByDay: number;
+  isReady: boolean;
+}
 
 export type User = {
   id: string;
@@ -14,6 +26,7 @@ export type User = {
   backgroundImage: string;
   role: UserRole;
   createdAt?: Date;
+  questionnaire?: Questionnaire;
 };
 
 export type LoggedUser = User & {
