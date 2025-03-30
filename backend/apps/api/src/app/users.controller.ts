@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Body, Controller, FileTypeValidator, Get, HttpStatus, MaxFileSizeValidator, Param, 
         ParseFilePipe, Patch, Post, Req, UploadedFile, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import 'multer';
-import { AuthenticationResponseMessage, CreateUserDto, LoggedUserRdo, LoginUserDto, UpdateUserDto, UserRdo } from '@backend/authentications';
+import { AuthenticationResponseMessage, CreateQuestionnaireDto, CreateUserDto, LoggedUserRdo, LoginUserDto, UpdateQuestionnaireDto, UpdateUserDto, UserRdo } from '@backend/authentications';
 import { ApplicationServiceURL } from './app.config';
 import { AxiosExceptionFilter } from './filters/axios-exception.filter';
 import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -118,5 +118,30 @@ export class UsersController {
       }
     });
     return {...data, avatar: `${ApplicationServiceURL.File}/static${data.avatar}`};;
+  }
+
+  @Post('/questionnaire')
+  @ApiOperation({ summary: 'Создание опросника пользователя.' })
+  @ApiResponse({ status: HttpStatus.CREATED, type: UserRdo })
+  @ApiBearerAuth()
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(InjectUserIdInterceptor)
+  async createQuestionnaire(
+    @UserId() userId: string,
+    @Body() dto: CreateQuestionnaireDto
+  ) {
+    const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Users}/questionnaire/${userId}`, dto);
+    return {...data, avatar: `${ApplicationServiceURL.File}/static${data.avatar}`};
+  }
+
+  @Patch('/questionnaire')
+  @ApiOperation({ summary: 'Редактирование опросника пользователя.' })
+  @ApiResponse({ status: HttpStatus.CREATED, type: UserRdo })
+  async updateQuestionnaire(
+    @UserId() userId: string,
+    @Body() dto: UpdateQuestionnaireDto
+  ) {
+    const { data } = await this.httpService.axiosRef.patch(`${ApplicationServiceURL.Users}/questionnaire/${userId}`, dto);
+    return {...data, avatar: `${ApplicationServiceURL.File}/static${data.avatar}`};
   }
 }

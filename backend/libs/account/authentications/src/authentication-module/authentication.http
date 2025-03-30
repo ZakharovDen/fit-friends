@@ -27,7 +27,7 @@ POST http://localhost:3333/api/auth/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "user@notfound.local",
+  "email": "example1@email.com",
   "password": "123456"
 }
 
@@ -40,6 +40,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIiLCJlbWFpb
 
 # Check user token
 POST http://localhost:3333/api/auth/check HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NzY2ZTE2ZjkwYzAyNjRhNzRhMWY5ZDQiLCJlbWFpbCI6InVzZXJAbm90Zm91bmQubG9jYWwiLCJuYW1lIjoiS2VrcyIsImlhdCI6MTczNzUzOTQyNywiZXhwIjoxNzM3NTM5NzI3fQ.a2oK5yU-nCmHEQh1QdqpoMq5x40NdkBkBS_QBWMuOko
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2U4ZGU2OGMyNzViMDA0YzcwNDQ3Y2MiLCJlbWFpbCI6ImV4YW1wbGUxQGVtYWlsLmNvbSIsIm5hbWUiOiJEZW5pcyBaYWtoYXJvdiIsImlhdCI6MTc0MzM0OTcyMSwiZXhwIjoxNzQzMzUwNjIxfQ.QickGSjg6YtZOvSqam0MM8IDc8Zv0p5Bnk-VXeNUbJQ
 
 ###
