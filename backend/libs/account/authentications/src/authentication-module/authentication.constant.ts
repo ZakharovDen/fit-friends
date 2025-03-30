@@ -1,4 +1,4 @@
-import { UserLocation, UserRole, Sex } from "@backend/core";
+import { UserLocation, UserRole, Sex, TrainingLevel, TrainingType, TrainingDuration } from "@backend/core";
 
 export const AUTH_USER_EXISTS = 'User with this email exists';
 export const AUTH_USER_NOT_FOUND = 'User not found';
@@ -55,4 +55,32 @@ export const AuthFieldDescription = {
   Location: { description: 'Станция метро', example: UserLocation.Petrogradskaya, enum: UserLocation },
   BackgroundImage:  { description: 'Фоновая картинка для карточки пользователя' },
   Role:  { description: 'Роль пользователя', example: UserRole.Coach, enum: UserRole },
+} as const;
+
+export const QuestionnaireDescription = {
+  Level: { description: 'Уровень подготовки', example: TrainingLevel.Beginner },
+  Types: { description: 'Тип тренировок', example: [TrainingType.Aerobics] },
+  Duration: { description: 'Время на тренировку', example: TrainingDuration["80-100"] },
+  CaloriesTotal: { description: 'Количество калорий для сброса', example: 5000 },
+  CaloriesByDay: { description: 'Количество калорий для траты в день', example: 1000 },
+  IsReady: { description: 'Готовность к тренировке', example: true },
+} as const;
+
+export const QuestionnaireValidateValue = {
+  CaloriesTotal: {
+    Min: 1000,
+    Max: 5000,
+  },
+  CaloriesByDay: {
+    Min: 1000,
+    Max: 5000,
+  },
+  Types: {
+    MaxArraySize: 3
+  }
+} as const;
+
+export const QuestionnaireValidateMessage = {
+  CaloriesTotal: `Min value for CaloriesTotal is ${QuestionnaireValidateValue.CaloriesTotal.Min}, max is ${QuestionnaireValidateValue.CaloriesTotal.Max}`,
+  CaloriesByDay: `Min value for CaloriesByDay is ${QuestionnaireValidateValue.CaloriesByDay.Min}, max is ${QuestionnaireValidateValue.CaloriesByDay.Max}`,
 } as const;

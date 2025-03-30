@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpException, HttpStatus, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -13,14 +13,16 @@ import { RequestWithUser } from './request-with-user.interface';
 import { JwtRefreshGuard } from '../guards/jwt-refresh.guard';
 import { RequestWithTokenPayload } from './request-with-token-payload.interface';
 import { UpdateUserDto } from '../dto/update-user.dto';
+import { CreateQuestionnaireDto } from '../dto/create-user-questionnaire.dto';
+import { UpdateQuestionnaireDto } from '../dto/update-user-questionnaire.dto';
 
 @ApiTags('authentication')
 @Controller('auth')
 export class AuthenticationController {
   constructor(
     private readonly authService: AuthenticationService,
-  ) {}
-  
+  ) { }
+
   @ApiOperation({ summary: 'Регистрация пользователя.' })
   @ApiResponse({
     status: HttpStatus.CREATED,
@@ -34,7 +36,7 @@ export class AuthenticationController {
   public async create(@Body() dto: CreateUserDto) {
     const newUser = await this.authService.register(dto);
     const userToken = await this.authService.createUserToken(newUser);
-    return fillDto(LoggedUserRdo, { ...newUser.toPOJO(), ...userToken });  
+    return fillDto(LoggedUserRdo, { ...newUser.toPOJO(), ...userToken });
   }
 
   @ApiOperation({ summary: 'Авторизация пользователя.' })
@@ -51,7 +53,7 @@ export class AuthenticationController {
   @Post('login')
   public async login(@Req() { user }: RequestWithUser) {
     const userToken = await this.authService.createUserToken(user);
-    return fillDto(LoggedUserRdo, { ...user.toPOJO(), ...userToken });  
+    return fillDto(LoggedUserRdo, { ...user.toPOJO(), ...userToken });
   }
 
   @ApiOperation({ summary: 'Получение детальной информации о пользователе.' })
@@ -86,7 +88,7 @@ export class AuthenticationController {
   @Post('check')
   public async checkToken(@Req() { user: payload }: RequestWithTokenPayload) {
     const existUser = await this.authService.getUser(payload.sub);
-    return fillDto(UserRdo, existUser.toPOJO());    
+    return fillDto(UserRdo, existUser.toPOJO());
   }
 
   @Patch('/user/:id')
@@ -98,5 +100,33 @@ export class AuthenticationController {
   ) {
     const user = await this.authService.update(id, dto);
     return fillDto(UserRdo, user.toPOJO());
+  }
+
+  @Post('/questionnaire/:userId')
+  @ApiOperation({ summary: 'Создание опросника пользователя.' })
+  @ApiResponse({ status: HttpStatus.CREATED, type: UserRdo })
+  async createQuestionnaire(
+    @Param('userId') userId: string,
+    @Body() dto: CreateQuestionnaireDto
+  ) {
+    const user = await this.authService.addQuestionnaire(userId, dto);
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+    return user;
+  }
+
+  @Patch('/questionnaire/:userId')
+  @ApiOperation({ summary: 'Создание опросника пользователя.' })
+  @ApiResponse({ status: HttpStatus.CREATED, type: UserRdo })
+  async updateQuestionnaire(
+    @Param('userId') userId: string,
+    @Body() dto: UpdateQuestionnaireDto
+  ) {
+    const user = await this.authService.updateQuestionnaire(userId, dto);
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+    return user;
   }
 }

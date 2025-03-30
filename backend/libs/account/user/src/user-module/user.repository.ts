@@ -20,4 +20,5 @@ export class UserRepository extends BaseMongoRepository<UserEntity, UserModel> {
     const document = await this.model.findOne({ email }).exec();
     return this.createEntityFromDocument(document);
   }
+
 }

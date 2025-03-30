@@ -7,3 +7,4 @@ export { AuthenticationResponseMessage } from './authentication-module/authentic
 export { UpdateUserDto } from './dto/update-user.dto';
 export { JwtAuthGuard } from './guards/jwt-auth.guard';
 export { RequestWithTokenPayload } from './authentication-module/request-with-token-payload.interface';
+export { CreateQuestionnaireDto } from './dto/create-user-questionnaire.dto';

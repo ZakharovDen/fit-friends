@@ -1,4 +1,4 @@
-export { User } from './lib/types/user/user.interface';
+export { User, Questionnaire } from './lib/types/user/user.interface';
 export { AuthUser } from './lib/types/user/auth-user.interface';
 export { Sex } from './lib/types/sex.enum';
 export { File } from './lib/types/file.interface';

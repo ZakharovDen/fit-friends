@@ -5,12 +5,13 @@ import { AUTH_USER_EXISTS, AUTH_USER_NOT_FOUND, AUTH_USER_PASSWORD_WRONG } from 
 import { LoginUserDto } from '../dto/login-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { Token, User } from '@backend/core';
-//import { NotifyService } from '@backend/account-notify';
 import { jwtConfig } from '@backend/account-config';
 import { ConfigType } from '@nestjs/config';
 import { createJWTPayload } from '@backend/helpers';
 import { RefreshTokenService } from '../refresh-token-module/refresh-token.service';
 import { UpdateUserDto } from '../dto/update-user.dto';
+import { CreateQuestionnaireDto } from '../dto/create-user-questionnaire.dto';
+import { UpdateQuestionnaireDto } from '../dto/update-user-questionnaire.dto';
 
 @Injectable()
 export class AuthenticationService {
@@ -19,7 +20,6 @@ export class AuthenticationService {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
-    //private readonly notifyService: NotifyService,
     @Inject(jwtConfig.KEY) private readonly jwtOptions: ConfigType<typeof jwtConfig>,
     private readonly refreshTokenService: RefreshTokenService,
   ) { }
@@ -101,8 +101,22 @@ export class AuthenticationService {
 
   public async update(id: string, dto: UpdateUserDto): Promise<UserEntity> {
     const user = await this.getUser(id);
-    const updatedUser = Object.assign(user, dto)
+    const updatedUser = Object.assign(user, dto);
     await this.userRepository.update(updatedUser);
+    return user;
+  }
+
+  public async addQuestionnaire(userId: string, dto: CreateQuestionnaireDto): Promise<UserEntity> {
+    const user = await this.getUser(userId);
+    user.questionnaire = dto;
+    await this.userRepository.update(user);
+    return user;
+  }
+
+  public async updateQuestionnaire(userId: string, dto: UpdateQuestionnaireDto): Promise<UserEntity> {
+    const user = await this.getUser(userId);
+    user.questionnaire = Object.assign(user.questionnaire, dto);
+    await this.userRepository.update(user);
     return user;
   }
 }

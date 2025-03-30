@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { AuthUser, UserLocation, UserRole, Sex } from "@backend/core";
+import { AuthUser, UserLocation, UserRole, Sex, TrainingLevel, TrainingType, TrainingDuration } from "@backend/core";
 
 @Schema({
   collection: 'accounts',
@@ -48,6 +48,27 @@ export class UserModel extends Document implements AuthUser {
     enum: UserRole, 
   })
   role: UserRole;
+
+  @Prop({
+    type: {
+      level: { type: String, enum: TrainingLevel },
+      types: [{ type: String, enum: TrainingType }],
+      duration: { type: String, enum: TrainingDuration },
+      caloriesTotal: Number,
+      caloriesByDay: Number,
+      isReady: Boolean
+    },
+    required: false,
+    _id: false
+  })
+  questionnaire?: {
+    level: TrainingLevel;
+    types: TrainingType[];
+    duration: TrainingDuration;
+    caloriesTotal: number;
+    caloriesByDay: number;
+    isReady: boolean;
+  };
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserModel);

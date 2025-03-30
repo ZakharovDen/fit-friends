@@ -1,4 +1,4 @@
-import { AuthUser, Entity, StorableEntity, UserLocation, UserRole, Sex } from '@backend/core';
+import { AuthUser, Entity, StorableEntity, UserLocation, UserRole, Sex, Questionnaire } from '@backend/core';
 import { compare, genSalt, hash } from 'bcrypt';
 import { SALT_ROUNDS } from './user.constant';
 
@@ -15,6 +15,7 @@ export class UserEntity extends Entity implements StorableEntity<AuthUser>{
   public sex: Sex;
   public dateOfBirth: Date;
   public description: string;
+  public questionnaire: Questionnaire;
 
   constructor(user?: AuthUser) {
     super();
@@ -39,6 +40,7 @@ export class UserEntity extends Entity implements StorableEntity<AuthUser>{
     this.sex = user.sex;
     this.dateOfBirth = user.dateOfBirth ?? undefined;
     this.description = user.description ?? undefined;
+    this.questionnaire = user.questionnaire ?? undefined;
   }
 
   toPOJO(): AuthUser {
@@ -56,6 +58,7 @@ export class UserEntity extends Entity implements StorableEntity<AuthUser>{
       sex: this.sex,
       dateOfBirth: this.dateOfBirth,
       description: this.description,
+      questionnaire: this.questionnaire,
     };
   }
 
