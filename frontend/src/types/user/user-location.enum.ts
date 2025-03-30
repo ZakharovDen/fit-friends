@@ -1,7 +1,15 @@
 export enum UserLocation {
-  Pionerskaya = 'Пионерская',
-  Petrogradskaya = 'Петроградская',
-  Udelnaya = 'Удельная',
-  Zvezdnaya = 'Звёздная',
-  Sportivnaya = 'Спортивная',
+  Pionerskaya = 'Pionerskaya',
+  Petrogradskaya = 'Petrogradskaya',
+  Udelnaya = 'Udelnaya',
+  Zvezdnaya = 'Zvezdnaya',
+  Sportivnaya = 'Sportivnaya',
+}
+
+export const UserLocationLabel: Record<UserLocation, string> = {
+  [UserLocation.Pionerskaya]: 'Пионерская',
+  [UserLocation.Petrogradskaya]: 'Петроградская',
+  [UserLocation.Udelnaya]: 'Удельная',
+  [UserLocation.Zvezdnaya]: 'Звёздная',
+  [UserLocation.Sportivnaya]: 'Спортивная',
 }

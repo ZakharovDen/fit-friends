@@ -2,17 +2,16 @@ import { ChangeEvent, FormEvent, useState } from "react";
 import { useAppDispatch } from "../../hooks";
 import { registerAction } from "../../store/user/thunks";
 import { SexUserLabel } from "../../types/sex.enum";
-import { UserLocation } from "../../types/user/user-location.enum";
-import LocationListBox from "../../components/location-listbox/location-listbox";
-import { LocationListBoxDisplayMode } from "../../components/location-listbox/constant";
+import { UserLocationLabel } from "../../types/user/user-location.enum";
+import { CustomSelect } from "../../components/custom-select/custom-select";
 
 function RegistrationScreen(): JSX.Element {
   const dispatch = useAppDispatch();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewURL, setPreviewURL] = useState<string | null>(null);
-  const [selectedLocation, setSelectedLocation] = useState<UserLocation>();
+  const [selectedLocation, setSelectedLocation] = useState<string>();
 
-  const handleLocationSelect = (location: UserLocation) => {
+  const handleLocationSelect = (location: string) => {
     setSelectedLocation(location);
   };
 
@@ -99,10 +98,11 @@ function RegistrationScreen(): JSX.Element {
                         <input type="date" name="birthday" max="2099-12-31" /></span>
                       </label>
                     </div>
-                    <LocationListBox 
-                      onSelectLocation={handleLocationSelect} 
-                      selectedLocation={selectedLocation} 
-                      displayMode={LocationListBoxDisplayMode.Register} 
+                    <CustomSelect
+                      value={selectedLocation}
+                      label={'Ваша локация'}
+                      options={Object.entries(UserLocationLabel).map(([key, value]) => ({ value: key, label: value }))}
+                      onChange={handleLocationSelect}
                     />
                     <div className="custom-input">
                       <label><span className="custom-input__label">Пароль</span><span className="custom-input__wrapper">

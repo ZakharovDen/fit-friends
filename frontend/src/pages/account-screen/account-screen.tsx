@@ -1,17 +1,54 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppSelector } from "../../hooks";
 import { getUser } from "../../store/user/selectors";
-import { UserLocation } from "../../types/user/user-location.enum";
-import LocationListBox from "../../components/location-listbox/location-listbox";
-import { LocationListBoxDisplayMode } from "../../components/location-listbox/constant";
+import { UserLocation, UserLocationLabel } from "../../types/user/user-location.enum";
+import { CustomSelect } from "../../components/custom-select/custom-select";
+import { Sex, SexUserLabel } from "../../types/sex.enum";
+import { TrainingLevel, TrainingLevelLabel } from "../../types/training/training-level.enum";
+
+function isSex(value: string): value is Sex {
+  return Object.values(Sex).includes(value as Sex);
+}
+
+function isLocation(value: string): value is UserLocation {
+  return Object.values(UserLocation).includes(value as UserLocation);
+}
+
+function isLevel(value: string): value is TrainingLevel {
+  return Object.values(TrainingLevel).includes(value as TrainingLevel);
+}
 
 function AccountScreen(): JSX.Element {
+  console.dir(Object.entries(UserLocationLabel).map(([key, value]) => ({value: key, label: value})));
+
   const user = useAppSelector(getUser);
-  const [selectedLocation, setSelectedLocation] = useState<UserLocation | undefined>(user?.location);
-  console.log(user?.location);
-  const handleLocationSelect = (location: UserLocation) => {
-    setSelectedLocation(location);
+  const [selectedLocation, setSelectedLocation] = useState<string | undefined>(user?.location);
+  const [selectedSex, setSelectedSex] = useState<string | undefined>(user?.sex);
+  const [selectedLevel, setSelectedLevel] = useState<string | undefined>();
+
+  const handleLocationSelect = (location: string) => {
+    if (isLocation(location)) {
+      console.log(location);
+      setSelectedLocation(location);
+    }
   };
+
+const handleSexSelect = (sex: string) => {
+  if (isSex(sex)) {
+    setSelectedSex(sex);
+  }
+}
+
+const handleLevelSelect = (level: string) => {
+  if (isLevel(level)) {
+    setSelectedLevel(level);
+  }
+}
+
+useEffect(() => {
+  setSelectedSex(user?.sex);
+  setSelectedLocation(user?.location)
+}, [user])
 
   return (
     <main>
@@ -113,30 +150,30 @@ function AccountScreen(): JSX.Element {
                     </div>
                   </div>
                 </div>
-                <LocationListBox
-                  onSelectLocation={handleLocationSelect}
-                  selectedLocation={selectedLocation}
+                <CustomSelect 
+                  value={selectedLocation} 
+                  label={'Локация'} 
                   readonly={true}
-                  displayMode={LocationListBoxDisplayMode.Account}
+                  options={Object.entries(UserLocationLabel).map(([key, value]) => ({value: key, label: value}))}
+                  onChange={handleLocationSelect}
+                  //placeholder={selectedSex} 
                 />
-                <div className="custom-select--readonly custom-select user-info__select"><span className="custom-select__label">Пол</span>
-                  <div className="custom-select__placeholder">Женский</div>
-                  <button className="custom-select__button" type="button" aria-label="Выберите одну из опций" disabled><span className="custom-select__text"></span><span className="custom-select__icon">
-                    <svg width="15" height="6" aria-hidden="true">
-                      <use xlinkHref="#arrow-down"></use>
-                    </svg></span></button>
-                  <ul className="custom-select__list" role="listbox">
-                  </ul>
-                </div>
-                <div className="custom-select--readonly custom-select user-info__select"><span className="custom-select__label">Уровень</span>
-                  <div className="custom-select__placeholder">Профессионал</div>
-                  <button className="custom-select__button" type="button" aria-label="Выберите одну из опций" disabled><span className="custom-select__text"></span><span className="custom-select__icon">
-                    <svg width="15" height="6" aria-hidden="true">
-                      <use xlinkHref="#arrow-down"></use>
-                    </svg></span></button>
-                  <ul className="custom-select__list" role="listbox">
-                  </ul>
-                </div>
+                <CustomSelect 
+                  value={selectedSex} 
+                  label={'Пол'} 
+                  readonly={true}
+                  options={Object.entries(SexUserLabel).map(([key, value]) => ({value: key, label: value}))}
+                  onChange={handleSexSelect}
+                  //placeholder={selectedSex} 
+                />
+                <CustomSelect 
+                  value={selectedLevel} 
+                  label={'Уровень'} 
+                  readonly={true}
+                  options={Object.entries(TrainingLevelLabel).map(([key, value]) => ({value: key, label: value}))}
+                  onChange={handleLevelSelect}
+                  //placeholder={selectedSex} 
+                />
               </form>
             </section>
             <div className="inner-page__content">
@@ -158,14 +195,6 @@ function AccountScreen(): JSX.Element {
                   </form>
                 </div>
                 <div className="personal-account-user__additional-info">
-                  {/* <a className="thumbnail-link thumbnail-link--theme-light" href="#">
-                    <div className="thumbnail-link__icon thumbnail-link__icon--theme-light">
-                      <svg width="30" height="26" aria-hidden="true">
-                        <use xlinkHref="#icon-friends"></use>
-                      </svg>
-                    </div>
-                    <span className="thumbnail-link__text">Мои друзья</span>
-                  </a> */}
                   <a className="thumbnail-link thumbnail-link--theme-light" href="#">
                     <div className="thumbnail-link__icon thumbnail-link__icon--theme-light">
                       <svg width="30" height="26" aria-hidden="true">
