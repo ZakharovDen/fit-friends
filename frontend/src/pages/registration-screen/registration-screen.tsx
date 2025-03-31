@@ -1,19 +1,12 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../hooks";
+import { ChangeEvent, FormEvent, useState } from "react";
+import { useAppDispatch } from "../../hooks";
 import { registerAction } from "../../store/user/thunks";
 import { SexUserLabel } from "../../types/sex.enum";
 import { UserLocationLabel } from "../../types/user/user-location.enum";
 import { CustomSelect } from "../../components/custom-select/custom-select";
-import { getAuthorizationStatus, getIsProcess, getIsSuccess } from "../../store/user/selectors";
-import { useNavigate } from "react-router-dom";
-import { AppRoute, AuthorizationStatus } from "../../constant";
 
 function RegistrationScreen(): JSX.Element {
   const dispatch = useAppDispatch();
-  const isProcess = useAppSelector(getIsProcess);
-  const isSuccess = useAppSelector(getIsSuccess);
-  const authorizationStatus = useAppSelector(getAuthorizationStatus);
-  const navigate = useNavigate();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewURL, setPreviewURL] = useState<string | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<string>();
@@ -56,12 +49,6 @@ function RegistrationScreen(): JSX.Element {
       setPreviewURL(null);
     }
   };
-
-  // useEffect(() => {
-  //   if (isSuccess && !isProcess) {
-  //     navigate(AppRoute.Questionnaire);
-  //   }
-  // }, [isSuccess, isProcess]);
 
   return (
     <main>

@@ -5,7 +5,7 @@ import { TrainingType, TrainingTypeLabel } from "../../types/training/training-t
 import { Questionnaire } from "../../types/user/user";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { addQuestionnaireAction } from "../../store/user/thunks";
-import { getIsProcess, getIsQuestionnaireCompleted, getIsSuccess, getUser } from "../../store/user/selectors";
+import { getIsProcess, getIsQuestionnaireCompleted, getIsSuccess } from "../../store/user/selectors";
 import { AppRoute } from "../../constant";
 import { useNavigate } from "react-router-dom";
 
