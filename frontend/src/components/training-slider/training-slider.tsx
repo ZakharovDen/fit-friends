@@ -2,13 +2,15 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Training } from '../../types/training/training';
 import TrainingItem from '../training-item/training-item';
 import { TrainingItemDisplayMode } from '../training-item/constant';
+import { useNavigate } from 'react-router-dom';
+import { AppRoute } from '../../constant';
 
 type TrainingSliderProps = {
   trainings: Training[];
 }
 
 function TrainingSlider({ trainings }: TrainingSliderProps): JSX.Element {
-
+  const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [transitionEnabled, setTransitionEnabled] = useState(true);
   const [visibleItems, setVisibleItems] = useState(4); // Начальное значение
@@ -72,6 +74,11 @@ function TrainingSlider({ trainings }: TrainingSliderProps): JSX.Element {
         <div className="popular-trainings__wrapper">
           <div className="popular-trainings__title-wrapper">
             <h2 className="popular-trainings__title">Популярные тренировки</h2>
+            <button className="btn-flat popular-trainings__button" type="button" onClick={() => navigate(AppRoute.Catalog)}><span>Смотреть все</span>
+            <svg width="14" height="10" aria-hidden="true">
+                  <use xlinkHref="#arrow-right"></use>
+                </svg>
+              </button>
             <div className="popular-trainings__controls">
               <button
                 className={`btn-icon popular-trainings__control ${!canGoPrev ? 'disabled' : ''}`}
