@@ -58,7 +58,7 @@ POSTGRES_DB=fit                         # Имя БД для Postgres
 PGADMIN_DEFAULT_EMAIL=example@mail.com  # Имя пользователя для PgAdmin
 PGADMIN_DEFAULT_PASSWORD=123456         # Пароль пользователя для PgAdmin
 ```
-##### \libs\fit\models\prisma\.env
+##### \libs\fit\models\prisma\ .env
 ```
 # Строка подключения для Prisma
 DATABASE_URL=postgres://postgres:postgres@localhost:5432/fit
