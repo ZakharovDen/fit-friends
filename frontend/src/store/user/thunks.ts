@@ -30,18 +30,6 @@ export const loginAction = createAsyncThunk<LoggedUser, UserAuth, {
   },
 );
 
-// export const logoutAction = createAsyncThunk<void, undefined, {
-//   dispatch: AppDispatch;
-//   state: State;
-//   extra: AxiosInstance;
-// }>(
-//   'user/logout',
-//   async (_arg, { extra: api }) => {
-//     await api.delete(APIRoute.Logout);
-//     dropToken();
-//   },
-// );
-
 export const registerAction = createAsyncThunk<LoggedUser, /*UserRegister*/FormData, {
   dispatch: AppDispatch;
   state: State;
