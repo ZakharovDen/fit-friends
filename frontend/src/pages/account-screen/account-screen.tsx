@@ -90,11 +90,9 @@ function AccountScreen(): JSX.Element {
   const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     dispatch(editUserAction(userData));
-    //setIsEdited(false);
   }
 
   useEffect(() => {
-    console.log(isSuccess, isProcess);
     if (isSuccess && !isProcess) {
       setIsEdited(false);
     }
@@ -167,7 +165,11 @@ function AccountScreen(): JSX.Element {
                   <h2 className="user-info__title user-info__title--status">Статус</h2>
                   <div className="custom-toggle custom-toggle--switch user-info__toggle">
                     <label>
-                      <input type="checkbox" name="ready-for-training" checked={userData.questionnaire?.isReady} onChange={handleChangeIsReady} /><span className="custom-toggle__icon">
+                      <input type="checkbox" name="ready-for-training" 
+                        checked={userData.questionnaire?.isReady} 
+                        onChange={handleChangeIsReady} 
+                      />
+                      <span className="custom-toggle__icon">
                         <svg width="9" height="6" aria-hidden="true">
                           <use xlinkHref="#arrow-check"></use>
                         </svg></span><span className="custom-toggle__label">Готов к тренировке</span>

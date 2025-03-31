@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
 import { APIRoute } from '../const';
 import { dropToken, saveToken } from '../../services/token';
-import { LoggedUser, User, UserAuth, UserRegister } from '../../types/user/user';
+import { LoggedUser, Questionnaire, User, UserAuth, UserRegister } from '../../types/user/user';
 import { AppDispatch, State } from '../../types/state';
 
 export const checkAuthAction = createAsyncThunk<LoggedUser, undefined, {
@@ -42,14 +42,15 @@ export const loginAction = createAsyncThunk<LoggedUser, UserAuth, {
 //   },
 // );
 
-export const registerAction = createAsyncThunk<User, /*UserRegister*/FormData, {
+export const registerAction = createAsyncThunk<LoggedUser, /*UserRegister*/FormData, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }>(
   'user/register',
   async (formData , { extra: api }) => {
-    const { data } = await api.post<User>(APIRoute.Users, formData);
+    const { data } = await api.post<LoggedUser>(APIRoute.Users, formData);
+    saveToken(data.accessToken);
     return data;
   }
 );
@@ -66,14 +67,14 @@ export const editUserAction = createAsyncThunk<User, User, {
   }
 );
 
-// export const editQuestionnaireAction = createAsyncThunk<User, FormData, {
-//   dispatch: AppDispatch;
-//   state: State;
-//   extra: AxiosInstance;
-// }>(
-//   'user/questionnaire',
-//   async (formData , { extra: api }) => {
-//     const { data } = await api.patch<User>(APIRoute.Questionnaire, formData);
-//     return data;
-//   }
-// );
+export const addQuestionnaireAction = createAsyncThunk<User, Questionnaire, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'user/questionnaire',
+  async (questionnaire , { extra: api }) => {
+    const { data } = await api.post<User>(APIRoute.Questionnaire, questionnaire);
+    return data;
+  }
+);

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { NameSpace } from '../const';
-import { checkAuthAction, editUserAction, loginAction } from './thunks';
+import { addQuestionnaireAction, checkAuthAction, editUserAction, loginAction, registerAction } from './thunks';
 import { AuthorizationStatus } from '../../constant';
 import { User } from '../../types/user/user';
 
@@ -9,13 +9,15 @@ type InitialState = {
   user: User | undefined;
   isProcess: boolean;
   isSuccess: boolean;
+  isQuestionnaireCompleted: boolean;
 };
 
 const initialState: InitialState = {
   authorizationStatus: AuthorizationStatus.Unknown,
   user: undefined,
   isProcess: false,
-  isSuccess: true,
+  isSuccess: false,
+  isQuestionnaireCompleted: false,
 };
 
 export const user = createSlice({
@@ -27,18 +29,52 @@ export const user = createSlice({
       .addCase(checkAuthAction.fulfilled, (state, action) => {
         state.authorizationStatus = AuthorizationStatus.Auth;
         state.user = action.payload;
+        state.isQuestionnaireCompleted = (!!state.user.questionnaire);
       })
       .addCase(checkAuthAction.rejected, (state) => {
         state.authorizationStatus = AuthorizationStatus.NoAuth;
         state.user = undefined;
+        state.isQuestionnaireCompleted = false;
       })
       .addCase(loginAction.fulfilled, (state, action) => {
         state.authorizationStatus = AuthorizationStatus.Auth;
         state.user = action.payload;
+        state.isQuestionnaireCompleted = (!!state.user.questionnaire);
       })
       .addCase(loginAction.rejected, (state) => {
         state.authorizationStatus = AuthorizationStatus.NoAuth;
         state.user = undefined;
+        state.isQuestionnaireCompleted = (false);
+      })
+      .addCase(registerAction.pending, (state) => {
+        state.isProcess = true;
+        state.isSuccess = false;
+      })
+      .addCase(registerAction.rejected, (state) => {
+        state.isProcess = false;
+        state.isSuccess = false;
+        state.isQuestionnaireCompleted = (false);
+      })
+      .addCase(registerAction.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.isProcess = false;
+        state.isSuccess = true;
+        state.isQuestionnaireCompleted = (!!state.user.questionnaire);
+        state.authorizationStatus = AuthorizationStatus.Auth;
+      })
+      .addCase(addQuestionnaireAction.pending, (state) => {
+        state.isProcess = true;
+        state.isSuccess = false;
+      })
+      .addCase(addQuestionnaireAction.rejected, (state) => {
+        state.isProcess = false;
+        state.isSuccess = false;
+      })
+      .addCase(addQuestionnaireAction.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.isProcess = false;
+        state.isSuccess = true;
+        state.isQuestionnaireCompleted = (!!state.user.questionnaire);
       })
       .addCase(editUserAction.pending, (state) => {
         state.isProcess = true;

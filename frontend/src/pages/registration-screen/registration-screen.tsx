@@ -1,12 +1,19 @@
-import { ChangeEvent, FormEvent, useState } from "react";
-import { useAppDispatch } from "../../hooks";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 import { registerAction } from "../../store/user/thunks";
 import { SexUserLabel } from "../../types/sex.enum";
 import { UserLocationLabel } from "../../types/user/user-location.enum";
 import { CustomSelect } from "../../components/custom-select/custom-select";
+import { getAuthorizationStatus, getIsProcess, getIsSuccess } from "../../store/user/selectors";
+import { useNavigate } from "react-router-dom";
+import { AppRoute, AuthorizationStatus } from "../../constant";
 
 function RegistrationScreen(): JSX.Element {
   const dispatch = useAppDispatch();
+  const isProcess = useAppSelector(getIsProcess);
+  const isSuccess = useAppSelector(getIsSuccess);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const navigate = useNavigate();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewURL, setPreviewURL] = useState<string | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<string>();
@@ -15,16 +22,22 @@ function RegistrationScreen(): JSX.Element {
     setSelectedLocation(location);
   };
 
-  const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = async (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     const form = evt.currentTarget;
     const formData = new FormData(form);
     formData.append('location', String(selectedLocation));
-    formData.append('dateOfBirth', String(formData.get('birthday')));
+    if (formData.get('birthday')) {
+      formData.append('dateOfBirth', String(formData.get('birthday')));
+    }
     if (selectedFile) {
       formData.append('avatar', selectedFile);
     }
-    dispatch(registerAction(formData));
+    try {
+    await dispatch(registerAction(formData));
+    } catch(error) {
+      console.error("Ошибка при редактировании пользователя:", error);
+    }
   };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -43,6 +56,12 @@ function RegistrationScreen(): JSX.Element {
       setPreviewURL(null);
     }
   };
+
+  // useEffect(() => {
+  //   if (isSuccess && !isProcess) {
+  //     navigate(AppRoute.Questionnaire);
+  //   }
+  // }, [isSuccess, isProcess]);
 
   return (
     <main>
@@ -112,7 +131,7 @@ function RegistrationScreen(): JSX.Element {
                     <div className="sign-up__radio"><span className="sign-up__label">Пол</span>
                       <div className="custom-toggle-radio custom-toggle-radio--big">
                         {Object.entries(SexUserLabel).map(([key, value]) => (
-                          <div className="custom-toggle-radio__block">
+                          <div className="custom-toggle-radio__block" key={key}>
                             <label key={key}>
                               <input type="radio" name="sex" value={key} key={key} />
                               <span className="custom-toggle-radio__icon"></span>
@@ -128,16 +147,7 @@ function RegistrationScreen(): JSX.Element {
                     <div className="role-selector sign-up__role-selector">
                       <div className="role-btn">
                         <label>
-                          <input className="visually-hidden" type="radio" name="role" value="coach" checked />
-                          <span className="role-btn__icon">
-                            <svg width="12" height="13" aria-hidden="true">
-                              <use xlinkHref="#icon-cup"></use>
-                            </svg></span><span className="role-btn__btn">Я хочу тренировать</span>
-                        </label>
-                      </div>
-                      <div className="role-btn">
-                        <label>
-                          <input className="visually-hidden" type="radio" name="role" value="sportsman" /><span className="role-btn__icon">
+                          <input className="visually-hidden" type="radio" name="role" value="sportsman" checked /><span className="role-btn__icon">
                             <svg width="12" height="13" aria-hidden="true">
                               <use xlinkHref="#icon-weight"></use>
                             </svg></span><span className="role-btn__btn">Я хочу тренироваться</span>
