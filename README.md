@@ -32,7 +32,7 @@ JWT_ACCESS_TOKEN_EXPIRES_IN=15m         # Время жизни JWT Access то�
 JWT_REFRESH_TOKEN_SECRET=secret         # Секрет для JWT Refresh
 JWT_REFRESH_TOKEN_EXPIRES_IN=7d         # Время жизни JWT Refresh токена
 ```
-##### \apps\api\.env
+##### \apps\api\ .env
 ```
 PORT=3000                               # Порт на котором будет запущен сервис ApiGateway
 ```
