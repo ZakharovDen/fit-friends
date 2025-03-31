@@ -1,17 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { NameSpace } from '../const';
-import { checkAuthAction, editQuestionnaireAction, loginAction } from './thunks';
+import { checkAuthAction, editUserAction, loginAction } from './thunks';
 import { AuthorizationStatus } from '../../constant';
 import { User } from '../../types/user/user';
 
 type InitialState = {
   authorizationStatus: AuthorizationStatus;
   user: User | undefined;
+  isProcess: boolean;
+  isSuccess: boolean;
 };
 
 const initialState: InitialState = {
   authorizationStatus: AuthorizationStatus.Unknown,
   user: undefined,
+  isProcess: false,
+  isSuccess: true,
 };
 
 export const user = createSlice({
@@ -36,10 +40,18 @@ export const user = createSlice({
         state.authorizationStatus = AuthorizationStatus.NoAuth;
         state.user = undefined;
       })
-      .addCase(editQuestionnaireAction.fulfilled, (state, action) => {
-        if (state.user) {
-          state.user.questionnaire = action.payload.questionnaire;
-        }
+      .addCase(editUserAction.pending, (state) => {
+        state.isProcess = true;
+        state.isSuccess = false;
+      })
+      .addCase(editUserAction.rejected, (state) => {
+        state.isProcess = false;
+        state.isSuccess = false;
+      })
+      .addCase(editUserAction.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.isProcess = false;
+        state.isSuccess = true;
       });
   },
 });

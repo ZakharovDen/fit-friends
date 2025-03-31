@@ -66,14 +66,14 @@ export const editUserAction = createAsyncThunk<User, User, {
   }
 );
 
-export const editQuestionnaireAction = createAsyncThunk<User, FormData, {
-  dispatch: AppDispatch;
-  state: State;
-  extra: AxiosInstance;
-}>(
-  'user/questionnaire',
-  async (formData , { extra: api }) => {
-    const { data } = await api.patch<User>(APIRoute.Questionnaire, formData);
-    return data;
-  }
-);
+// export const editQuestionnaireAction = createAsyncThunk<User, FormData, {
+//   dispatch: AppDispatch;
+//   state: State;
+//   extra: AxiosInstance;
+// }>(
+//   'user/questionnaire',
+//   async (formData , { extra: api }) => {
+//     const { data } = await api.patch<User>(APIRoute.Questionnaire, formData);
+//     return data;
+//   }
+// );

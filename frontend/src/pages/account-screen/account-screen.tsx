@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { getUser } from "../../store/user/selectors";
+import { getIsProcess, getIsSuccess, getUser } from "../../store/user/selectors";
 import { UserLocation, UserLocationLabel } from "../../types/user/user-location.enum";
 import { CustomSelect } from "../../components/custom-select/custom-select";
 import { Sex, SexUserLabel } from "../../types/sex.enum";
@@ -25,6 +25,8 @@ function isLevel(value: string): value is TrainingLevel {
 function AccountScreen(): JSX.Element {
   const dispatch = useAppDispatch();
   const user = useAppSelector(getUser);
+  const isProcess = useAppSelector(getIsProcess);
+  const isSuccess = useAppSelector(getIsSuccess);
 
   if (!user) {
     return <NotFoundScreen />
@@ -87,9 +89,16 @@ function AccountScreen(): JSX.Element {
 
   const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    const savedUser = dispatch(editUserAction(userData));
-    setIsEdited(false);
+    dispatch(editUserAction(userData));
+    //setIsEdited(false);
   }
+
+  useEffect(() => {
+    console.log(isSuccess, isProcess);
+    if (isSuccess && !isProcess) {
+      setIsEdited(false);
+    }
+  }, [isSuccess, isProcess]);
 
   const handleEditForm = (evt: React.MouseEvent<HTMLButtonElement>) => {
     evt.stopPropagation();

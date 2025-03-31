@@ -1,8 +1,10 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDateString, IsEnum, IsOptional, IsString, Length } from "class-validator";
+import { IsDateString, IsEnum, IsOptional, IsString, Length, ValidateNested } from "class-validator";
 import { AuthenticationValidateMessage, AuthFieldDescription, AuthValidateValue } from "../authentication-module/authentication.constant";
 import 'multer';
 import { UserLocation, UserRole, Sex } from "@backend/core";
+import { CreateQuestionnaireDto } from "./create-user-questionnaire.dto";
+import { Type } from "class-transformer";
 export class UpdateUserDto {
   @ApiProperty(AuthFieldDescription.Name)
   @Length(
@@ -49,4 +51,10 @@ export class UpdateUserDto {
   @ApiProperty(AuthFieldDescription.Role)
   @IsOptional()
   public role?: UserRole;
+
+  @ApiProperty({description: 'Опросник', type: CreateQuestionnaireDto})
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => CreateQuestionnaireDto)
+  public questionnaire: CreateQuestionnaireDto;
 }
