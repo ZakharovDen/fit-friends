@@ -11,12 +11,13 @@ import AccountScreen from '../../pages/account-screen/account-screen';
 import PrivateRoute from '../private-route/private-route';
 import QuestionnaireScreen from '../../pages/questionnaire-screen/questionnaire-screen';
 import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
+import PrivateRouteQuestionnaire from '../private-route-questionnaire/private-route-questionnaire';
 
 function App(): JSX.Element {
   return (
     <BrowserRouter>
       <Routes>
-        <Route 
+        <Route
           path={AppRoute.NotFound}
           element={<NotFoundScreen />}
         />
@@ -24,7 +25,9 @@ function App(): JSX.Element {
           path={AppRoute.Main}
           element={
             <PrivateRoute restrictedFor={AuthorizationStatus.NoAuth} redirectTo={AppRoute.Intro}>
-              <LayoutMain />
+              <PrivateRouteQuestionnaire state={true} redirectTo={AppRoute.Questionnaire}>
+                <LayoutMain />
+              </PrivateRouteQuestionnaire>
             </PrivateRoute>
           }
         >
@@ -71,9 +74,11 @@ function App(): JSX.Element {
         <Route
           path={AppRoute.Questionnaire}
           element={
-            <PrivateRoute restrictedFor={AuthorizationStatus.Auth} redirectTo={AppRoute.Main}>
-              <QuestionnaireScreen />
-            </PrivateRoute>
+            <PrivateRouteQuestionnaire state={false} redirectTo={AppRoute.Main}>
+              <PrivateRoute restrictedFor={AuthorizationStatus.NoAuth} redirectTo={AppRoute.Register}>
+                <QuestionnaireScreen />
+              </PrivateRoute>
+            </PrivateRouteQuestionnaire>
           }
         />
         <Route
