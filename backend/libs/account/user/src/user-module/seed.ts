@@ -27,7 +27,7 @@ async function bootstrap() {
   const mockUsers = getUsers();
 
   for (const mockUser of mockUsers) {
-    const { id: _id, email, name, password, avatar, backgroundImage, dateOfBirth, description, location, role, sex } = mockUser;
+    const { id: _id, email, name, password, avatar, backgroundImage, dateOfBirth, description, location, role, sex, questionnaire } = mockUser;
     const passwordHash = await hash(password, salt);
     await new UserEntity({ 
       _id, 
@@ -40,7 +40,8 @@ async function bootstrap() {
       description, 
       location, 
       role, 
-      sex 
+      sex, 
+      questionnaire
     }).save();
   }
 
