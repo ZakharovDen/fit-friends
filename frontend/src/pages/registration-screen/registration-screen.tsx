@@ -26,11 +26,7 @@ function RegistrationScreen(): JSX.Element {
     if (selectedFile) {
       formData.append('avatar', selectedFile);
     }
-    try {
     await dispatch(registerAction(formData));
-    } catch(error) {
-      console.error("Ошибка при редактировании пользователя:", error);
-    }
   };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {

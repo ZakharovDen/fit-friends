@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
 import { APIRoute } from '../const';
-import { dropToken, saveToken } from '../../services/token';
-import { LoggedUser, Questionnaire, User, UserAuth, UserRegister } from '../../types/user/user';
+import { saveToken } from '../../services/token';
+import { LoggedUser, Questionnaire, User, UserAuth } from '../../types/user/user';
 import { AppDispatch, State } from '../../types/state';
 
 export const checkAuthAction = createAsyncThunk<LoggedUser, undefined, {
@@ -30,7 +30,7 @@ export const loginAction = createAsyncThunk<LoggedUser, UserAuth, {
   },
 );
 
-export const registerAction = createAsyncThunk<LoggedUser, /*UserRegister*/FormData, {
+export const registerAction = createAsyncThunk<LoggedUser, FormData, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
