@@ -51,7 +51,7 @@ export function CustomSelect({
       className={`custom-select user-info__select ${readonly ? 'custom-select--readonly' : ''} ${isOpen ? 'is-open' : ''} ${className}`}
     >
       <span className="custom-select__label">{label}</span>
-      <div className="custom-select__placeholder">
+      <div className="custom-select__placeholder" data-testid="custom-select-placeholder">
         {selectedOption?.label || placeholder}
       </div>
       <button
@@ -61,9 +61,6 @@ export function CustomSelect({
         onClick={() => !readonly && setIsOpen(!isOpen)}
         disabled={readonly}
       >
-        <span className="custom-select__text">
-          {selectedOption?.label || placeholder}
-        </span>
         <span className="custom-select__icon">
           <svg width="15" height="6" aria-hidden="true">
             <use xlinkHref="#arrow-down"></use>
