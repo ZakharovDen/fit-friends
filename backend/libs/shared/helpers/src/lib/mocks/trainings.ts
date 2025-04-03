@@ -29,10 +29,18 @@ const descriptions = [
 ]
 
 const images = [
-  '/default/training-1.png',
-  '/default/training-2.png',
-  '/default/training-3.png',
-  '/default/training-4.png',
+  '/default/trainings/training-01.jpg',
+  '/default/trainings/training-02.jpg',
+  '/default/trainings/training-03.jpg',
+  '/default/trainings/training-04.jpg',
+  '/default/trainings/training-05.jpg',
+  '/default/trainings/training-06.jpg',
+  '/default/trainings/training-07.jpg',
+  '/default/trainings/training-08.jpg',
+  '/default/trainings/training-09.jpg',
+  '/default/trainings/training-10.jpg',
+  '/default/trainings/training-11.jpg',
+  '/default/trainings/training-12.jpg',
 ]
 
 const videos = [
