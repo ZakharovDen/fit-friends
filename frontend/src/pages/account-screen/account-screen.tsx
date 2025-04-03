@@ -9,6 +9,8 @@ import { TrainingType, TrainingTypeLabel } from "../../types/training/training-t
 import { editUserAction } from "../../store/user/thunks";
 import NotFoundScreen from "../not-found-screen/not-found-screen";
 import { User } from "../../types/user/user";
+import { Link } from "react-router-dom";
+import { AppRoute } from "../../constant";
 
 function isSex(value: string): value is Sex {
   return Object.values(Sex).includes(value as Sex);
@@ -203,7 +205,6 @@ function AccountScreen(): JSX.Element {
                   readonly={!isEdited}
                   options={Object.entries(UserLocationLabel).map(([key, value]) => ({ value: key, label: value }))}
                   onChange={handleLocationSelect}
-                //placeholder={sex} 
                 />
                 <CustomSelect
                   value={userData.sex}
@@ -211,7 +212,6 @@ function AccountScreen(): JSX.Element {
                   readonly={!isEdited}
                   options={Object.entries(SexUserLabel).map(([key, value]) => ({ value: key, label: value }))}
                   onChange={handleSexSelect}
-                //placeholder={sex} 
                 />
                 <CustomSelect
                   value={userData.questionnaire?.level}
@@ -219,7 +219,6 @@ function AccountScreen(): JSX.Element {
                   readonly={!isEdited}
                   options={Object.entries(TrainingLevelLabel).map(([key, value]) => ({ value: key, label: value }))}
                   onChange={handleLevelSelect}
-                //placeholder={sex} 
                 />
               </form>
             </section>
@@ -242,13 +241,13 @@ function AccountScreen(): JSX.Element {
                   </form>
                 </div>
                 <div className="personal-account-user__additional-info">
-                  <a className="thumbnail-link thumbnail-link--theme-light" href="#">
+                  <Link className="thumbnail-link thumbnail-link--theme-light" to={AppRoute.MyPurchases}>
                     <div className="thumbnail-link__icon thumbnail-link__icon--theme-light">
                       <svg width="30" height="26" aria-hidden="true">
                         <use xlinkHref="#icon-shopping-cart"></use>
                       </svg>
                     </div><span className="thumbnail-link__text">Мои покупки</span>
-                  </a>
+                  </Link>
                   <div className="thumbnail-spec-gym">
                     <div className="thumbnail-spec-gym__image">
                       <picture>

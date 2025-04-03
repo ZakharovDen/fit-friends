@@ -52,7 +52,7 @@ describe('CustomSelect Component', () => {
   });
 
   it('updates the selected value in the parent component when an option is selected', async () => {
-    const { container } = render(<ParentComponent />);
+    render(<ParentComponent />);
 
     const button = screen.getByRole('button', { name: 'Выберите одну из опций' });
     fireEvent.click(button);

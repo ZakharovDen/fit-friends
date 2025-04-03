@@ -12,6 +12,7 @@ import PrivateRoute from '../private-route/private-route';
 import QuestionnaireScreen from '../../pages/questionnaire-screen/questionnaire-screen';
 import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
 import PrivateRouteQuestionnaire from '../private-route-questionnaire/private-route-questionnaire';
+import PurchasesScreen from '../../pages/purchases-screen/purchases-screen';
 
 function App(): JSX.Element {
   return (
@@ -46,6 +47,10 @@ function App(): JSX.Element {
           <Route
             path={AppRoute.Account}
             element={<AccountScreen />}
+          />
+          <Route
+            path={AppRoute.MyPurchases}
+            element={<PurchasesScreen />}
           />
         </Route>
         <Route

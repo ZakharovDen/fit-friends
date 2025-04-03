@@ -9,6 +9,7 @@ export enum AppRoute {
   Account = '/account',
   Questionnaire = '/questionnaire',
   NotFound = '/404',
+  MyPurchases = '/my-purchases',
 }
 
 export enum AuthorizationStatus {
