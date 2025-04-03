@@ -1,11 +1,37 @@
 import { useEffect } from "react";
 
+enum Rating {
+  Min = 1,
+  Max = 5
+}
+
 type PopupFeedbackProps = {
   isVisible: boolean;
   onClose: () => void;
+  onChange?: () => void;
 }
 
-function PopupFeedback({ isVisible, onClose }: PopupFeedbackProps): JSX.Element | null {
+function PopupFeedback({ isVisible, onClose, onChange }: PopupFeedbackProps): JSX.Element | null {
+  
+  const items: JSX.Element[] = [];
+  for (let i = Rating.Min; i < Rating.Max + 1; i++) {
+    items.push(
+      <li className="popup__rate-item" key={i}>
+        <div className="popup__rate-item-wrap" key={i}>
+          <label>
+            <input 
+              type="radio" 
+              name="оценка тренировки" 
+              aria-label={`оценка ${i}.`} 
+              value={i}
+              onChange={onChange}
+            /><span className="popup__rate-number">{i}</span>
+          </label>
+        </div>
+      </li>
+    );    
+  };
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -41,41 +67,7 @@ function PopupFeedback({ isVisible, onClose }: PopupFeedbackProps): JSX.Element 
             <div className="popup__content popup__content--feedback">
               <h3 className="popup__feedback-title">Оцените тренировку</h3>
               <ul className="popup__rate-list">
-                <li className="popup__rate-item">
-                  <div className="popup__rate-item-wrap">
-                    <label>
-                      <input type="radio" name="оценка тренировки" aria-label="оценка 1." value="1" /><span className="popup__rate-number">1</span>
-                    </label>
-                  </div>
-                </li>
-                <li className="popup__rate-item">
-                  <div className="popup__rate-item-wrap">
-                    <label>
-                      <input type="radio" name="оценка тренировки" aria-label="оценка 2." value="2" /><span className="popup__rate-number">2</span>
-                    </label>
-                  </div>
-                </li>
-                <li className="popup__rate-item">
-                  <div className="popup__rate-item-wrap">
-                    <label>
-                      <input type="radio" name="оценка тренировки" aria-label="оценка 3." value="3" /><span className="popup__rate-number">3</span>
-                    </label>
-                  </div>
-                </li>
-                <li className="popup__rate-item">
-                  <div className="popup__rate-item-wrap">
-                    <label>
-                      <input type="radio" name="оценка тренировки" aria-label="оценка 4." value="4" /><span className="popup__rate-number">4</span>
-                    </label>
-                  </div>
-                </li>
-                <li className="popup__rate-item">
-                  <div className="popup__rate-item-wrap">
-                    <label>
-                      <input type="radio" name="оценка тренировки" aria-label="оценка 5." value="5" checked /><span className="popup__rate-number">5</span>
-                    </label>
-                  </div>
-                </li>
+                {items}
               </ul>
               <div className="popup__feedback">
                 <h3 className="popup__feedback-title popup__feedback-title--text">Поделитесь своими впечатлениями о тренировке</h3>
