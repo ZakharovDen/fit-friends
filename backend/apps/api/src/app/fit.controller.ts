@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Query, SerializeOptions, UseFilters, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Param, Post, Query, SerializeOptions, UseFilters, UseGuards, UseInterceptors } from "@nestjs/common";
 import { AxiosExceptionFilter } from "./filters/axios-exception.filter";
 import { HttpService } from "@nestjs/axios";
 import { ApplicationServiceURL } from "./app.config";
@@ -10,6 +10,8 @@ import { UserRdo } from "@backend/authentications";
 import { TrainingWithUserRdo } from "./rdo/training-with-user.rdo";
 import { AppService } from "./app.service";
 import { FeedbackWithUserRdo } from "./rdo/feedback-with-user.rdo";
+import { UserId } from "./decorators/user-id.decorator";
+import { InjectUserIdInterceptor } from "@backend/interceptors";
 
 @Controller('fit')
 @UseFilters(AxiosExceptionFilter)
@@ -55,9 +57,15 @@ export class FitController {
   @ApiResponse({ status: HttpStatus.CREATED, type: FitFeedBackRdo })
   @ApiBearerAuth()
   @UseGuards(CheckAuthGuard)
-  public async create(@Body() dto: CreateFeedBackDto){
+  @UseInterceptors(InjectUserIdInterceptor)
+  public async create(
+    @Body() dto: CreateFeedBackDto,
+    @UserId() userId: string
+  ){
+    dto.userId = userId;
     const feedback = (await this.httpService.axiosRef.post(ApplicationServiceURL.FitFeedbacks, dto)).data;
-    return feedback;
+    await this.appService.appendUser([feedback]);
+    return {...feedback, user: {...feedback.user, avatar: `${ApplicationServiceURL.File}/static${feedback.user.avatar}`}};
   }
 
   @Get('feedback/:trainingId')

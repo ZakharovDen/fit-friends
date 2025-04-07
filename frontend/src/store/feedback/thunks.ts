@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
 import { APIRoute } from '../const';
 import { AppDispatch, State } from '../../types/state';
-import { Feedback, FeedbackWithUser } from '../../types/feedback/feedback';
+import { FeedbackData, FeedbackWithUser } from '../../types/feedback/feedback';
 
 export const getFeedbacksAction = createAsyncThunk<FeedbackWithUser[], string | undefined, {
   dispatch: AppDispatch;
@@ -16,7 +16,7 @@ export const getFeedbacksAction = createAsyncThunk<FeedbackWithUser[], string | 
   },
 );
 
-export const createFeedbackAction = createAsyncThunk<FeedbackWithUser, Feedback, {
+export const createFeedbackAction = createAsyncThunk<FeedbackWithUser, FeedbackData, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;

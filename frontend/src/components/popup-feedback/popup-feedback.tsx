@@ -1,4 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { FeedbackData } from "../../types/feedback/feedback";
+import { useAppDispatch } from "../../hooks";
+import { createFeedbackAction } from "../../store/feedback/thunks";
 
 enum Rating {
   Min = 1,
@@ -8,11 +11,36 @@ enum Rating {
 type PopupFeedbackProps = {
   isVisible: boolean;
   onClose: () => void;
-  onChange?: () => void;
+  trainingId: string;
 }
 
-function PopupFeedback({ isVisible, onClose, onChange }: PopupFeedbackProps): JSX.Element | null {
-  
+function PopupFeedback({ isVisible, onClose, trainingId }: PopupFeedbackProps): JSX.Element | null {
+  const defaultValues: FeedbackData = {
+    rating: 5, 
+    text: '', 
+    trainingId
+  };
+  const dispatch = useAppDispatch();
+  const [feedback, setFeedback] = useState<FeedbackData>(defaultValues);
+
+  const ratingChangeHandle = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    setFeedback({...feedback, rating: Number(evt.target.value)})
+  }
+
+  const feedbackChangeHandle = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setFeedback({...feedback, text: evt.target.value})
+  }
+
+  const formCloseHandle = () => {
+    setFeedback(defaultValues);
+    onClose();
+  }
+
+  const formSaveHandle = () => {
+    dispatch(createFeedbackAction(feedback));
+    formCloseHandle();
+  }
+
   const items: JSX.Element[] = [];
   for (let i = Rating.Min; i < Rating.Max + 1; i++) {
     items.push(
@@ -24,7 +52,8 @@ function PopupFeedback({ isVisible, onClose, onChange }: PopupFeedbackProps): JS
               name="оценка тренировки" 
               aria-label={`оценка ${i}.`} 
               value={i}
-              onChange={onChange}
+              onChange={ratingChangeHandle}
+              checked={(feedback.rating === i)}
             /><span className="popup__rate-number">{i}</span>
           </label>
         </div>
@@ -35,7 +64,7 @@ function PopupFeedback({ isVisible, onClose, onChange }: PopupFeedbackProps): JS
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        onClose();
+        formCloseHandle();
       }
     };
 
@@ -58,7 +87,7 @@ function PopupFeedback({ isVisible, onClose, onChange }: PopupFeedbackProps): JS
           <div className="popup__wrapper">
             <div className="popup-head">
               <h2 className="popup-head__header">Оставить отзыв</h2>
-              <button className="btn-icon btn-icon--outlined btn-icon--big" type="button" aria-label="close" onClick={onClose}>
+              <button className="btn-icon btn-icon--outlined btn-icon--big" type="button" aria-label="close" onClick={formCloseHandle}>
                 <svg width="20" height="20" aria-hidden="true">
                   <use xlinkHref="#icon-cross"></use>
                 </svg>
@@ -74,13 +103,22 @@ function PopupFeedback({ isVisible, onClose, onChange }: PopupFeedbackProps): JS
                 <div className="popup__feedback-textarea">
                   <div className="custom-textarea">
                     <label>
-                      <textarea name="description" placeholder=" "></textarea>
+                      <textarea 
+                        name="description" 
+                        placeholder=" "
+                        onChange={feedbackChangeHandle}
+                        value={feedback.text}
+                      ></textarea>
                     </label>
                   </div>
                 </div>
               </div>
               <div className="popup__button">
-                <button className="btn" type="button">Продолжить</button>
+                <button 
+                  className="btn" 
+                  type="button"
+                  onClick={formSaveHandle}
+                >Продолжить</button>
               </div>
             </div>
           </div>

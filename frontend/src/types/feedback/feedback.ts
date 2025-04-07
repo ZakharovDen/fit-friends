@@ -10,3 +10,5 @@ export type Feedback = {
 }
 
 export type FeedbackWithUser = Omit<Feedback, 'userId'> & {user: User};
+
+export type FeedbackData = Omit<Feedback, 'id' | 'userId' | 'createdAt'>;

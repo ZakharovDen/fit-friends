@@ -72,7 +72,7 @@ function TrainingCardScreen(): JSX.Element {
                 {(feedbacks.length) && feedbacks.map((feedback) => <ReviewItem feedback={feedback} key={feedback.id} />)}
               </ul>
               <button className="btn btn--medium reviews-side-bar__button" type="button" onClick={openPopupFeedback}>Оставить отзыв</button>
-              <PopupFeedback isVisible={isPopupFeedbackVisible} onClose={closePopupFeedback} />
+              <PopupFeedback isVisible={isPopupFeedbackVisible} onClose={closePopupFeedback} trainingId={training.id} />
             </aside>
             <div className="training-card">
               <div className="training-info">

@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { NameSpace } from '../const';
 import { FeedbackWithUser } from '../../types/feedback/feedback';
-import { getFeedbacksAction } from './thunks';
+import { createFeedbackAction, getFeedbacksAction } from './thunks';
 
 type InitialState = {
   feedbacks: FeedbackWithUser[];
@@ -32,6 +32,9 @@ export const feedback = createSlice({
       .addCase(getFeedbacksAction.rejected, (state) => {
         state.isFeedbacksDataLoading = false;
         state.hasError = true;
+      })
+      .addCase(createFeedbackAction.fulfilled, (state, action) => {
+        state.feedbacks.push(action.payload);
       })
   },
 });
