@@ -10,6 +10,8 @@ export enum AppRoute {
   Questionnaire = '/questionnaire',
   NotFound = '/404',
   MyPurchases = '/my-purchases',
+  CreateTraining = '/create-training',
+  UserCard = '/user/:id',
 }
 
 export enum AuthorizationStatus {

@@ -13,6 +13,8 @@ import QuestionnaireScreen from '../../pages/questionnaire-screen/questionnaire-
 import NotFoundScreen from '../../pages/not-found-screen/not-found-screen';
 import PrivateRouteQuestionnaire from '../private-route-questionnaire/private-route-questionnaire';
 import PurchasesScreen from '../../pages/purchases-screen/purchases-screen';
+import CreateTrainingScreen from '../../pages/create-training-screen/create-training-screen';
+import UserCardScreen from '../../pages/user-card-screen/user-card-screen';
 
 function App(): JSX.Element {
   return (
@@ -51,6 +53,14 @@ function App(): JSX.Element {
           <Route
             path={AppRoute.MyPurchases}
             element={<PurchasesScreen />}
+          />
+          <Route
+            path={AppRoute.CreateTraining}
+            element={<CreateTrainingScreen />}
+          />
+          <Route
+            path={AppRoute.UserCard}
+            element={<UserCardScreen />}
           />
         </Route>
         <Route
