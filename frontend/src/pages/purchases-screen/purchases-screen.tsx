@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { TrainingItemDisplayMode } from "../../components/training-item/constant";
 import TrainingItem from "../../components/training-item/training-item";
 import { Sex } from "../../types/sex.enum";
@@ -6,6 +5,8 @@ import { Training } from "../../types/training/training";
 import { TrainingDuration } from "../../types/training/training-duration.enum";
 import { TrainingLevel } from "../../types/training/training-level.enum";
 import { TrainingType } from "../../types/training/training-type.enum";
+import BackButton from "../../components/back-button/back-button";
+import { BackButtonDisplayMode } from "../../components/back-button/constant";
 
 const mockTraining: Training = {
   id: "0dfbda7e-fb14-4ca3-ae1d-8e111a777a66",
@@ -26,21 +27,12 @@ const mockTraining: Training = {
 }
 
 function PurchasesScreen(): JSX.Element {
-  const navigate = useNavigate();
   return (
     <main>
       <section className="my-purchases">
         <div className="container">
           <div className="my-purchases__wrapper">
-            <button
-              className="btn-flat my-purchases__back"
-              type="button"
-              onClick={() => navigate(-1)}
-            >
-              <svg width="14" height="10" aria-hidden="true">
-                <use xlinkHref="#arrow-left"></use>
-              </svg><span>Назад</span>
-            </button>
+            <BackButton displayMode={BackButtonDisplayMode.Purchases} />
             <div className="my-purchases__title-wrapper">
               <h1 className="my-purchases__title">Мои покупки</h1>
               <div className="my-purchases__controls">

@@ -1,14 +1,13 @@
+import BackButton from "../../components/back-button/back-button";
+import { BackButtonDisplayMode } from "../../components/back-button/constant";
+
 function UserCardScreen(): JSX.Element {
   return (
     <main>
       <div className="inner-page inner-page--no-sidebar">
         <div className="container">
           <div className="inner-page__wrapper">
-            <button className="btn-flat inner-page__back" type="button">
-              <svg width="14" height="10" aria-hidden="true">
-                <use xlinkHref="#arrow-left"></use>
-              </svg><span>Назад</span>
-            </button>
+            <BackButton displayMode={BackButtonDisplayMode.User} />
             <div className="inner-page__content">
               <section className="user-card-coach">
                 <h1 className="visually-hidden">Карточка пользователя роль тренер</h1>
