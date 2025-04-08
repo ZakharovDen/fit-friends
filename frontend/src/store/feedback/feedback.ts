@@ -7,12 +7,16 @@ type InitialState = {
   feedbacks: FeedbackWithUser[];
   isFeedbacksDataLoading: boolean;
   hasError: boolean;
+  isProcess: boolean;
+  isSuccess: boolean;
 };
 
 const initialState: InitialState = {
   feedbacks: [],
   hasError: false,
   isFeedbacksDataLoading: false,
+  isProcess: false,
+  isSuccess: false,
 };
 
 export const feedback = createSlice({
@@ -33,8 +37,18 @@ export const feedback = createSlice({
         state.isFeedbacksDataLoading = false;
         state.hasError = true;
       })
+      .addCase(createFeedbackAction.pending, (state) => {
+        state.isProcess = true;
+        state.isSuccess = false;
+      })
+      .addCase(createFeedbackAction.rejected, (state) => {
+        state.isProcess = false;
+        state.isSuccess = false;
+      })
       .addCase(createFeedbackAction.fulfilled, (state, action) => {
         state.feedbacks.push(action.payload);
+        state.isProcess = false;
+        state.isSuccess = true;
       })
   },
 });

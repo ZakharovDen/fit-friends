@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { FeedbackData } from "../../types/feedback/feedback";
-import { useAppDispatch } from "../../hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 import { createFeedbackAction } from "../../store/feedback/thunks";
+import { getIsProcess, getIsSuccess } from "../../store/feedback/selectors";
 
 enum Rating {
   Min = 1,
@@ -21,6 +22,8 @@ function PopupFeedback({ isVisible, onClose, trainingId }: PopupFeedbackProps): 
     trainingId
   };
   const dispatch = useAppDispatch();
+  const isProcess = useAppSelector(getIsProcess);
+  const isSuccess = useAppSelector(getIsSuccess);
   const [feedback, setFeedback] = useState<FeedbackData>(defaultValues);
 
   const ratingChangeHandle = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,8 +41,13 @@ function PopupFeedback({ isVisible, onClose, trainingId }: PopupFeedbackProps): 
 
   const formSaveHandle = () => {
     dispatch(createFeedbackAction(feedback));
-    formCloseHandle();
   }
+
+  useEffect(() => {
+    if (isSuccess && !isProcess) {
+      formCloseHandle();
+    }
+  }, [isSuccess, isProcess]);
 
   const items: JSX.Element[] = [];
   for (let i = Rating.Min; i < Rating.Max + 1; i++) {
