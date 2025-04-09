@@ -5,7 +5,7 @@ import { TrainingType, TrainingTypeLabel } from "../../types/training/training-t
 import { TrainingFilter } from "../../types/filter/training-filter";
 import { AllowedFilterValues } from "../../types/filter/allowed-filter-values";
 import { TrainingSort, TrainingSortLabel } from "../../types/filter/training-sort";
-import MultiRangeSlider from 'multi-range-slider-react';
+import SliderRange from "../slider-range/slider-range";
 
 type FilterSortingProps = {
   allowedFilterValues: AllowedFilterValues;
@@ -90,28 +90,7 @@ function FilterSorting({ allowedFilterValues, onFilterChange }: FilterSortingPro
           </div>
         </div> */}
       </div>
-      {/* <div className="gym-catalog-form__block gym-catalog-form__block--rating">
-        <h4 className="gym-catalog-form__block-title">Рейтинг</h4>
-        <div className="filter-raiting">
-        <MultiRangeSlider
-            min={1}
-            max={5}
-            step={1}
-            style={{ border: 'none', boxShadow: 'none', padding: '15px 10px' }}
-            ruler="false"
-            barLeftColor="black"
-            barInnerColor="black"
-            barRightColor="black"
-            thumbLeftColor="black"
-            thumbRightColor="black"
-            minValue={filterValues.rating[0]}
-            maxValue={filterValues.rating[1]}
-            onInput={(evt) => {
-              setFilterValues({ ...filterValues, rating: [evt.minValue, evt.maxValue] });
-            }}
-          />
-        </div>
-      </div> */}
+      <SliderRange className="filter-range" maxRangeValue={5} minRangeValue={1} isShowValues={true} />
       <div className="gym-catalog-form__block gym-catalog-form__block--type">
         <h4 className="gym-catalog-form__block-title">Тип</h4>
         <ul className="gym-catalog-form__check-list">
