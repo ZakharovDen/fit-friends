@@ -1,4 +1,63 @@
+import { useState } from "react";
+import { CustomSelect } from "../../components/custom-select/custom-select";
+import { TrainingLevel, TrainingLevelLabel } from "../../types/training/training-level.enum";
+import { TrainingCrateData } from "../../types/training/training";
+import { TrainingDuration } from "../../types/training/training-duration.enum";
+import { TrainingType, TrainingTypeLabel } from "../../types/training/training-type.enum";
+import { Sex, SexCreateTrainingLabel } from "../../types/sex.enum";
+
+function isLevel(value: string): value is TrainingLevel {
+  return Object.values(TrainingLevel).includes(value as TrainingLevel);
+}
+
+function isDuration(value: string): value is TrainingDuration {
+  return Object.values(TrainingDuration).includes(value as TrainingDuration);
+}
+
+function isType(value: string): value is TrainingType {
+  return Object.values(TrainingType).includes(value as TrainingType);
+}
+
+function isSex(value: string): value is Sex {
+  return Object.values(Sex).includes(value as Sex);
+}
+
 function CreateTrainingScreen(): JSX.Element {
+  const [trainingData, setTrainingData] = useState<TrainingCrateData>({sex: Sex.Any});
+
+  const handleLevelSelect = (level: string) => {
+    if (isLevel(level)) {
+      setTrainingData({ ...trainingData, level });
+    }
+  }
+
+  const handleDurationSelect = (duration: string) => {
+    if (isDuration(duration)) {
+      setTrainingData({ ...trainingData, duration });
+    }
+  }
+
+  const handleTypeSelect = (type: string) => {
+    if (isType(type)) {
+      setTrainingData({ ...trainingData, type });
+    }
+  }
+
+  const handleSexSelect = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, checked } = evt.target;
+    if (!checked) {
+      return;
+    }
+    if (isSex(value)) {
+      setTrainingData({ ...trainingData, sex: value });
+    }
+  }
+
+  const handleChangeDescription = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const {value} = evt.target;
+    setTrainingData({...trainingData, description: value})
+  }
+
   return (
     <main>
       <div className="popup-form popup-form--create-training">
@@ -22,68 +81,62 @@ function CreateTrainingScreen(): JSX.Element {
                     <div className="create-training__block">
                       <h2 className="create-training__legend">Характеристики тренировки</h2>
                       <div className="create-training__info">
-                        <div className="custom-select custom-select--not-selected"><span className="custom-select__label">Выберите тип тренировки</span>
-                          <button className="custom-select__button" type="button" aria-label="Выберите одну из опций"><span className="custom-select__text"></span><span className="custom-select__icon">
-                            <svg width="15" height="6" aria-hidden="true">
-                              <use xlinkHref="#arrow-down"></use>
-                            </svg></span></button>
-                          <ul className="custom-select__list" role="listbox">
-                          </ul>
-                        </div>
+                        <CustomSelect
+                          value={trainingData?.type}
+                          label={'Выберите тип тренировки'}
+                          options={Object.entries(TrainingTypeLabel).map(([key, value]) => ({ value: key, label: value }))}
+                          onChange={handleTypeSelect}
+                        />
                         <div className="custom-input custom-input--with-text-right">
                           <label><span className="custom-input__label">Сколько калорий потратим</span><span className="custom-input__wrapper">
                             <input type="number" name="calories" /><span className="custom-input__text">ккал</span></span>
                           </label>
                         </div>
-                        <div className="custom-select custom-select--not-selected"><span className="custom-select__label">Сколько времени потратим</span>
-                          <button className="custom-select__button" type="button" aria-label="Выберите одну из опций"><span className="custom-select__text"></span><span className="custom-select__icon">
-                            <svg width="15" height="6" aria-hidden="true">
-                              <use xlinkHref="#arrow-down"></use>
-                            </svg></span></button>
-                          <ul className="custom-select__list" role="listbox">
-                          </ul>
-                        </div>
+                        <CustomSelect
+                          value={trainingData?.duration}
+                          label={'Сколько времени потратим'}
+                          options={Object.entries(TrainingDuration).map(([key, value]) => ({ value: key, label: value }))}
+                          onChange={handleDurationSelect}
+                        />
                         <div className="custom-input custom-input--with-text-right">
                           <label><span className="custom-input__label">Стоимость тренировки</span><span className="custom-input__wrapper">
                             <input type="number" name="price" /><span className="custom-input__text">₽</span></span>
                           </label>
                         </div>
-                        <div className="custom-select custom-select--not-selected"><span className="custom-select__label">Выберите уровень тренировки</span>
-                          <button className="custom-select__button" type="button" aria-label="Выберите одну из опций"><span className="custom-select__text"></span><span className="custom-select__icon">
-                            <svg width="15" height="6" aria-hidden="true">
-                              <use xlinkHref="#arrow-down"></use>
-                            </svg></span></button>
-                          <ul className="custom-select__list" role="listbox">
-                          </ul>
-                        </div>
+                        <CustomSelect
+                          value={trainingData?.level}
+                          label={'Выберите уровень тренировки'}
+                          options={Object.entries(TrainingLevelLabel).map(([key, value]) => ({ value: key, label: value }))}
+                          onChange={handleLevelSelect}
+                        />
                         <div className="create-training__radio-wrapper"><span className="create-training__label">Кому подойдет тренировка</span>
                           <br />
                           <div className="custom-toggle-radio create-training__radio">
-                            <div className="custom-toggle-radio__block">
-                              <label>
-                                <input type="radio" name="gender" /><span className="custom-toggle-radio__icon"></span><span className="custom-toggle-radio__label">Мужчинам</span>
-                              </label>
-                            </div>
-                            <div className="custom-toggle-radio__block">
-                              <label>
-                                <input type="radio" name="gender" checked /><span className="custom-toggle-radio__icon"></span><span className="custom-toggle-radio__label">Женщинам</span>
-                              </label>
-                            </div>
-                            <div className="custom-toggle-radio__block">
-                              <label>
-                                <input type="radio" name="gender" /><span className="custom-toggle-radio__icon"></span><span className="custom-toggle-radio__label">Всем</span>
-                              </label>
-                            </div>
+                            {Object.entries(SexCreateTrainingLabel).map(([key, value]) => (
+                              <div className="custom-toggle-radio__block" key={key}>
+                                <label key={key}>
+                                  <input
+                                    type="radio"
+                                    name="gender"
+                                    value={key}
+                                    key={key}
+                                    onChange={handleSexSelect}
+                                    checked={key === trainingData.sex}
+                                  />
+                                  <span className="custom-toggle-radio__icon"></span>
+                                  <span className="custom-toggle-radio__label">{value}</span>
+                                </label>
+                              </div>)
+                            )}
                           </div>
                         </div>
                       </div>
-
                     </div>
                     <div className="create-training__block">
                       <h2 className="create-training__legend">Описание тренировки</h2>
                       <div className="custom-textarea create-training__textarea">
                         <label>
-                          <textarea name="description" placeholder=" "></textarea>
+                          <textarea name="description" placeholder=" " value={trainingData.description} onChange={handleChangeDescription}></textarea>
                         </label>
                       </div>
                     </div>

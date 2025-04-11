@@ -48,7 +48,7 @@ export function CustomSelect({
   return (
     <div
       ref={selectRef}
-      className={`custom-select user-info__select ${readonly ? 'custom-select--readonly' : ''} ${isOpen ? 'is-open' : ''} ${className}`}
+      className={`custom-select ${readonly ? 'custom-select--readonly' : ''} ${isOpen ? 'is-open' : ''} ${className}`}
     >
       <span className="custom-select__label">{label}</span>
       <div className="custom-select__placeholder" data-testid="custom-select-placeholder">

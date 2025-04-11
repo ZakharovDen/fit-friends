@@ -15,3 +15,9 @@ export const SexUserLabel: Record<Sex, string> = {
   [Sex.Female]: 'Женский',
   [Sex.Any]: 'Неважно',
 };
+
+export const SexCreateTrainingLabel: Record<Sex, string> = {
+  [Sex.Male]: 'Мужчинам',
+  [Sex.Female]: 'Женщинам',
+  [Sex.Any]: 'Всем',
+};

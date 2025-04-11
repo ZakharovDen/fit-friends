@@ -205,6 +205,7 @@ function AccountScreen(): JSX.Element {
                   readonly={!isEdited}
                   options={Object.entries(UserLocationLabel).map(([key, value]) => ({ value: key, label: value }))}
                   onChange={handleLocationSelect}
+                  className={'user-info__select'}
                 />
                 <CustomSelect
                   value={userData.sex}
@@ -212,6 +213,7 @@ function AccountScreen(): JSX.Element {
                   readonly={!isEdited}
                   options={Object.entries(SexUserLabel).map(([key, value]) => ({ value: key, label: value }))}
                   onChange={handleSexSelect}
+                  className={'user-info__select'}
                 />
                 <CustomSelect
                   value={userData.questionnaire?.level}
@@ -219,6 +221,7 @@ function AccountScreen(): JSX.Element {
                   readonly={!isEdited}
                   options={Object.entries(TrainingLevelLabel).map(([key, value]) => ({ value: key, label: value }))}
                   onChange={handleLevelSelect}
+                  className={'user-info__select'}
                 />
               </form>
             </section>

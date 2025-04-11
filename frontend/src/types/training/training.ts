@@ -23,3 +23,5 @@ export type Training = {
 }
 
 export type TrainingWithUser = Omit<Training, 'userId'> & {user: User};
+
+export type TrainingCrateData = Omit<Partial<Training>, 'userId' | 'id' | 'image' | 'specialOffer' | 'rating' | 'createdAt'>;
