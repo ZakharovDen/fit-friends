@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpStatus, Param, Post, Query, SerializeOptions } from "@nestjs/common";
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FitTrainingService } from "./fit-training.service";
-import { CreateTrainingDto } from "./dto/create-training.dto";
+import { CreateFitTrainingDto } from "./dto/create-fit-training.dto";
 import { fillDto } from '@backend/helpers';
 import { FitTrainingRdo } from "./rdo/fit-training.rdo";
 import { FitTrainingQuery } from "./fit-training.query";
@@ -17,7 +17,7 @@ export class FitTrainingController {
   @Post('/')
   @ApiOperation({ summary: 'Создание тренировки.' })
   @ApiResponse({ status: HttpStatus.CREATED, type: FitTrainingRdo })
-  public async create(@Body() dto: CreateTrainingDto) {
+  public async create(@Body() dto: CreateFitTrainingDto) {
     const training = await this.fitTrainingService.create(dto);
     return fillDto(FitTrainingRdo, training);
   }

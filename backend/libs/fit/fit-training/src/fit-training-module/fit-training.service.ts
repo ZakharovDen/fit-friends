@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { FitTrainingRepository } from "./fit-training.repository";
 import { FitTrainingEntity } from "./fit-training.entity";
-import { CreateTrainingDto } from "./dto/create-training.dto";
+import { CreateFitTrainingDto } from "./dto/create-fit-training.dto";
 import { FitTrainingQuery } from "./fit-training.query";
 import { PaginationResult } from "@backend/core";
 
@@ -12,8 +12,9 @@ export class FitTrainingService {
     //private readonly notifyService: NotifyService
   ) { }
 
-  public async create(dto: CreateTrainingDto): Promise<FitTrainingEntity> {
+  public async create(dto: CreateFitTrainingDto): Promise<FitTrainingEntity> {
     const newTraining = new FitTrainingEntity({...dto, rating: undefined});
+    delete newTraining.rating;
     await this.fitTrainingRepository.save(newTraining);
     return newTraining;
   }
