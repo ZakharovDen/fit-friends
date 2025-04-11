@@ -8,7 +8,7 @@ import TrainingSlider from "../../components/training-slider/training-slider";
 function MainScreen(): JSX.Element {
   const dispatch = useAppDispatch();
   const { entities } = useAppSelector(getTrainings);
-  const [queryParams, setQueryParams] = useState<QueryParams>({
+  const [queryParams, _setQueryParams] = useState<QueryParams>({
     page: 1,
     limit: 20,
     sortBy: 'rating',

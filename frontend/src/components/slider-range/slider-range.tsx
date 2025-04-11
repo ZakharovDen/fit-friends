@@ -43,16 +43,15 @@ function SliderRange({
     setCurrentMax(maxValue);
   }, [minValue, maxValue]);
 
-  const calculatePosition = useCallback(
-    (value: number) => {
-      if (!scaleRef.current) return 0;
-      const scaleWidth = scaleRef.current.offsetWidth;
-      return (
-        ((value - minRangeValue) / (maxRangeValue - minRangeValue)) * scaleWidth
-      );
-    },
-    [minRangeValue, maxRangeValue]
-  );
+// Добавляем проверку в `calculateValue` и `calculatePosition`
+const calculatePosition = useCallback(
+  (value: number) => {
+    if (!scaleRef.current || scaleRef.current.offsetWidth === 0) return 0;
+    const scaleWidth = scaleRef.current.offsetWidth;
+    return ((value - minRangeValue) / (maxRangeValue - minRangeValue)) * scaleWidth;
+  },
+  [minRangeValue, maxRangeValue]
+);
 
   const calculateValue = useCallback(
     (position: number) => {
@@ -120,13 +119,25 @@ function SliderRange({
     (type: 'min' | 'max') => (e: ReactMouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
       setIsDragging(type);
-
-      // Добавляем слушатель для mouseleave на документ
+  
+      // Сразу обновляем позицию ползунка
+      if (scaleRef.current) {
+        const scaleRect = scaleRef.current.getBoundingClientRect();
+        const clickX = e.clientX - scaleRect.left;
+        const newValue = calculateValue(clickX);
+  
+        if (type === 'min') {
+          setCurrentMin(Math.min(newValue, currentMax - 1));
+        } else {
+          setCurrentMax(Math.max(newValue, currentMin + 1));
+        }
+      }
+  
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
       document.addEventListener('mouseleave', handleMouseUp);
     },
-    [handleMouseMove, handleMouseUp]
+    [handleMouseMove, handleMouseUp, currentMin, currentMax, calculateValue]
   );
 
 useEffect(() => {
