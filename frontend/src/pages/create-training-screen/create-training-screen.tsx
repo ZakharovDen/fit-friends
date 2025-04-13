@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { CustomSelect } from "../../components/custom-select/custom-select";
 import { TrainingLevel, TrainingLevelLabel } from "../../types/training/training-level.enum";
 import { TrainingCrateData } from "../../types/training/training";
 import { TrainingDuration } from "../../types/training/training-duration.enum";
 import { TrainingType, TrainingTypeLabel } from "../../types/training/training-type.enum";
 import { Sex, SexCreateTrainingLabel } from "../../types/sex.enum";
+import { useAppDispatch } from "../../hooks";
+import { postTrainingAction } from "../../store/training/thunks";
 
 function isLevel(value: string): value is TrainingLevel {
   return Object.values(TrainingLevel).includes(value as TrainingLevel);
@@ -23,7 +25,8 @@ function isSex(value: string): value is Sex {
 }
 
 function CreateTrainingScreen(): JSX.Element {
-  const [trainingData, setTrainingData] = useState<TrainingCrateData>({sex: Sex.Any});
+  const dispatch = useAppDispatch();
+  const [trainingData, setTrainingData] = useState<TrainingCrateData>({ sex: Sex.Any });
 
   const handleLevelSelect = (level: string) => {
     if (isLevel(level)) {
@@ -54,9 +57,18 @@ function CreateTrainingScreen(): JSX.Element {
   }
 
   const handleChangeDescription = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const {value} = evt.target;
-    setTrainingData({...trainingData, description: value})
+    const { value } = evt.target;
+    setTrainingData({ ...trainingData, description: value })
   }
+
+  const handleFormSubmit = async (evt: FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+    const form = evt.currentTarget;
+    const formData = new FormData(form);
+    formData.append('title', String(formData.get('training-name')));
+    formData.append('sex', String(formData.get('gender')));
+    await dispatch(postTrainingAction(formData));
+  };
 
   return (
     <main>
@@ -67,7 +79,7 @@ function CreateTrainingScreen(): JSX.Element {
               <h1 className="popup-form__title">Создание тренировки</h1>
             </div>
             <div className="popup-form__form">
-              <form method="get">
+              <form method="get" onSubmit={handleFormSubmit}>
                 <div className="create-training">
                   <div className="create-training__wrapper">
                     <div className="create-training__block">
