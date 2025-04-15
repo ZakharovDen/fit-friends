@@ -8,7 +8,7 @@ import { AxiosExceptionFilter } from './filters/axios-exception.filter';
 import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CheckAnonymousGuard } from './guards/check-anonymous.guard';
 import { CheckAuthGuard } from './guards/check-auth.guard';
-import { InjectUserIdInterceptor, ParseJsonBodyInterceptor } from '@backend/interceptors';
+import { InjectUserIdInterceptor } from '@backend/interceptors';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AvatarParams } from './constant';
 import { AppService } from './app.service';
@@ -52,7 +52,6 @@ export class UsersController {
   })
   @ApiBearerAuth()
   @UseGuards(CheckAnonymousGuard)
-  @UseInterceptors(new ParseJsonBodyInterceptor())
   @UseInterceptors(FileInterceptor('avatar'))
   @ApiConsumes('multipart/form-data')
   public async create(
@@ -65,6 +64,7 @@ export class UsersController {
       fileIsRequired: false,
     }),) avatar?: Express.Multer.File
   ) {
+    console.dir(dto);
     const newUser = plainToInstance(CreateUserDto, dto);
     if (avatar) {
       newUser.avatar = await this.appService.uploadFile(avatar);

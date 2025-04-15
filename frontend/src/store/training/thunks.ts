@@ -86,7 +86,7 @@ export const postTrainingAction = createAsyncThunk<Training, FormData, {
 }>(
   'data/postTraining',
   async (formData, { extra: api }) => {
-    const { data } = await api.post<Training>(`${APIRoute.Trainings}`, formData);
+    const { data } = await api.post<Training>(APIRoute.Trainings, formData);
     return data;
   },
 );

@@ -21,6 +21,9 @@ async function bootstrap() {
   SwaggerModule.setup(SPEC_PATH, app, document);
   app.useGlobalPipes(new ValidationPipe({
     transform: true,
+    transformOptions: {
+      enableImplicitConversion: true, // Разрешить неявное преобразование
+    },
   }));
   const port = process.env.PORT || 3000;
   await app.listen(port);

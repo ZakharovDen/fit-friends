@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Query, SerializeOptions, UseFilters, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, FileTypeValidator, Get, HttpStatus, MaxFileSizeValidator, Param, ParseFilePipe, Post, Query, SerializeOptions, UploadedFile, UseFilters, UseGuards, UseInterceptors } from "@nestjs/common";
 import { AxiosExceptionFilter } from "./filters/axios-exception.filter";
 import { HttpService } from "@nestjs/axios";
 import { ApplicationServiceURL } from "./app.config";
@@ -13,6 +13,7 @@ import { FeedbackWithUserRdo } from "./rdo/feedback-with-user.rdo";
 import { UserId } from "./decorators/user-id.decorator";
 import { InjectUserIdInterceptor } from "@backend/interceptors";
 import { CreateTrainingDto } from "./dto/create-training.dto";
+import { FileInterceptor } from "@nestjs/platform-express";
 
 @Controller('fit')
 @UseFilters(AxiosExceptionFilter)
@@ -84,14 +85,23 @@ export class FitController {
   @Post('trainings')
   @ApiOperation({ summary: 'Создание тренировки.' })
   @ApiResponse({ status: HttpStatus.CREATED, type: FitTrainingRdo })
+  @UseInterceptors(FileInterceptor('video'))
   @ApiBearerAuth()
   @UseGuards(CheckAuthGuard)
   @UseInterceptors(InjectUserIdInterceptor)
   public async createTraining(
+    @UserId() userId: string,
     @Body() dto: CreateTrainingDto,
-    @UserId() userId: string
+    @UploadedFile(new ParseFilePipe({
+      validators: [
+        new MaxFileSizeValidator({ maxSize: 1000000 }),
+        new FileTypeValidator({ fileType: /(jpg|jpeg|png)$/ }),
+      ],
+      fileIsRequired: false,
+    }),) video?: Express.Multer.File
   ): Promise<FitTrainingRdo> {
-    const training: FitTrainingRdo = (await this.httpService.axiosRef.post(ApplicationServiceURL.FitTrainings, {...dto, userId})).data;
+    console.dir(dto);
+    const training: FitTrainingRdo = (await this.httpService.axiosRef.post(ApplicationServiceURL.FitTrainings, { ...dto, userId })).data;
     return {
       ...training,
       image: `${ApplicationServiceURL.File}/static${training.image}`

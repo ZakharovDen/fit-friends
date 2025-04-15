@@ -2,6 +2,7 @@ import { Sex, TrainingDuration, TrainingLevel, TrainingType } from "@backend/cor
 import { ApiProperty } from "@nestjs/swagger";
 import { IsBoolean, IsEnum, IsInt, IsMongoId, IsString, Length, Max, Min } from 'class-validator';
 import { TrainingFieldDescription, TrainingValidateMessage, TrainingValidateValue } from "../fit-training.constant";
+import { Transform, Type } from "class-transformer";
 
 export class CreateFitTrainingDto {
   @ApiProperty(TrainingFieldDescription.UserId)
