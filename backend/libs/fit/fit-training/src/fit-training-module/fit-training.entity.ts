@@ -1,4 +1,5 @@
 import { Training, Entity, StorableEntity, TrainingLevel, TrainingType, TrainingDuration, Sex } from '@backend/core';
+import { DataGenerator, getImages } from '@backend/helpers';
 
 export class FitTrainingEntity extends Entity implements StorableEntity<Training> {
   public userId: string;
@@ -17,6 +18,8 @@ export class FitTrainingEntity extends Entity implements StorableEntity<Training
   public createdAt?: Date;
   public updatedAt?: Date;
 
+  private dataGenerator = new DataGenerator();
+
   constructor(training?: Training) {
     super();
     this.populate(training);
@@ -30,7 +33,7 @@ export class FitTrainingEntity extends Entity implements StorableEntity<Training
     this.id = training.id ?? undefined;
     this.userId = training.userId;
     this.title = training.title;
-    this.image = training.image;
+    this.image = training.image ?? this.dataGenerator.getRandomItem<string>(getImages());
     this.level = training.level;
     this.type = training.type;
     this.duration = training.duration;
@@ -38,8 +41,8 @@ export class FitTrainingEntity extends Entity implements StorableEntity<Training
     this.calories = training.calories;
     this.description = training.description;
     this.sex = training.sex;
-    this.video = training.video;
-    this.specialOffer = training.specialOffer;
+    this.video = training.video ?? undefined;
+    this.specialOffer = training.specialOffer ?? false;
     this.rating = training.rating ?? 0;
     this.createdAt = training.createdAt ?? undefined;
     this.updatedAt = training.updatedAt ?? undefined;

@@ -23,7 +23,7 @@ export class DataGenerator {
     return +((Math.random() * (max - min)) + min).toFixed(numAfterDigit);
   }
 
-  private getRandomItem<T>(items: T[]): T {
+  public getRandomItem<T>(items: T[]): T {
     return items[this.generateRandomValue(0, items.length - 1)];
   }
 

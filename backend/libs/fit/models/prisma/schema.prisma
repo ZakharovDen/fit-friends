@@ -26,7 +26,7 @@ model Training {
   calories     Int
   description  String
   sex          String
-  video        String
+  video        String?
   specialOffer Boolean  @map("special_offer")
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")

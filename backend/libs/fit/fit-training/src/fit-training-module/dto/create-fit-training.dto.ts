@@ -2,7 +2,6 @@ import { Sex, TrainingDuration, TrainingLevel, TrainingType } from "@backend/cor
 import { ApiProperty } from "@nestjs/swagger";
 import { IsBoolean, IsEnum, IsInt, IsMongoId, IsString, Length, Max, Min } from 'class-validator';
 import { TrainingFieldDescription, TrainingValidateMessage, TrainingValidateValue } from "../fit-training.constant";
-import { Transform, Type } from "class-transformer";
 
 export class CreateFitTrainingDto {
   @ApiProperty(TrainingFieldDescription.UserId)
@@ -18,9 +17,9 @@ export class CreateFitTrainingDto {
   )
   title: string;
 
-  @ApiProperty(TrainingFieldDescription.Image)
-  @IsString()
-  image: string;
+  // @ApiProperty(TrainingFieldDescription.Image)
+  // @IsString()
+  // image: string;
 
   @ApiProperty(TrainingFieldDescription.Level)
   @IsEnum(TrainingLevel)
@@ -58,11 +57,11 @@ export class CreateFitTrainingDto {
   @IsEnum(Sex)
   sex: Sex;
 
-  @ApiProperty(TrainingFieldDescription.Video)
-  @IsString()
-  video: string;
+  // @ApiProperty(TrainingFieldDescription.Video)
+  // @IsString()
+  // video: string;
 
-  @ApiProperty(TrainingFieldDescription.SpecialOffer)
-  @IsBoolean()
-  specialOffer: boolean;
+  // @ApiProperty(TrainingFieldDescription.SpecialOffer)
+  // @IsBoolean()
+  // specialOffer: boolean;
 }

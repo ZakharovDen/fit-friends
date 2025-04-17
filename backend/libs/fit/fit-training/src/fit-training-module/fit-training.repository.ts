@@ -59,26 +59,26 @@ export class FitTrainingRepository extends BasePostgresRepository<FitTrainingEnt
       }
     }
 
-    const ratingTrainings = await this.client.feedback.groupBy({
-      by: ['trainingId'],
-      _avg: {
-        rating: true
-      },
-      having: {
-        rating: {
-          _avg: {
-            gte: query.minRating,
-            lte: query.maxRating,
-          },
-        },
-      },
-    });
-    const trainingIds = ratingTrainings.map((item) => item.trainingId);
-    if (trainingIds.length === 1) {
-      where.id = { equals: trainingIds[0] }
-    } else {
-      where.id = { in: trainingIds }
-    }
+    // const ratingTrainings = await this.client.feedback.groupBy({
+    //   by: ['trainingId'],
+    //   _avg: {
+    //     rating: true
+    //   },
+    //   having: {
+    //     rating: {
+    //       _avg: {
+    //         gte: query.minRating,
+    //         lte: query.maxRating,
+    //       },
+    //     },
+    //   },
+    // });
+    // const trainingIds = ratingTrainings.map((item) => item.trainingId);
+    // if (trainingIds.length === 1) {
+    //   where.id = { equals: trainingIds[0] }
+    // } else {
+    //   where.id = { in: trainingIds }
+    // }
 
     const [documents, trainingCount] = await Promise.all([
       this.client.training.findMany({ orderBy, where, skip, take, include: { feedbacks: true } }),

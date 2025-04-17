@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { CustomSelect } from "../../components/custom-select/custom-select";
 import { TrainingLevel, TrainingLevelLabel } from "../../types/training/training-level.enum";
 import { TrainingCrateData } from "../../types/training/training";
@@ -27,6 +27,7 @@ function isSex(value: string): value is Sex {
 function CreateTrainingScreen(): JSX.Element {
   const dispatch = useAppDispatch();
   const [trainingData, setTrainingData] = useState<TrainingCrateData>({ sex: Sex.Any });
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const handleLevelSelect = (level: string) => {
     if (isLevel(level)) {
@@ -67,7 +68,19 @@ function CreateTrainingScreen(): JSX.Element {
     const formData = new FormData(form);
     formData.append('title', String(formData.get('training-name')));
     formData.append('sex', String(formData.get('gender')));
+    formData.append('level', String(trainingData.level));
+    formData.append('type', String(trainingData.type));
+    formData.append('duration', String(trainingData.duration));
+    if (selectedFile) {
+      formData.append('video', selectedFile);
+    }
     await dispatch(postTrainingAction(formData));
+  };
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    const file = files && files[0] ? files[0] : null;
+    setSelectedFile(file);
   };
 
   return (
@@ -155,11 +168,14 @@ function CreateTrainingScreen(): JSX.Element {
                     <div className="create-training__block">
                       <h2 className="create-training__legend">Загрузите видео-тренировку</h2>
                       <div className="drag-and-drop create-training__drag-and-drop">
-                        <label><span className="drag-and-drop__label" tabIndex={0}>Загрузите сюда файлы формата MOV, AVI или MP4
+                        <label><span className="drag-and-drop__label" tabIndex={0}>
+                          {selectedFile
+                            ? `Выбран файл: ${selectedFile.name}`
+                            : 'Загрузите сюда файлы формата MOV, AVI или MP4'}
                           <svg width="20" height="20" aria-hidden="true">
                             <use xlinkHref="#icon-import-video"></use>
                           </svg></span>
-                          <input type="file" name="import" tabIndex={-1} accept=".mov, .avi, .mp4" />
+                          <input type="file" name="import" tabIndex={-1} accept=".mov, .avi, .mp4" onChange={handleFileChange} />
                         </label>
                       </div>
                     </div>
