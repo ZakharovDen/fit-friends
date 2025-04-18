@@ -1,12 +1,14 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { CustomSelect } from "../../components/custom-select/custom-select";
 import { TrainingLevel, TrainingLevelLabel } from "../../types/training/training-level.enum";
 import { TrainingCrateData } from "../../types/training/training";
 import { TrainingDuration } from "../../types/training/training-duration.enum";
 import { TrainingType, TrainingTypeLabel } from "../../types/training/training-type.enum";
 import { Sex, SexCreateTrainingLabel } from "../../types/sex.enum";
-import { useAppDispatch } from "../../hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 import { postTrainingAction } from "../../store/training/thunks";
+import { useNavigate } from "react-router-dom";
+import { getTrainingSaveIsProcess, getTrainingSaveIsSuccess } from "../../store/training/selectors";
 
 function isLevel(value: string): value is TrainingLevel {
   return Object.values(TrainingLevel).includes(value as TrainingLevel);
@@ -28,6 +30,9 @@ function CreateTrainingScreen(): JSX.Element {
   const dispatch = useAppDispatch();
   const [trainingData, setTrainingData] = useState<TrainingCrateData>({ sex: Sex.Any });
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const navigate = useNavigate();
+  const isProcess = useAppSelector(getTrainingSaveIsProcess);
+  const isSuccess = useAppSelector(getTrainingSaveIsSuccess);
 
   const handleLevelSelect = (level: string) => {
     if (isLevel(level)) {
@@ -82,6 +87,12 @@ function CreateTrainingScreen(): JSX.Element {
     const file = files && files[0] ? files[0] : null;
     setSelectedFile(file);
   };
+
+  useEffect(() => {
+    if (isSuccess && !isProcess) {
+      navigate(-1);
+    }
+  }, [isProcess, isSuccess]);
 
   return (
     <main>

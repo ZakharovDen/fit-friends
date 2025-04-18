@@ -9,3 +9,5 @@ export const getTrainingsDataLoadingStatus = (state: State): boolean => state[Na
 export const getErrorStatus = (state: State): boolean => state[NameSpace.Training].hasError;
 export const getTrainingInfo = (state: State): TrainingWithUser | undefined => state[NameSpace.Training].trainingInfo;
 export const getAllowedFilterValues = (state: State): AllowedFilterValues => state[NameSpace.Training].filterValues;
+export const getTrainingSaveIsProcess = (state: State): boolean => state[NameSpace.Training].isProcess;
+export const getTrainingSaveIsSuccess = (state: State): boolean => state[NameSpace.Training].isSuccess;

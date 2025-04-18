@@ -11,6 +11,8 @@ export type InitialState = {
   isTrainingsDataLoading: boolean;
   hasError: boolean;
   filterValues: AllowedFilterValues;
+  isProcess: boolean;
+  isSuccess: boolean;
 };
 
 const initialState: InitialState = {
@@ -28,6 +30,8 @@ const initialState: InitialState = {
     price: { min: undefined, max: undefined }, 
     calories: { min: undefined, max: undefined },
   },
+  isProcess: false,
+  isSuccess: false,
 };
 
 export const training = createSlice({
@@ -73,16 +77,17 @@ export const training = createSlice({
         state.hasError = true;
       })
       .addCase(postTrainingAction.pending, (state) => {
-        state.isTrainingsDataLoading = true;
-        state.hasError = false;
+        state.isProcess = true;
+        state.isSuccess = false;
       })
       .addCase(postTrainingAction.fulfilled, (state, action) => {
         state.trainings.entities.push(action.payload);
-        state.isTrainingsDataLoading = false;
+        state.isProcess = false;
+        state.isSuccess = true;
       })
       .addCase(postTrainingAction.rejected, (state) => {
-        state.isTrainingsDataLoading = false;
-        state.hasError = true;
+        state.isProcess = false;
+        state.isSuccess = false;
       })
       .addCase(getFilterValuesAction.fulfilled, (state, action) => {
         state.filterValues = action.payload;
