@@ -4,12 +4,19 @@ import { registerAction } from "../../store/user/thunks";
 import { SexUserLabel } from "../../types/sex.enum";
 import { UserLocationLabel } from "../../types/user/user-location.enum";
 import { CustomSelect } from "../../components/custom-select/custom-select";
+import { UserRoleIcon, UserRoleLabel } from "./constant";
+import { UserRole } from "../../types/user/user-role.enum";
+
+function isRole(value: string): value is UserRole {
+  return Object.values(UserRole).includes(value as UserRole);
+}
 
 function RegistrationScreen(): JSX.Element {
   const dispatch = useAppDispatch();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewURL, setPreviewURL] = useState<string | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<string>();
+  const [role, setRole] = useState<UserRole>(UserRole.Sportsman);
 
   const handleLocationSelect = (location: string) => {
     setSelectedLocation(location);
@@ -45,6 +52,15 @@ function RegistrationScreen(): JSX.Element {
       setPreviewURL(null);
     }
   };
+
+  const handleRoleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, checked } = event.target;
+    if (checked) {
+      if (isRole(value)) {
+        setRole(value);
+      }
+    }
+  }
 
   return (
     <main>
@@ -128,14 +144,24 @@ function RegistrationScreen(): JSX.Element {
                   <div className="sign-up__role">
                     <h2 className="sign-up__legend">Выберите роль</h2>
                     <div className="role-selector sign-up__role-selector">
-                      <div className="role-btn">
-                        <label>
-                          <input className="visually-hidden" type="radio" name="role" value="sportsman" checked /><span className="role-btn__icon">
-                            <svg width="12" height="13" aria-hidden="true">
-                              <use xlinkHref="#icon-weight"></use>
-                            </svg></span><span className="role-btn__btn">Я хочу тренироваться</span>
-                        </label>
-                      </div>
+                      {Object.entries(UserRoleLabel).map(([key, value]) => (
+                        <div className="role-btn">
+                          <label>
+                            <input
+                              className="visually-hidden"
+                              type="radio"
+                              name="role"
+                              value={key}
+                              checked={key === role}
+                              onChange={handleRoleChange}
+                            />
+                            <span className="role-btn__icon">
+                              <svg width="12" height="13" aria-hidden="true">
+                                <use xlinkHref={UserRoleIcon[key as UserRole]}></use>
+                              </svg></span><span className="role-btn__btn">{value}</span>
+                          </label>
+                        </div>
+                      ))}
                     </div>
                   </div>
                   <div className="sign-up__checkbox">
