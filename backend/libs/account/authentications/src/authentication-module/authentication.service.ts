@@ -12,6 +12,7 @@ import { RefreshTokenService } from '../refresh-token-module/refresh-token.servi
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { CreateQuestionnaireDto } from '../dto/create-user-questionnaire.dto';
 import { UpdateQuestionnaireDto } from '../dto/update-user-questionnaire.dto';
+import { randomUUID } from 'node:crypto';
 
 @Injectable()
 export class AuthenticationService {
@@ -73,7 +74,7 @@ export class AuthenticationService {
 
   public async createUserToken(user: User): Promise<Token> {
     const accessTokenPayload = createJWTPayload(user);
-    const refreshTokenPayload = { ...accessTokenPayload, tokenId: crypto.randomUUID() };
+    const refreshTokenPayload = { ...accessTokenPayload, tokenId: randomUUID() };
     await this.refreshTokenService.createRefreshSession(refreshTokenPayload);
 
     try {
