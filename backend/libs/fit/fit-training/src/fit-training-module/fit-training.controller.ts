@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Query, SerializeOptions } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Param, Patch, Post, Query, SerializeOptions } from "@nestjs/common";
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FitTrainingService } from "./fit-training.service";
 import { CreateFitTrainingDto } from "./dto/create-fit-training.dto";
@@ -6,6 +6,7 @@ import { fillDto } from '@backend/helpers';
 import { FitTrainingRdo } from "./rdo/fit-training.rdo";
 import { FitTrainingQuery } from "./fit-training.query";
 import { FitTrainingWithPaginationRdo } from "./rdo/fit-training-with-pagination.rdo";
+import { UpdateFitTrainingDto } from "./dto/update-fit-training.dto";
 
 @ApiTags('Тренировки')
 @Controller('trainings')
@@ -19,6 +20,18 @@ export class FitTrainingController {
   @ApiResponse({ status: HttpStatus.CREATED, type: FitTrainingRdo })
   public async create(@Body() dto: CreateFitTrainingDto) {
     const training = await this.fitTrainingService.create(dto);
+    return fillDto(FitTrainingRdo, training);
+  }
+
+  @Patch('/:id')
+  @ApiOperation({ summary: 'Редактирование тренировки.' })
+  @ApiResponse({ status: HttpStatus.CREATED, type: FitTrainingRdo })
+  public async update(
+    @Body() dto: UpdateFitTrainingDto,
+    @Param('id') id: string,
+    @Query('userId') userId: string,
+  ) {
+    const training = await this.fitTrainingService.update(id, userId, dto);
     return fillDto(FitTrainingRdo, training);
   }
 

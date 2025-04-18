@@ -31,6 +31,14 @@ export class FitTrainingRepository extends BasePostgresRepository<FitTrainingEnt
     entity.id = record.id;
   }
 
+  public async update(entity: FitTrainingEntity): Promise<void> {
+    const data = entity.toPOJO();
+    await this.client.training.update({
+      where: { id: data.id },
+      data
+    });
+  }
+
   public async findAll(query?: FitTrainingQuery): Promise<PaginationResult<FitTrainingEntity>> {
     const skip = query?.page && query?.limit ? (query.page - 1) * query.limit : undefined;
     const take = query?.limit ? query?.limit : undefined;

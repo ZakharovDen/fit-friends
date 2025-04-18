@@ -1,9 +1,10 @@
-import { Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { FitTrainingRepository } from "./fit-training.repository";
 import { FitTrainingEntity } from "./fit-training.entity";
 import { CreateFitTrainingDto } from "./dto/create-fit-training.dto";
 import { FitTrainingQuery } from "./fit-training.query";
 import { PaginationResult } from "@backend/core";
+import { UpdateFitTrainingDto } from "./dto/update-fit-training.dto";
 
 @Injectable()
 export class FitTrainingService {
@@ -17,6 +18,17 @@ export class FitTrainingService {
     delete newTraining.rating;
     await this.fitTrainingRepository.save(newTraining);
     return newTraining;
+  }
+
+  public async update(id: string, userId: string, dto: UpdateFitTrainingDto) {
+    const training = await this.findById(id);
+    if (training.userId !== userId) {
+      throw new HttpException('Запрещено редактировать чужие тренировки', HttpStatus.BAD_REQUEST);
+    }
+    const entity = new FitTrainingEntity(Object.assign(training, dto));
+    delete entity.rating;
+    await this.fitTrainingRepository.update(entity);
+    return entity;
   }
 
   public async findAll(query?: FitTrainingQuery): Promise<PaginationResult<FitTrainingEntity>> {

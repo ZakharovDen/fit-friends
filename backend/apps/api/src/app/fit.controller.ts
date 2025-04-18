@@ -1,4 +1,4 @@
-import { Body, Controller, FileTypeValidator, Get, HttpStatus, MaxFileSizeValidator, Param, ParseFilePipe, Post, Query, SerializeOptions, UploadedFile, UseFilters, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, FileTypeValidator, Get, HttpStatus, MaxFileSizeValidator, Param, ParseFilePipe, Patch, Post, Query, SerializeOptions, UploadedFile, UseFilters, UseGuards, UseInterceptors } from "@nestjs/common";
 import { AxiosExceptionFilter } from "./filters/axios-exception.filter";
 import { HttpService } from "@nestjs/axios";
 import { ApplicationServiceURL } from "./app.config";
@@ -14,6 +14,7 @@ import { UserId } from "./decorators/user-id.decorator";
 import { InjectUserIdInterceptor } from "@backend/interceptors";
 import { CreateTrainingDto } from "./dto/create-training.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { UpdateTrainingDto } from "./dto/update-training.dto";
 
 @Controller('fit')
 @UseFilters(AxiosExceptionFilter)
@@ -100,8 +101,25 @@ export class FitController {
       fileIsRequired: false,
     }),) video?: Express.Multer.File
   ): Promise<FitTrainingRdo> {
-    console.dir(dto);
     const training: FitTrainingRdo = (await this.httpService.axiosRef.post(ApplicationServiceURL.FitTrainings, { ...dto, userId })).data;
+    return {
+      ...training,
+      image: `${ApplicationServiceURL.File}/static${training.image}`
+    };
+  }
+
+  @Patch('trainings/:id')
+  @ApiOperation({ summary: 'Редактирование тренировки.' })
+  @ApiResponse({ status: HttpStatus.CREATED, type: FitTrainingRdo })
+  @ApiBearerAuth()
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(InjectUserIdInterceptor)
+  public async updateTraining(
+    @UserId() userId: string,
+    @Body() dto: UpdateTrainingDto,
+    @Param('id') id: string,
+  ): Promise<FitTrainingRdo> {
+    const training: FitTrainingRdo = (await this.httpService.axiosRef.patch(`${ApplicationServiceURL.FitTrainings}/${id}`, dto, { params: { userId } })).data;
     return {
       ...training,
       image: `${ApplicationServiceURL.File}/static${training.image}`
