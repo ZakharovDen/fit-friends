@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
 import { APIRoute } from '../const';
 import { saveToken } from '../../services/token';
-import { LoggedUser, Questionnaire, User, UserAuth } from '../../types/user/user';
+import { LoggedUser, Questionnaire, User, UserAuth, UserUpdate } from '../../types/user/user';
 import { AppDispatch, State } from '../../types/state';
 
 export const checkAuthAction = createAsyncThunk<LoggedUser, undefined, {
@@ -43,14 +43,14 @@ export const registerAction = createAsyncThunk<LoggedUser, FormData, {
   }
 );
 
-export const editUserAction = createAsyncThunk<User, User, {
+export const editUserAction = createAsyncThunk<User, UserUpdate, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }>(
   'user/edit',
-  async (user , { extra: api }) => {
-    const { data } = await api.patch<User>(APIRoute.Users, user);
+  async (userData , { extra: api }) => {
+    const { data } = await api.patch<User>(APIRoute.Users, userData);
     return data;
   }
 );

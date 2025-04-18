@@ -37,3 +37,5 @@ export type LoggedUser = User & {
 export type UserAuth = Pick<User, 'email'> & { password: string };
 
 export type UserRegister =  User &  { password: string };
+
+export type UserUpdate = Omit<User, 'id' | 'email' | 'dateOfBirth' | 'role' | 'createdAt' | 'backgroundImage'>;
