@@ -5,6 +5,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 const SPEC_PATH = 'spec';
 const GLOBAL_PREFIX = 'api';
+const DEFAULT_PORT = 3000;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -25,7 +26,7 @@ async function bootstrap() {
       enableImplicitConversion: true, // Разрешить неявное преобразование
     },
   }));
-  const port = process.env.PORT || 3000;
+  const port = process.env.PORT || DEFAULT_PORT;
   await app.listen(port);
   Logger.log(`🚀 Application is running on: http://localhost:${port}/${GLOBAL_PREFIX}`);
   Logger.log(`API specification is running on: http://localhost:${port}/${SPEC_PATH}`);

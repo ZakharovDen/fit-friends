@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
-import { HTTP_CLIENT_MAX_REDIRECTS, HTTP_CLIENT_TIMEOUT } from './app.config';
+import { HttpClientSettings } from './app.config';
 import { UsersController } from './users.controller';
 import { CheckAuthGuard } from './guards/check-auth.guard';
 import { AppService } from './app.service';
@@ -9,8 +9,8 @@ import { FitController } from './fit.controller';
 @Module({
   imports: [
     HttpModule.register({
-      timeout: HTTP_CLIENT_TIMEOUT,
-      maxRedirects: HTTP_CLIENT_MAX_REDIRECTS,
+      timeout: HttpClientSettings.Timeout,
+      maxRedirects: HttpClientSettings.MaxRedirects,
     }),
   ],
   controllers: [UsersController, FitController],

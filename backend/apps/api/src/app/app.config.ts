@@ -5,5 +5,7 @@ export enum ApplicationServiceURL {
   File = 'http://localhost:3337/api/files'
 }
 
-export const HTTP_CLIENT_MAX_REDIRECTS = 5;
-export const HTTP_CLIENT_TIMEOUT = 3000;
+export enum HttpClientSettings {
+  MaxRedirects = 5,
+  Timeout = 3000,
+}

@@ -5,6 +5,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 const GLOBAL_PREFIX = 'api';
 const SPEC_PATH = 'spec';
+const DEFAULT_PORT = 3334;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -23,7 +24,7 @@ async function bootstrap() {
   }));
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector), { excludeExtraneousValues: true }));
 
-  const port = process.env.PORT || 3000;
+  const port = process.env.PORT || DEFAULT_PORT;
   await app.listen(port);
   Logger.log(
     `🚀 Application is running on: http://localhost:${port}/${GLOBAL_PREFIX}`
