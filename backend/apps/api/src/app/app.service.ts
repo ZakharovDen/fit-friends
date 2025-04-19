@@ -1,7 +1,7 @@
 import { HttpService } from "@nestjs/axios";
 import { Injectable } from "@nestjs/common";
 import { ApplicationServiceURL } from "./app.config";
-import { Feedback, File } from "@backend/core";
+import { Feedback, File, UserRole } from "@backend/core";
 import 'multer';
 import { createUrlForFile } from "@backend/helpers";
 import FormData from 'form-data';
@@ -39,5 +39,9 @@ export class AppService {
     feedbacks.forEach((feedback) => {
       feedback['user'] = users.find((user) => user.id === feedback.userId);
     });
+  }
+
+  public async matchRoles(roles: UserRole[], role: UserRole){
+    return roles.includes(role);
   }
 }

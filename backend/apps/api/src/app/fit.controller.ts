@@ -15,6 +15,9 @@ import { InjectUserIdInterceptor } from "@backend/interceptors";
 import { CreateTrainingDto } from "./dto/create-training.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { UpdateTrainingDto } from "./dto/update-training.dto";
+import { Roles } from "./decorators/roles.decorator";
+import { UserRole } from "@backend/core";
+import { RolesGuard } from "./guards/roles.guard";
 
 @Controller('fit')
 @UseFilters(AxiosExceptionFilter)
@@ -88,8 +91,9 @@ export class FitController {
   @ApiResponse({ status: HttpStatus.CREATED, type: FitTrainingRdo })
   @UseInterceptors(FileInterceptor('video'))
   @ApiBearerAuth()
-  @UseGuards(CheckAuthGuard)
+  @UseGuards(CheckAuthGuard, RolesGuard)
   @UseInterceptors(InjectUserIdInterceptor)
+  @Roles(UserRole.Coach)
   public async createTraining(
     @UserId() userId: string,
     @Body() dto: CreateTrainingDto,
@@ -112,8 +116,9 @@ export class FitController {
   @ApiOperation({ summary: 'Редактирование тренировки.' })
   @ApiResponse({ status: HttpStatus.CREATED, type: FitTrainingRdo })
   @ApiBearerAuth()
-  @UseGuards(CheckAuthGuard)
+  @UseGuards(CheckAuthGuard, RolesGuard)
   @UseInterceptors(InjectUserIdInterceptor)
+  @Roles(UserRole.Coach)
   public async updateTraining(
     @UserId() userId: string,
     @Body() dto: UpdateTrainingDto,
