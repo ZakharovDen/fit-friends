@@ -13,16 +13,13 @@ import { getFeedbacks } from "../../store/feedback/selectors";
 import { getFeedbacksAction } from "../../store/feedback/thunks";
 import BackButton from "../../components/back-button/back-button";
 import { BackButtonDisplayMode } from "../../components/back-button/constant";
+import { getUser } from "../../store/user/selectors";
+import { UserRole } from "../../types/user/user-role.enum";
+import { TrainingUpdateData } from "../../types/training/training";
 
 function TrainingCardScreen(): JSX.Element {
-  const [isPopupFeedbackVisible, setPopupFeedbackVisible] = useState<boolean>(false);
-  const [isPopupBuyVisible, setPopupBuyVisible] = useState<boolean>(false);
-  const [hashTags, setHashTags] = useState<string[]>();
-  const params = useParams();
   const dispatch = useAppDispatch();
-  const training = useAppSelector(getTrainingInfo);
-  const feedbacks = useAppSelector(getFeedbacks);
-
+  const params = useParams();
   useEffect(() => {
     const { id } = params;
     if (id) {
@@ -30,6 +27,19 @@ function TrainingCardScreen(): JSX.Element {
       dispatch(getFeedbacksAction(id));
     }
   }, [params, dispatch]);
+  const training = useAppSelector(getTrainingInfo);
+  const user = useAppSelector(getUser);
+  const feedbacks = useAppSelector(getFeedbacks);
+  const [isPopupFeedbackVisible, setPopupFeedbackVisible] = useState<boolean>(false);
+  const [isPopupBuyVisible, setPopupBuyVisible] = useState<boolean>(false);
+  const [hashTags, setHashTags] = useState<string[]>();
+  const [isEdited, setIsEdited] = useState<boolean>(false);
+  const [trainingData, setTrainingData] = useState<TrainingUpdateData>({
+    description: training?.description, 
+    price: training?.price, 
+    title: training?.title
+  });
+  const authorMode = (user?.role === UserRole.Coach && training?.user.id === user.id);
 
   useEffect(() => {
     if (training) {
@@ -38,7 +48,12 @@ function TrainingCardScreen(): JSX.Element {
         SexTrainingLabel[training?.sex].replace(' ', '_'),
         `${training?.calories}ккал`,
         `${training?.duration.replace('-', '_')}минут`
-      ])
+      ]);
+      setTrainingData({
+        description: training.description, 
+        price: training.price, 
+        title: training.title
+      });
     }
   }, [training]);
 
@@ -47,6 +62,20 @@ function TrainingCardScreen(): JSX.Element {
 
   const openPopupBuy = () => setPopupBuyVisible(true);
   const closePopupBuy = () => setPopupBuyVisible(false);
+
+  const handleEditForm = (evt: React.MouseEvent<HTMLButtonElement>) => {
+    evt.stopPropagation();
+    evt.preventDefault();
+    setIsEdited(true);
+  }
+
+  const handleTitleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    setTrainingData({...trainingData, title: evt.target.value});
+  }
+
+  const handleDescriptionChange = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setTrainingData({...trainingData, description: evt.target.value});
+  }
 
   if (!training) {
     return <NotFoundScreen />
@@ -64,7 +93,14 @@ function TrainingCardScreen(): JSX.Element {
               <ul className="reviews-side-bar__list">
                 {(feedbacks.length) && feedbacks.map((feedback) => <ReviewItem feedback={feedback} key={feedback.id} />)}
               </ul>
-              <button className="btn btn--medium reviews-side-bar__button" type="button" onClick={openPopupFeedback}>Оставить отзыв</button>
+              <button
+                className="btn btn--medium reviews-side-bar__button"
+                type="button"
+                onClick={openPopupFeedback}
+                disabled={authorMode}
+              >
+                Оставить отзыв
+              </button>
               <PopupFeedback isVisible={isPopupFeedbackVisible} onClose={closePopupFeedback} trainingId={training.id} />
             </aside>
             <div className="training-card">
@@ -88,10 +124,22 @@ function TrainingCardScreen(): JSX.Element {
                       </picture>
                     </div>
                     <div className="training-info__coach-info">
-                      <span className="training-info__label">Тренер</span>
+                      <span className="training-info__label">{`Тренер`}</span>
                       <span className="training-info__name">{training?.user.name}</span>
                     </div>
                   </div>
+                  {(authorMode) && ((isEdited)
+                    ? <button className="btn-flat btn-flat--light btn-flat--underlined training-info__edit training-info__edit--edit" type="button">
+                      <svg width="12" height="12" aria-hidden="true">
+                        <use xlinkHref="#icon-edit"></use>
+                      </svg><span>Сохранить</span>
+                    </button>
+                    : <button className="btn-flat btn-flat--light training-info__edit training-info__edit--edit" type="button" onClick={handleEditForm}>
+                      <svg width="12" height="12" aria-hidden="true">
+                        <use xlinkHref="#icon-edit"></use>
+                      </svg><span>Редактировать</span>
+                    </button>)
+                  }
                 </div>
                 <div className="training-info__main-content">
                   <form action="#" method="get">
@@ -99,13 +147,13 @@ function TrainingCardScreen(): JSX.Element {
                       <div className="training-info__info-wrapper">
                         <div className="training-info__input training-info__input--training">
                           <label><span className="training-info__label">Название тренировки</span>
-                            <input type="text" name="training" value={training?.title} disabled />
+                            <input type="text" name="training" value={trainingData.title} disabled={!isEdited} onChange={handleTitleChange} />
                           </label>
                           <div className="training-info__error">Обязательное поле</div>
                         </div>
                         <div className="training-info__textarea">
                           <label><span className="training-info__label">Описание тренировки</span>
-                            <textarea name="description" disabled>{training?.description}</textarea>
+                            <textarea name="description" disabled={!isEdited} onChange={handleDescriptionChange}>{trainingData.description}</textarea>
                           </label>
                         </div>
                       </div>
@@ -134,7 +182,7 @@ function TrainingCardScreen(): JSX.Element {
                       <div className="training-info__price-wrapper">
                         <div className="training-info__input training-info__input--price">
                           <label><span className="training-info__label">Стоимость</span>
-                            <input type="text" name="price" value={`${training?.price} ₽`} disabled />
+                            <input type="text" name="price" value={`${training?.price} ₽`} disabled={!isEdited} />
                           </label>
                           <div className="training-info__error">Введите число</div>
                         </div>
