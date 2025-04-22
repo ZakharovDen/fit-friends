@@ -17,6 +17,18 @@ import { getUser } from "../../store/user/selectors";
 import { UserRole } from "../../types/user/user-role.enum";
 import { TrainingUpdateData } from "../../types/training/training";
 
+const DISCOUNT_PERCENT = 10;
+
+const setDiscount = (price: number | undefined, isSpecialOffer: boolean) => {
+  if (price) {
+    if (isSpecialOffer){
+      return price - (price * DISCOUNT_PERCENT / 100);
+    } else {
+      return price * 100 / (100 - DISCOUNT_PERCENT);
+    }
+  }
+}
+
 function TrainingCardScreen(): JSX.Element {
   const dispatch = useAppDispatch();
   const params = useParams();
@@ -35,9 +47,10 @@ function TrainingCardScreen(): JSX.Element {
   const [hashTags, setHashTags] = useState<string[]>();
   const [isEdited, setIsEdited] = useState<boolean>(false);
   const [trainingData, setTrainingData] = useState<TrainingUpdateData>({
-    description: training?.description, 
-    price: training?.price, 
-    title: training?.title
+    description: training?.description,
+    price: training?.price,
+    title: training?.title,
+    specialOffer: training?.specialOffer
   });
   const authorMode = (user?.role === UserRole.Coach && training?.user.id === user.id);
   const isProcess = useAppSelector(getTrainingSaveIsProcess);
@@ -52,9 +65,10 @@ function TrainingCardScreen(): JSX.Element {
         `${training?.duration.replace('-', '_')}минут`
       ]);
       setTrainingData({
-        description: training.description, 
-        price: training.price, 
-        title: training.title
+        description: training.description,
+        price: training.price,
+        title: training.title,
+        specialOffer: training.specialOffer,
       });
     }
   }, [training]);
@@ -72,17 +86,17 @@ function TrainingCardScreen(): JSX.Element {
   }
 
   const handleTitleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    setTrainingData({...trainingData, title: evt.target.value});
+    setTrainingData({ ...trainingData, title: evt.target.value });
   }
 
   const handleDescriptionChange = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setTrainingData({...trainingData, description: evt.target.value});
+    setTrainingData({ ...trainingData, description: evt.target.value });
   }
 
   const handlePriceChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const price = Number(evt.target.value.replace(' ₽', ''));
-    if (typeof(price) === 'number'){
-      setTrainingData({...trainingData, price: price});
+    if (typeof (price) === 'number') {
+      setTrainingData({ ...trainingData, price: price });
     }
   }
 
@@ -95,7 +109,13 @@ function TrainingCardScreen(): JSX.Element {
   const handleSaveForm = (evt: React.MouseEvent<HTMLButtonElement>) => {
     evt.stopPropagation();
     evt.preventDefault();
-    dispatch(patchTrainingAction({...trainingData, id: training?.id}));
+    dispatch(patchTrainingAction({ ...trainingData, id: training?.id }));
+  }
+
+  const handleDiscountButtonClick = (evt: React.MouseEvent<HTMLButtonElement>) => {
+    evt.stopPropagation();
+    evt.preventDefault();
+    setTrainingData({...trainingData, specialOffer: !trainingData.specialOffer, price: setDiscount(trainingData.price, !trainingData.specialOffer)});
   }
 
   if (!training) {
@@ -124,7 +144,7 @@ function TrainingCardScreen(): JSX.Element {
               </button>
               <PopupFeedback isVisible={isPopupFeedbackVisible} onClose={closePopupFeedback} trainingId={training.id} />
             </aside>
-            <div className="training-card">
+            <div className={`training-card ${isEdited && 'training-card--edit'}`}>
               <div className="training-info">
                 <h2 className="visually-hidden">Информация о тренировке</h2>
                 <div className="training-info__header">
@@ -145,21 +165,23 @@ function TrainingCardScreen(): JSX.Element {
                       </picture>
                     </div>
                     <div className="training-info__coach-info">
-                      <span className="training-info__label">{`Тренер`}</span>
+                      <span className="training-info__label">{`Тренер${authorMode}`}</span>
                       <span className="training-info__name">{training?.user.name}</span>
                     </div>
                   </div>
-                  {(authorMode) && ((isEdited)
-                    ? <button className="btn-flat btn-flat--light btn-flat--underlined training-info__edit training-info__edit--edit" type="button" onClick={handleSaveForm}>
-                      <svg width="12" height="12" aria-hidden="true">
-                        <use xlinkHref="#icon-edit"></use>
-                      </svg><span>Сохранить</span>
-                    </button>
-                    : <button className="btn-flat btn-flat--light training-info__edit training-info__edit--edit" type="button" onClick={handleEditForm}>
-                      <svg width="12" height="12" aria-hidden="true">
-                        <use xlinkHref="#icon-edit"></use>
-                      </svg><span>Редактировать</span>
-                    </button>)
+                  {(authorMode) &&
+                    <>
+                      <button className="btn-flat btn-flat--light btn-flat--underlined training-info__edit training-info__edit--save" type="button" onClick={handleSaveForm}>
+                        <svg width="12" height="12" aria-hidden="true">
+                          <use xlinkHref="#icon-edit"></use>
+                        </svg><span>Сохранить</span>
+                      </button>
+                      <button className="btn-flat btn-flat--light training-info__edit training-info__edit--edit" type="button" onClick={handleEditForm}>
+                        <svg width="12" height="12" aria-hidden="true">
+                          <use xlinkHref="#icon-edit"></use>
+                        </svg><span>Редактировать</span>
+                      </button>
+                    </>
                   }
                 </div>
                 <div className="training-info__main-content">
@@ -207,7 +229,17 @@ function TrainingCardScreen(): JSX.Element {
                           </label>
                           <div className="training-info__error">Введите число</div>
                         </div>
-                        <button className="btn training-info__buy" type="button" onClick={openPopupBuy}>Купить</button>
+                        {(authorMode)
+                          ? <button
+                            className="btn-flat btn-flat--light btn-flat--underlined training-info__discount"
+                            type="button"
+                            onClick={handleDiscountButtonClick}
+                          >
+                            <svg width="14" height="14" aria-hidden="true">
+                              <use xlinkHref="#icon-discount"></use>
+                            </svg><span>{(trainingData.specialOffer) ? `Отменить скидку` : `Сделать скидку ${DISCOUNT_PERCENT}%`}</span>
+                          </button>
+                          : <button className="btn training-info__buy" type="button" onClick={openPopupBuy}>Купить</button>}
                         <PopupBuy isVisible={isPopupBuyVisible} onClose={closePopupBuy} />
                       </div>
                     </div>
@@ -238,10 +270,34 @@ function TrainingCardScreen(): JSX.Element {
                     </svg>
                   </button>
                 </div>
-                <div className="training-video__buttons-wrapper">
-                  <button className="btn training-video__button training-video__button--start" type="button" disabled>Приступить</button>
-                  <button className="btn training-video__button training-video__button--stop" type="button">Закончить</button>
-                </div>
+                {(authorMode)
+                  ? <>
+                    <div className="training-video__drop-files">
+                      <form action="#" method="post">
+                        <div className="training-video__form-wrapper">
+                          <div className="drag-and-drop">
+                            <label><span className="drag-and-drop__label" tabIndex={0}>Загрузите сюда файлы формата MOV, AVI или MP4
+                              <svg width="20" height="20" aria-hidden="true">
+                                <use xlinkHref="#icon-import-video"></use>
+                              </svg></span>
+                              <input type="file" name="import" tabIndex={-1} accept=".mov, .avi, .mp4" />
+                            </label>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                    <div className="training-video__buttons-wrapper">
+                      <div className="training-video__edit-buttons">
+                        <button className="btn" type="button">Сохранить</button>
+                        <button className="btn btn--outlined" type="button">Удалить</button>
+                      </div>
+                    </div>
+                  </>
+                  : <div className="training-video__buttons-wrapper">
+                    <button className="btn training-video__button training-video__button--start" type="button" disabled>Приступить</button>
+                    <button className="btn training-video__button training-video__button--stop" type="button">Закончить</button>
+                  </div>
+                }
               </div>
             </div>
           </div>
