@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { NameSpace } from "../const";
-import { deleteTrainingAction, fetchTrainingsAction, getFilterValuesAction, getTrainingAction, postTrainingAction } from "./thunks";
+import { deleteTrainingAction, fetchTrainingsAction, getFilterValuesAction, getTrainingAction, patchTrainingAction, postTrainingAction } from "./thunks";
 import { TrainingsWithPagination } from "../../types/training/trainings-with-pagination";
 import { TrainingWithUser } from "../../types/training/training";
 import { AllowedFilterValues } from "../../types/filter/allowed-filter-values";
@@ -86,6 +86,18 @@ export const training = createSlice({
         state.isSuccess = true;
       })
       .addCase(postTrainingAction.rejected, (state) => {
+        state.isProcess = false;
+        state.isSuccess = false;
+      })
+      .addCase(patchTrainingAction.pending, (state) => {
+        state.isProcess = true;
+        state.isSuccess = false;
+      })
+      .addCase(patchTrainingAction.fulfilled, (state, action) => {
+        state.isProcess = false;
+        state.isSuccess = true;
+      })
+      .addCase(patchTrainingAction.rejected, (state) => {
         state.isProcess = false;
         state.isSuccess = false;
       })

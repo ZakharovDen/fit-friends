@@ -4,7 +4,7 @@ import { AppDispatch, State } from '../../types/state';
 import { APIRoute } from '../const';
 import { TrainingsWithPagination } from '../../types/training/trainings-with-pagination';
 import { QueryParams } from '../../types/training/query-params';
-import { Training, TrainingWithUser } from '../../types/training/training';
+import { Training, TrainingUpdateData, TrainingWithUser } from '../../types/training/training';
 import { AllowedFilterValues } from '../../types/filter/allowed-filter-values';
 
 export const fetchTrainingsAction = createAsyncThunk<TrainingsWithPagination, any, {
@@ -87,6 +87,20 @@ export const postTrainingAction = createAsyncThunk<Training, FormData, {
   'data/postTraining',
   async (formData, { extra: api }) => {
     const { data } = await api.post<Training>(APIRoute.Trainings, formData);
+    return data;
+  },
+);
+
+export const patchTrainingAction = createAsyncThunk<Training, TrainingUpdateData & {id?: string}, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'data/patchTraining',
+  async (trainingData, { extra: api }) => {
+    const id = trainingData.id;
+    delete trainingData.id;
+    const { data } = await api.patch<Training>(`${APIRoute.Trainings}/${id}`, trainingData);
     return data;
   },
 );

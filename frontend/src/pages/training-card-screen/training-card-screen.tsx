@@ -4,8 +4,8 @@ import ReviewItem from "../../components/review-item/review-item";
 import PopupBuy from "../../components/popup-buy/popup-buy";
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { getTrainingInfo } from "../../store/training/selectors";
-import { getTrainingAction } from "../../store/training/thunks";
+import { getTrainingInfo, getTrainingSaveIsProcess, getTrainingSaveIsSuccess } from "../../store/training/selectors";
+import { getTrainingAction, patchTrainingAction } from "../../store/training/thunks";
 import { TrainingTypeLabel } from "../../types/training/training-type.enum";
 import { SexTrainingLabel } from "../../types/sex.enum";
 import NotFoundScreen from "../not-found-screen/not-found-screen";
@@ -40,6 +40,8 @@ function TrainingCardScreen(): JSX.Element {
     title: training?.title
   });
   const authorMode = (user?.role === UserRole.Coach && training?.user.id === user.id);
+  const isProcess = useAppSelector(getTrainingSaveIsProcess);
+  const isSuccess = useAppSelector(getTrainingSaveIsSuccess);
 
   useEffect(() => {
     if (training) {
@@ -75,6 +77,25 @@ function TrainingCardScreen(): JSX.Element {
 
   const handleDescriptionChange = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTrainingData({...trainingData, description: evt.target.value});
+  }
+
+  const handlePriceChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    const price = Number(evt.target.value.replace(' ₽', ''));
+    if (typeof(price) === 'number'){
+      setTrainingData({...trainingData, price: price});
+    }
+  }
+
+  useEffect(() => {
+    if (isSuccess && !isProcess) {
+      setIsEdited(false);
+    }
+  }, [isSuccess, isProcess]);
+
+  const handleSaveForm = (evt: React.MouseEvent<HTMLButtonElement>) => {
+    evt.stopPropagation();
+    evt.preventDefault();
+    dispatch(patchTrainingAction({...trainingData, id: training?.id}));
   }
 
   if (!training) {
@@ -129,7 +150,7 @@ function TrainingCardScreen(): JSX.Element {
                     </div>
                   </div>
                   {(authorMode) && ((isEdited)
-                    ? <button className="btn-flat btn-flat--light btn-flat--underlined training-info__edit training-info__edit--edit" type="button">
+                    ? <button className="btn-flat btn-flat--light btn-flat--underlined training-info__edit training-info__edit--edit" type="button" onClick={handleSaveForm}>
                       <svg width="12" height="12" aria-hidden="true">
                         <use xlinkHref="#icon-edit"></use>
                       </svg><span>Сохранить</span>
@@ -153,7 +174,7 @@ function TrainingCardScreen(): JSX.Element {
                         </div>
                         <div className="training-info__textarea">
                           <label><span className="training-info__label">Описание тренировки</span>
-                            <textarea name="description" disabled={!isEdited} onChange={handleDescriptionChange}>{trainingData.description}</textarea>
+                            <textarea name="description" disabled={!isEdited} onChange={handleDescriptionChange} value={trainingData.description}></textarea>
                           </label>
                         </div>
                       </div>
@@ -182,7 +203,7 @@ function TrainingCardScreen(): JSX.Element {
                       <div className="training-info__price-wrapper">
                         <div className="training-info__input training-info__input--price">
                           <label><span className="training-info__label">Стоимость</span>
-                            <input type="text" name="price" value={`${training?.price} ₽`} disabled={!isEdited} />
+                            <input type="text" name="price" value={`${trainingData.price} ₽`} onChange={handlePriceChange} disabled={!isEdited} />
                           </label>
                           <div className="training-info__error">Введите число</div>
                         </div>

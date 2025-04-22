@@ -44,6 +44,7 @@ function UserInfo({ user }: UserInfoProps): JSX.Element {
       setIsEdited(false);
     }
   }, [isSuccess, isProcess]);
+
   const handleChangeIsReady = () => {
     if (!isEdited || !userData.questionnaire) {
       return;
