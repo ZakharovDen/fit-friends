@@ -8,6 +8,7 @@ import { UserLocation, UserLocationLabel } from "../../types/user/user-location.
 import { CustomSelect } from "../custom-select/custom-select";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { getIsProcess, getIsSuccess } from "../../store/user/selectors";
+import { UserRole } from "../../types/user/user-role.enum";
 
 function isSex(value: string): value is Sex {
   return Object.values(Sex).includes(value as Sex);
@@ -167,7 +168,10 @@ function UserInfo({ user }: UserInfoProps): JSX.Element {
               <span className="custom-toggle__icon">
                 <svg width="9" height="6" aria-hidden="true">
                   <use xlinkHref="#arrow-check"></use>
-                </svg></span><span className="custom-toggle__label">Готов к тренировке</span>
+                </svg></span>
+                <span className="custom-toggle__label">
+                  {(user.role === UserRole.Coach) ? `Готов тренировать` : `Готов к тренировке`}
+                </span>
             </label>
           </div>
         </div>
@@ -175,7 +179,7 @@ function UserInfo({ user }: UserInfoProps): JSX.Element {
           <h2 className="user-info__title user-info__title--specialization">Специализация</h2>
           <div className="specialization-checkbox user-info__specialization">
             {Object.entries(TrainingTypeLabel).map(([key, value]) => (
-              <div className="btn-checkbox">
+              <div className="btn-checkbox" key={key}>
                 <label>
                   <input
                     className="visually-hidden"
