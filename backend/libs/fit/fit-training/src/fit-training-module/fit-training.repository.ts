@@ -66,6 +66,9 @@ export class FitTrainingRepository extends BasePostgresRepository<FitTrainingEnt
         }
       }
     }
+    if (query.userId) {
+      where.userId = {equals: query.userId}
+    }
 
     // const ratingTrainings = await this.client.feedback.groupBy({
     //   by: ['trainingId'],

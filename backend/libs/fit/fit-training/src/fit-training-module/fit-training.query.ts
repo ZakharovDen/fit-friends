@@ -1,5 +1,5 @@
 import { Transform } from 'class-transformer';
-import { IsEnum, IsIn, IsNumber, IsOptional } from 'class-validator';
+import { IsEnum, IsIn, IsMongoId, IsNumber, IsOptional } from 'class-validator';
 
 import { ApiProperty } from '@nestjs/swagger';
 import { DEFAULT_COUNT_BY_PAGE_LIMIT, DEFAULT_PAGE_COUNT, DEFAULT_SORT_DIRECTION, DEFAULT_SORT_FIELD, DefaultCalories, DefaultPrice, DefaultRating, SortDirection, SortField } from './fit-training.constant';
@@ -64,8 +64,13 @@ export class FitTrainingQuery {
   @IsNumber()
   public maxRating?: number = DefaultRating.Max;
 
-  @ApiProperty({ description: 'Тип гитар', required: false, enum: TrainingType })
+  @ApiProperty({ description: 'Тип тренировки', required: false, enum: TrainingType })
   @IsIn(Object.values(TrainingType), { each: true })
   @IsOptional()
   public trainingType?: TrainingType[];
+
+  @ApiProperty({ description: 'Автор тренировки', required: false })
+  @IsOptional()
+  @IsMongoId()
+  public userId?: string;
 }

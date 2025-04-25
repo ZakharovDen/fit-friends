@@ -38,6 +38,25 @@ export class FitController {
     };
   }
 
+  @Get('my-trainings')
+  @ApiOperation({ summary: 'Список тренировок автора (тренера).' })
+  @ApiResponse({ status: HttpStatus.OK, type: FitTrainingWithPaginationRdo })
+  @ApiBearerAuth()
+  @UseGuards(CheckAuthGuard, RolesGuard)
+  @UseInterceptors(InjectUserIdInterceptor)
+  @Roles(UserRole.Coach)
+  public async getMyTrainings(
+    @UserId() userId: string,
+    @Query() query?: FitTrainingQuery
+  ): Promise<FitTrainingWithPaginationRdo> {
+    console.log(userId);
+    const trainings: FitTrainingWithPaginationRdo = (await this.httpService.axiosRef.get(ApplicationServiceURL.FitTrainings, { params: {...query, userId} })).data;
+    return {
+      ...trainings,
+      entities: trainings.entities.map((entity) => ({ ...entity, image: `${ApplicationServiceURL.File}/static${entity.image}` }))
+    };
+  }
+
   @Get('/filter-values')
   @ApiOperation({ summary: 'Минимальные и максимальные значения для фильтров.' })
   public async getFilterValues() {
