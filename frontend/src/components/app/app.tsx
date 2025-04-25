@@ -15,6 +15,8 @@ import PrivateRouteQuestionnaire from '../private-route-questionnaire/private-ro
 import PurchasesScreen from '../../pages/purchases-screen/purchases-screen';
 import CreateTrainingScreen from '../../pages/create-training-screen/create-training-screen';
 import UserCardScreen from '../../pages/user-card-screen/user-card-screen';
+import PrivateRouteRole from '../private-route-role/private-route-role';
+import { UserRole } from '../../types/user/user-role.enum';
 
 function App(): JSX.Element {
   return (
@@ -56,7 +58,11 @@ function App(): JSX.Element {
           />
           <Route
             path={AppRoute.CreateTraining}
-            element={<CreateTrainingScreen />}
+            element={
+              <PrivateRouteRole allowedRoles={[UserRole.Coach]}>
+                <CreateTrainingScreen />
+              </PrivateRouteRole>
+            }
           />
           <Route
             path={AppRoute.UserCard}
