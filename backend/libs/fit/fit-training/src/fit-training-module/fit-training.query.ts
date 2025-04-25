@@ -3,7 +3,7 @@ import { IsEnum, IsIn, IsMongoId, IsNumber, IsOptional } from 'class-validator';
 
 import { ApiProperty } from '@nestjs/swagger';
 import { DEFAULT_COUNT_BY_PAGE_LIMIT, DEFAULT_PAGE_COUNT, DEFAULT_SORT_DIRECTION, DEFAULT_SORT_FIELD, DefaultCalories, DefaultPrice, DefaultRating, SortDirection, SortField } from './fit-training.constant';
-import { TrainingType } from '@backend/core';
+import { TrainingDuration, TrainingType } from '@backend/core';
 
 
 export class FitTrainingQuery {
@@ -68,6 +68,11 @@ export class FitTrainingQuery {
   @IsIn(Object.values(TrainingType), { each: true })
   @IsOptional()
   public trainingType?: TrainingType[];
+
+  @ApiProperty({ description: 'Длительность тренировки', required: false, enum: TrainingDuration })
+  @IsEnum(TrainingDuration)
+  @IsOptional()
+  public duration?: TrainingDuration;
 
   @ApiProperty({ description: 'Автор тренировки', required: false })
   @IsOptional()

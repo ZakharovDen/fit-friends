@@ -66,6 +66,9 @@ export class FitTrainingRepository extends BasePostgresRepository<FitTrainingEnt
         }
       }
     }
+    if (query.duration) {
+      where.duration = {equals: query.duration}
+    }
     if (query.userId) {
       where.userId = {equals: query.userId}
     }
