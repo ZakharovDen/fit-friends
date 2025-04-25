@@ -40,6 +40,7 @@ export class FitTrainingRepository extends BasePostgresRepository<FitTrainingEnt
   }
 
   public async findAll(query?: FitTrainingQuery): Promise<PaginationResult<FitTrainingEntity>> {
+    console.dir(query);
     const skip = query?.page && query?.limit ? (query.page - 1) * query.limit : undefined;
     const take = query?.limit ? query?.limit : undefined;
     const where: Prisma.TrainingWhereInput = {};
@@ -66,8 +67,16 @@ export class FitTrainingRepository extends BasePostgresRepository<FitTrainingEnt
         }
       }
     }
-    if (query.duration) {
-      where.duration = {equals: query.duration}
+    if (query.trainingDuration) {
+      if (typeof query.trainingDuration === 'string') {
+        where.duration = {
+          equals: query.trainingDuration
+        }
+      } else {
+        where.duration = {
+          in: query.trainingDuration
+        }
+      }
     }
     if (query.userId) {
       where.userId = {equals: query.userId}

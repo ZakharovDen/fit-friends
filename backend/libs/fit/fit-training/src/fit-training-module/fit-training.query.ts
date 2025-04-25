@@ -70,9 +70,9 @@ export class FitTrainingQuery {
   public trainingType?: TrainingType[];
 
   @ApiProperty({ description: 'Длительность тренировки', required: false, enum: TrainingDuration })
-  @IsEnum(TrainingDuration)
+  @IsIn(Object.values(TrainingDuration), { each: true })
   @IsOptional()
-  public duration?: TrainingDuration;
+  public trainingDuration?: TrainingDuration[];
 
   @ApiProperty({ description: 'Автор тренировки', required: false })
   @IsOptional()

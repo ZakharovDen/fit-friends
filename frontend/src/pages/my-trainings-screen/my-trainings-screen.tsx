@@ -1,20 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BackButtonDisplayMode } from "../../components/back-button/constant";
 import { FilterSortingDisplayMode } from "../../components/filter-sorting/constant";
 import FilterSorting from "../../components/filter-sorting/filter-sorting";
-import { useAppSelector } from "../../hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks";
 import { getAllowedFilterValues, getTrainings } from "../../store/training/selectors";
 import { TrainingFilter } from "../../types/filter/training-filter";
-import { TrainingSort } from "../../types/filter/training-sort";
 import { QueryParams } from "../../types/training/query-params";
 import { COUNT_ITEMS_PER_PAGE } from "../training-catalog-screen/constant";
 import TrainingCatalogList from "../../components/training-catalog/training-catalog-list";
+import { fetchMyTrainingsAction, getFilterValuesAction } from "../../store/training/thunks";
 
 function MyTrainingsScreen(): JSX.Element {
+  const dispatch = useAppDispatch();
   const allowedFilterValues = useAppSelector(getAllowedFilterValues);
   const [queryParams, setQueryParams] = useState<QueryParams>({
-    sortBy: 'price',
-    sortOrder: 'asc',
     page: 1,
     limit: COUNT_ITEMS_PER_PAGE,
     minPrice: allowedFilterValues.price.min ?? 0,
@@ -25,20 +24,13 @@ function MyTrainingsScreen(): JSX.Element {
   const { entities, totalItems } = useAppSelector(getTrainings);
 
   const handleChangeFilter = (filterValues: TrainingFilter) => {
-    let sortOrder: QueryParams['sortOrder'] = 'asc';
-    if (filterValues.sort === TrainingSort.Higher) {
-      sortOrder = 'desc';
-    }
     setQueryParams({
       ...queryParams,
       minPrice: filterValues.price.min,
       maxPrice: filterValues.price.max,
       minCalories: filterValues.calories.min,
       maxCalories: filterValues.calories.max,
-      trainingType: filterValues.types,
-      sortBy: 'price',
-      sortOrder: sortOrder,
-      isFree: (filterValues.sort === TrainingSort.Free)
+      trainingDuration: filterValues.durations,
     });
   };
 
@@ -46,7 +38,15 @@ function MyTrainingsScreen(): JSX.Element {
     if (totalItems > queryParams.limit) {
       setQueryParams({ ...queryParams, limit: queryParams.limit + COUNT_ITEMS_PER_PAGE });
     }
-  }
+  };
+
+  useEffect(() => {
+    dispatch(getFilterValuesAction());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchMyTrainingsAction(queryParams));
+  }, [dispatch, queryParams]);
 
   return (
     <main>

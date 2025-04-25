@@ -1,3 +1,4 @@
+import { TrainingDuration } from "./training-duration.enum";
 import { TrainingType } from "./training-type.enum";
 
 export interface QueryParams {
@@ -12,5 +13,6 @@ export interface QueryParams {
   minRating?: number;
   maxRating?: number;
   trainingType?: TrainingType[];
+  trainingDuration?: TrainingDuration[];
   isFree?: boolean;
 }
