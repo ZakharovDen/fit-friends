@@ -5,11 +5,11 @@ import { useAppDispatch, useAppSelector } from "../../hooks";
 import { getAllowedFilterValues, getTrainings } from "../../store/training/selectors";
 import { fetchTrainingsAction, getFilterValuesAction } from "../../store/training/thunks";
 import { QueryParams } from "../../types/training/query-params";
-import { COUNT_ITEMS_PER_PAGE }from './constant';
+import { COUNT_ITEMS_PER_PAGE } from './constant';
 import { TrainingFilter } from "../../types/filter/training-filter";
 import { TrainingSort } from "../../types/filter/training-sort";
-import BackButton from "../../components/back-button/back-button";
 import { BackButtonDisplayMode } from "../../components/back-button/constant";
+import { FilterSortingDisplayMode } from "../../components/filter-sorting/constant";
 
 function TrainingCatalogScreen(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -25,7 +25,7 @@ function TrainingCatalogScreen(): JSX.Element {
     minCalories: allowedFilterValues.calories.min ?? 0,
     maxCalories: allowedFilterValues.calories.max ?? 0,
   });
-  
+
   useEffect(() => {
     dispatch(getFilterValuesAction());
   }, [dispatch]);
@@ -36,7 +36,7 @@ function TrainingCatalogScreen(): JSX.Element {
 
   const handleButtonMoreClick = () => {
     if (totalItems > queryParams.limit) {
-      setQueryParams({...queryParams, limit: queryParams.limit + COUNT_ITEMS_PER_PAGE});
+      setQueryParams({ ...queryParams, limit: queryParams.limit + COUNT_ITEMS_PER_PAGE });
     }
   }
 
@@ -46,8 +46,8 @@ function TrainingCatalogScreen(): JSX.Element {
       sortOrder = 'desc';
     }
     setQueryParams({
-      ...queryParams, 
-      minPrice: filterValues.price.min, 
+      ...queryParams,
+      minPrice: filterValues.price.min,
       maxPrice: filterValues.price.max,
       minCalories: filterValues.calories.min,
       maxCalories: filterValues.calories.max,
@@ -64,15 +64,17 @@ function TrainingCatalogScreen(): JSX.Element {
         <div className="container">
           <div className="inner-page__wrapper">
             <h1 className="visually-hidden">Каталог тренировок</h1>
-            <div className="gym-catalog-form">
-              <h2 className="visually-hidden">Мои тренировки Фильтр</h2>
-              <div className="gym-catalog-form__wrapper">
-                <BackButton displayMode={BackButtonDisplayMode.Catalog} />
-                <h3 className="gym-catalog-form__title">Фильтры</h3>
-                <FilterSorting allowedFilterValues={allowedFilterValues} onFilterChange={handleChangeFilter}/>
-              </div>
-            </div>
-            <TrainingCatalogList trainings={entities} onButtonMoreClick={handleButtonMoreClick} totalItems={totalItems}/>
+            <FilterSorting 
+              allowedFilterValues={allowedFilterValues} 
+              onFilterChange={handleChangeFilter} 
+              backButtonDisplayMode={BackButtonDisplayMode.Catalog} 
+              displayMode={FilterSortingDisplayMode.GymCatalog}
+            />
+            <TrainingCatalogList 
+              trainings={entities} 
+              onButtonMoreClick={handleButtonMoreClick} 
+              totalItems={totalItems} 
+            />
           </div>
         </div>
       </section>

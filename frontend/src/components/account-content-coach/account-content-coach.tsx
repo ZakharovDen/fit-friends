@@ -6,14 +6,14 @@ function AccountContentCoach(): JSX.Element {
     <div className="inner-page__content">
       <div className="personal-account-coach">
         <div className="personal-account-coach__navigation">
-          <a className="thumbnail-link thumbnail-link--theme-light" href="#">
+          <Link className="thumbnail-link thumbnail-link--theme-light" to={AppRoute.MyTrainings}>
             <div className="thumbnail-link__icon thumbnail-link__icon--theme-light">
               <svg width="30" height="26" aria-hidden="true">
                 <use xlinkHref="#icon-flash"></use>
               </svg>
             </div>
             <span className="thumbnail-link__text">Мои тренировки</span>
-          </a>
+          </Link>
           <Link className="thumbnail-link thumbnail-link--theme-light" to={AppRoute.CreateTraining}>
             <div className="thumbnail-link__icon thumbnail-link__icon--theme-light">
               <svg width="30" height="26" aria-hidden="true">

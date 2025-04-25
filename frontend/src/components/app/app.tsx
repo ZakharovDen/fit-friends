@@ -17,6 +17,7 @@ import CreateTrainingScreen from '../../pages/create-training-screen/create-trai
 import UserCardScreen from '../../pages/user-card-screen/user-card-screen';
 import PrivateRouteRole from '../private-route-role/private-route-role';
 import { UserRole } from '../../types/user/user-role.enum';
+import MyTrainingsScreen from '../../pages/my-trainings-screen/my-trainings-screen';
 
 function App(): JSX.Element {
   return (
@@ -71,6 +72,10 @@ function App(): JSX.Element {
           <Route
             path={AppRoute.UserCard}
             element={<UserCardScreen />}
+          />
+          <Route
+            path={AppRoute.MyTrainings}
+            element={<MyTrainingsScreen />}
           />
         </Route>
         <Route

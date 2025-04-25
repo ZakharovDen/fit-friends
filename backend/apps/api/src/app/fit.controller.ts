@@ -49,7 +49,6 @@ export class FitController {
     @UserId() userId: string,
     @Query() query?: FitTrainingQuery
   ): Promise<FitTrainingWithPaginationRdo> {
-    console.log(userId);
     const trainings: FitTrainingWithPaginationRdo = (await this.httpService.axiosRef.get(ApplicationServiceURL.FitTrainings, { params: {...query, userId} })).data;
     return {
       ...trainings,
