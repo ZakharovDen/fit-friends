@@ -38,7 +38,11 @@ function App(): JSX.Element {
         >
           <Route
             path={AppRoute.Main}
-            element={<MainScreen />}
+            element={
+              <PrivateRouteRole allowedRoles={[UserRole.Sportsman]} redirectTo={AppRoute.Account}>
+            <MainScreen />
+            </PrivateRouteRole>
+          }
           />
           <Route
             path={AppRoute.Catalog}
