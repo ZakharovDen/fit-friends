@@ -40,13 +40,15 @@ export class FitTrainingRepository extends BasePostgresRepository<FitTrainingEnt
   }
 
   public async findAll(query?: FitTrainingQuery): Promise<PaginationResult<FitTrainingEntity>> {
-    console.dir(query);
     const skip = query?.page && query?.limit ? (query.page - 1) * query.limit : undefined;
     const take = query?.limit ? query?.limit : undefined;
     const where: Prisma.TrainingWhereInput = {};
     let orderBy: Prisma.TrainingOrderByWithRelationInput = {};
     if (query.sortField === SortField.Price) {
       orderBy = { price: query.sortDirection };
+    }
+    if (query.sortField === SortField.CreateDate) {
+      orderBy = { createdAt: query.sortDirection };
     }
     where.price = {
       gte: (query?.minPrice) ?? query.minPrice,

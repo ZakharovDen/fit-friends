@@ -3,7 +3,7 @@ import { AxiosExceptionFilter } from "./filters/axios-exception.filter";
 import { HttpService } from "@nestjs/axios";
 import { ApplicationServiceURL } from "./app.config";
 import { ApiBearerAuth, ApiOperation, ApiResponse } from "@nestjs/swagger";
-import { FitTrainingQuery, FitTrainingRdo, FitTrainingWithPaginationRdo } from '@backend/fit-training';
+import { FitTrainingQuery, FitTrainingRdo, FitTrainingWithPaginationRdo, SortDirection, SortField } from '@backend/fit-training';
 import { CheckAuthGuard } from "./guards/check-auth.guard";
 import { CreateFeedBackDto, FitFeedBackRdo } from '@backend/fit-feedback';
 import { UserRdo } from "@backend/authentications";
@@ -49,6 +49,8 @@ export class FitController {
     @UserId() userId: string,
     @Query() query?: FitTrainingQuery
   ): Promise<FitTrainingWithPaginationRdo> {
+    query.sortField = SortField.CreateDate;
+    query.sortDirection = SortDirection.Desc;
     const trainings: FitTrainingWithPaginationRdo = (await this.httpService.axiosRef.get(ApplicationServiceURL.FitTrainings, { params: {...query, userId} })).data;
     return {
       ...trainings,
