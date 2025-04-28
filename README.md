@@ -99,8 +99,5 @@ npm start
 ```
 ### Backend
 ```bash
-npx nx run account:serve
-npx nx run fit:serve
-npx nx run file-vault:serve
-npx nx run api:serve
+npm run serve:all
 ```
