@@ -165,7 +165,7 @@ function TrainingCardScreen(): JSX.Element {
                       </picture>
                     </div>
                     <div className="training-info__coach-info">
-                      <span className="training-info__label">{`Тренер${authorMode}`}</span>
+                      <span className="training-info__label">{`Тренер`}</span>
                       <span className="training-info__name">{training?.user.name}</span>
                     </div>
                   </div>
