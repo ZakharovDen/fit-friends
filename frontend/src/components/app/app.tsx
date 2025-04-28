@@ -18,6 +18,7 @@ import UserCardScreen from '../../pages/user-card-screen/user-card-screen';
 import PrivateRouteRole from '../private-route-role/private-route-role';
 import { UserRole } from '../../types/user/user-role.enum';
 import MyTrainingsScreen from '../../pages/my-trainings-screen/my-trainings-screen';
+import MyOrdersScreen from '../../pages/my-orders-screen/my-orders-screen';
 
 function App(): JSX.Element {
   return (
@@ -41,9 +42,9 @@ function App(): JSX.Element {
             path={AppRoute.Main}
             element={
               <PrivateRouteRole allowedRoles={[UserRole.Sportsman]} redirectTo={AppRoute.Account}>
-            <MainScreen />
-            </PrivateRouteRole>
-          }
+                <MainScreen />
+              </PrivateRouteRole>
+            }
           />
           <Route
             path={AppRoute.Catalog}
@@ -75,7 +76,19 @@ function App(): JSX.Element {
           />
           <Route
             path={AppRoute.MyTrainings}
-            element={<MyTrainingsScreen />}
+            element={
+              <PrivateRouteRole allowedRoles={[UserRole.Coach]}>
+                <MyTrainingsScreen />
+              </PrivateRouteRole>
+            }
+          />
+          <Route
+            path={AppRoute.MyOrders}
+            element={
+              <PrivateRouteRole allowedRoles={[UserRole.Coach]}>
+                <MyOrdersScreen />
+              </PrivateRouteRole>
+            }
           />
         </Route>
         <Route
