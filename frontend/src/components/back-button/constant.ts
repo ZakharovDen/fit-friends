@@ -3,7 +3,8 @@ export enum BackButtonDisplayMode {
   User,
   Catalog,
   Training,
-  MyTraining
+  MyTraining,
+  MyOrders,
 }
 
 export const BackButtonClassName = {
@@ -12,4 +13,5 @@ export const BackButtonClassName = {
   [BackButtonDisplayMode.Catalog]: 'btn-flat--underlined gym-catalog-form__btnback',
   [BackButtonDisplayMode.Training]: 'btn-flat--underlined reviews-side-bar__back',
   [BackButtonDisplayMode.MyTraining]: 'btn-flat btn-flat--underlined my-training-form__btnback',
+  [BackButtonDisplayMode.MyOrders]: 'btn-flat btn-flat--underlined my-orders__back',
 } as const;

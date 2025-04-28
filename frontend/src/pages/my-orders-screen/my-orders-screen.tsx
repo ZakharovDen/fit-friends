@@ -1,14 +1,13 @@
+import BackButton from "../../components/back-button/back-button";
+import { BackButtonDisplayMode } from "../../components/back-button/constant";
+
 function MyOrdersScreen(): JSX.Element {
   return (
     <main>
       <section className="my-orders">
         <div className="container">
           <div className="my-orders__wrapper">
-            <button className="btn-flat btn-flat--underlined my-orders__back" type="button">
-              <svg width="14" height="10" aria-hidden="true">
-                <use xlinkHref="#arrow-left"></use>
-              </svg><span>Назад</span>
-            </button>
+            <BackButton displayMode={BackButtonDisplayMode.MyOrders} />
             <div className="my-orders__title-wrapper">
               <h1 className="my-orders__title">Мои заказы</h1>
               <div className="sort-for">
