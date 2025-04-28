@@ -60,8 +60,11 @@ export class FitController {
 
   @Get('/filter-values')
   @ApiOperation({ summary: 'Минимальные и максимальные значения для фильтров.' })
-  public async getFilterValues() {
-    const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.FitTrainings}/filter-values`)
+  public async getFilterValues(
+    @Query('authorId') authorId?: string
+  ) {
+    const params = (authorId) ? {authorId: authorId} : {};
+    const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.FitTrainings}/filter-values`, { params: params })
     return data;
   }
 

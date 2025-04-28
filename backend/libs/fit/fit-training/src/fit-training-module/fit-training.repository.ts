@@ -153,7 +153,7 @@ export class FitTrainingRepository extends BasePostgresRepository<FitTrainingEnt
     );
   }
 
-  public async getFilterValues() {
+  public async getFilterValues(authorId?: string) {
     const data = await this.client.training.aggregate(
       {
         _min: {
@@ -163,7 +163,8 @@ export class FitTrainingRepository extends BasePostgresRepository<FitTrainingEnt
         _max: {
           price: true,
           calories: true
-        }
+        },
+        where: {userId: authorId}
       }
     );
     return {

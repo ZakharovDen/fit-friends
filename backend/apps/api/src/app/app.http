@@ -10,3 +10,7 @@ Content-Type: application/json
 ###
 POST http://localhost:3000/api/users/check HTTP/1.1
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2RiYTE1MTllN2U3MGY3Y2NkNjQ1NTkiLCJlbWFpbCI6ImV4YW1wbGVAZW1haWwuY29tIiwibmFtZSI6Ikl2YW5vdiBJdmFuIiwiaWF0IjoxNzQyODIzNTA3LCJleHAiOjE3NDI4MjQ0MDd9.XN03SJ16qIxiNps0VUi4WM3fHm_CXEdSfoqijcBkXcU
+
+###
+GET http://localhost:3000/api/fit/filter-values?authorId=67fe232fe6bab933340924fe
+Content-Type: application/json

@@ -46,8 +46,10 @@ export class FitTrainingController {
 
   @Get('/filter-values')
   @ApiOperation({ summary: 'Минимальные и максимальные значения для фильтров.' })
-  public async getFilterValues(){
-    return await this.fitTrainingService.getFilterValues();
+  public async getFilterValues(
+    @Query('authorId') authorId?: string
+  ){
+    return await this.fitTrainingService.getFilterValues(authorId);
   }
 
   @Get(':id')

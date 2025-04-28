@@ -128,14 +128,14 @@ export const patchTrainingAction = createAsyncThunk<Training, TrainingUpdateData
   },
 );
 
-export const getFilterValuesAction = createAsyncThunk<AllowedFilterValues, undefined, {
+export const getFilterValuesAction = createAsyncThunk<AllowedFilterValues, string | undefined, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }>(
   'data/getFilterValues',
-  async (_arg, { extra: api }) => {
-    const { data } = await api.get<AllowedFilterValues>(`${APIRoute.Fit}/filter-values`);
+  async (authorId, { extra: api }) => {
+    const { data } = await api.get<AllowedFilterValues>(`${APIRoute.Fit}/filter-values`, {params: { authorId }});
     return data;
   },
 );

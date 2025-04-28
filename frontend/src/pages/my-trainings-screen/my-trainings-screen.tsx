@@ -41,7 +41,7 @@ function MyTrainingsScreen(): JSX.Element {
   };
 
   useEffect(() => {
-    dispatch(getFilterValuesAction());
+    dispatch(getFilterValuesAction('67fe232fe6bab933340924fe'));
   }, [dispatch]);
 
   useEffect(() => {

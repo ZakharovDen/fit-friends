@@ -40,8 +40,8 @@ export class FitTrainingService {
     return await this.fitTrainingRepository.findById(id);
   }
 
-  public async getFilterValues() {
-    return await this.fitTrainingRepository.getFilterValues();
+  public async getFilterValues(authorId?: string) {
+    return await this.fitTrainingRepository.getFilterValues(authorId);
   }
 
 }
