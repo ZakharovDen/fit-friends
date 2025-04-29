@@ -16,8 +16,9 @@ import { CreateTrainingDto } from "./dto/create-training.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { UpdateTrainingDto } from "./dto/update-training.dto";
 import { Roles } from "./decorators/roles.decorator";
-import { UserRole } from "@backend/core";
+import { Feedback, UserRole } from "@backend/core";
 import { RolesGuard } from "./guards/roles.guard";
+import { PathInterceptor } from "./interceptors/path.interceptor";
 
 @Controller('fit')
 @UseFilters(AxiosExceptionFilter)
@@ -30,12 +31,10 @@ export class FitController {
   @Get('trainings')
   @ApiOperation({ summary: 'Список тренировок.' })
   @ApiResponse({ status: HttpStatus.OK, type: FitTrainingWithPaginationRdo })
+  @UseInterceptors(new PathInterceptor({ fields: 'image' }))
   public async getAllTrainings(@Query() query?: FitTrainingQuery): Promise<FitTrainingWithPaginationRdo> {
     const trainings: FitTrainingWithPaginationRdo = (await this.httpService.axiosRef.get(ApplicationServiceURL.FitTrainings, { params: query })).data;
-    return {
-      ...trainings,
-      entities: trainings.entities.map((entity) => ({ ...entity, image: `${ApplicationServiceURL.File}/static${entity.image}` }))
-    };
+    return trainings;
   }
 
   @Get('my-trainings')
@@ -45,6 +44,7 @@ export class FitController {
   @UseGuards(CheckAuthGuard, RolesGuard)
   @UseInterceptors(InjectUserIdInterceptor)
   @Roles(UserRole.Coach)
+  @UseInterceptors(new PathInterceptor({ fields: 'image' }))
   public async getMyTrainings(
     @UserId() userId: string,
     @Query() query?: FitTrainingQuery
@@ -52,10 +52,7 @@ export class FitController {
     query.sortField = SortField.CreateDate;
     query.sortDirection = SortDirection.Desc;
     const trainings: FitTrainingWithPaginationRdo = (await this.httpService.axiosRef.get(ApplicationServiceURL.FitTrainings, { params: {...query, userId} })).data;
-    return {
-      ...trainings,
-      entities: trainings.entities.map((entity) => ({ ...entity, image: `${ApplicationServiceURL.File}/static${entity.image}` }))
-    };
+    return trainings;
   }
 
   @Get('/filter-values')
@@ -74,10 +71,11 @@ export class FitController {
   @SerializeOptions({ type: TrainingWithUserRdo })
   @ApiBearerAuth()
   @UseGuards(CheckAuthGuard)
+  @UseInterceptors(new PathInterceptor({ fields: 'user.avatar' }))
   public async getTrainingById(@Param('id') id: string) {
     const training: FitTrainingRdo = (await this.httpService.axiosRef.get(`${ApplicationServiceURL.FitTrainings}/${id}`)).data;
     const user: UserRdo = (await this.httpService.axiosRef.get(`${ApplicationServiceURL.Users}/${training.userId}`)).data;
-    const trainingWithUser: TrainingWithUserRdo = { ...training, user: { ...user, avatar: `${ApplicationServiceURL.File}/static${user.avatar}` } };
+    const trainingWithUser: TrainingWithUserRdo = { ...training, user};
     return trainingWithUser;
   }
 
@@ -87,14 +85,14 @@ export class FitController {
   @ApiBearerAuth()
   @UseGuards(CheckAuthGuard)
   @UseInterceptors(InjectUserIdInterceptor)
+  @UseInterceptors(new PathInterceptor({ fields: 'user.avatar' }))
   public async create(
     @Body() dto: CreateFeedBackDto,
     @UserId() userId: string
   ) {
     dto.userId = userId;
-    const feedback = (await this.httpService.axiosRef.post(ApplicationServiceURL.FitFeedbacks, dto)).data;
-    await this.appService.appendUser([feedback]);
-    return { ...feedback, user: { ...feedback.user, avatar: `${ApplicationServiceURL.File}/static${feedback.user.avatar}` } };
+    const feedback: Feedback = (await this.httpService.axiosRef.post(ApplicationServiceURL.FitFeedbacks, dto)).data;
+    return await this.appService.appendUser([feedback]);
   }
 
   @Get('feedback/:trainingId')
@@ -103,10 +101,13 @@ export class FitController {
   @ApiBearerAuth()
   @UseGuards(CheckAuthGuard)
   @SerializeOptions({ type: FeedbackWithUserRdo })
-  public async findByTrainingId(@Param('trainingId') trainingId: string) {
-    const feedbacks = (await this.httpService.axiosRef.get(`${ApplicationServiceURL.FitFeedbacks}/${trainingId}`)).data;
-    await this.appService.appendUser(feedbacks);
-    return feedbacks.map((feedback) => ({ ...feedback, user: { ...feedback.user, avatar: `${ApplicationServiceURL.File}/static${feedback.user.avatar}` } }));
+  @UseInterceptors(new PathInterceptor({ fields: 'user.avatar' }))
+  public async findByTrainingId(
+    @Param('trainingId') trainingId: string
+  ) {
+    const feedbacks: Feedback[] = (await this.httpService.axiosRef.get(`${ApplicationServiceURL.FitFeedbacks}/${trainingId}`)).data;
+    const feedbacksWithUser = await this.appService.appendUser(feedbacks);
+    return feedbacksWithUser;
   }
 
   @Post('trainings')
@@ -117,6 +118,7 @@ export class FitController {
   @UseGuards(CheckAuthGuard, RolesGuard)
   @UseInterceptors(InjectUserIdInterceptor)
   @Roles(UserRole.Coach)
+  @UseInterceptors(new PathInterceptor({ fields: 'image' }))
   public async createTraining(
     @UserId() userId: string,
     @Body() dto: CreateTrainingDto,
@@ -129,10 +131,7 @@ export class FitController {
     }),) video?: Express.Multer.File
   ): Promise<FitTrainingRdo> {
     const training: FitTrainingRdo = (await this.httpService.axiosRef.post(ApplicationServiceURL.FitTrainings, { ...dto, userId })).data;
-    return {
-      ...training,
-      image: `${ApplicationServiceURL.File}/static${training.image}`
-    };
+    return training;
   }
 
   @Patch('trainings/:id')
@@ -142,16 +141,14 @@ export class FitController {
   @UseGuards(CheckAuthGuard, RolesGuard)
   @UseInterceptors(InjectUserIdInterceptor)
   @Roles(UserRole.Coach)
+  @UseInterceptors(new PathInterceptor({ fields: 'image' }))
   public async updateTraining(
     @UserId() userId: string,
     @Body() dto: UpdateTrainingDto,
     @Param('id') id: string,
   ): Promise<FitTrainingRdo> {
     const training: FitTrainingRdo = (await this.httpService.axiosRef.patch(`${ApplicationServiceURL.FitTrainings}/${id}`, dto, { params: { userId } })).data;
-    return {
-      ...training,
-      image: `${ApplicationServiceURL.File}/static${training.image}`
-    };
+    return training;
   }
 
 }

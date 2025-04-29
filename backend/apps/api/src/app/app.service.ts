@@ -6,6 +6,7 @@ import 'multer';
 import { createUrlForFile } from "@backend/helpers";
 import FormData from 'form-data';
 import { UserRdo } from "@backend/authentications";
+import { FeedbackWithUserRdo } from "./rdo/feedback-with-user.rdo";
 
 @Injectable()
 export class AppService {
@@ -26,7 +27,7 @@ export class AppService {
     return createUrlForFile(fileMetaData, ApplicationServiceURL.File);
   }
 
-  public async appendUser(feedbacks: Feedback[]): Promise<void> {
+  public async appendUser(feedbacks: Feedback[]): Promise<FeedbackWithUserRdo[]> {
     const usersIds = feedbacks.map((feedback) => feedback.userId);
     const uniqUserIds = new Set(usersIds);
 
@@ -35,10 +36,19 @@ export class AppService {
         async (userId) => (await this.httpService.axiosRef.get(`${ApplicationServiceURL.Users}/${userId}`)).data
       )
     );
-
+    const feedbacksWithUser: FeedbackWithUserRdo[] = [];
     feedbacks.forEach((feedback) => {
-      feedback['user'] = users.find((user) => user.id === feedback.userId);
+      feedbacksWithUser.push({
+        id: feedback.id,
+        trainingId: feedback.trainingId,
+        createdAt: feedback.createdAt,
+        rating: feedback.rating,
+        text: feedback.text,
+        updatedAt: feedback.createdAt,
+        user: users.find((user) => user.id === feedback.userId)
+      })
     });
+    return feedbacksWithUser;
   }
 
   public async matchRoles(roles: UserRole[], role: UserRole){

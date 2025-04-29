@@ -15,9 +15,11 @@ import { AppService } from './app.service';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { plainToInstance } from 'class-transformer';
 import { UserId } from './decorators/user-id.decorator';
+import { PathInterceptor } from './interceptors/path.interceptor';
 
 @Controller('users')
 @UseFilters(AxiosExceptionFilter)
+@UseInterceptors(new PathInterceptor({ fields: 'avatar' }))
 export class UsersController {
   constructor(
     private readonly httpService: HttpService,
@@ -37,7 +39,7 @@ export class UsersController {
   @Get(':id')
   public async getById(@Param('id') id: string): Promise<UserRdo> {
     const data: UserRdo = (await this.httpService.axiosRef.get(`${ApplicationServiceURL.Users}/${id}`)).data;
-    return {...data, avatar: `${ApplicationServiceURL.File}/static${data.avatar}`};
+    return data;
   }
 
   @Post()
@@ -70,7 +72,7 @@ export class UsersController {
       newUser.avatar = await this.appService.uploadFile(avatar);
     }
     const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Users}/register`, newUser);
-    return {...data, avatar: `${ApplicationServiceURL.File}/static${data.avatar}`};
+    return data;
   }
 
   @ApiOperation({ summary: 'Авторизация пользователя.' })
@@ -86,7 +88,7 @@ export class UsersController {
   @Post('login')
   public async login(@Body() loginUserDto: LoginUserDto) {
     const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Users}/login`, loginUserDto);
-    return {...data, avatar: `${ApplicationServiceURL.File}/static${data.avatar}`};
+    return data;
   }
 
   @ApiOperation({ summary: 'Редактирование пользователя.' })
@@ -103,7 +105,7 @@ export class UsersController {
     @Body() dto: UpdateUserDto
   ) {
     const { data } = await this.httpService.axiosRef.patch(`${ApplicationServiceURL.Users}/user/${userId}`, dto);
-    return {...data, avatar: `${ApplicationServiceURL.File}/static${data.avatar}`};
+    return data;
   }
 
   @ApiOperation({ summary: 'Проверка состояния пользователя' })
@@ -117,7 +119,7 @@ export class UsersController {
         'Authorization': req.headers['authorization']
       }
     });
-    return {...data, avatar: `${ApplicationServiceURL.File}/static${data.avatar}`};;
+    return data;
   }
 
   @Post('/questionnaire')
@@ -131,7 +133,7 @@ export class UsersController {
     @Body() dto: CreateQuestionnaireDto
   ) {
     const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Users}/questionnaire/${userId}`, dto);
-    return {...data, avatar: `${ApplicationServiceURL.File}/static${data.avatar}`};
+    return data;
   }
 
   @Patch('/questionnaire')
@@ -142,6 +144,6 @@ export class UsersController {
     @Body() dto: UpdateQuestionnaireDto
   ) {
     const { data } = await this.httpService.axiosRef.patch(`${ApplicationServiceURL.Users}/questionnaire/${userId}`, dto);
-    return {...data, avatar: `${ApplicationServiceURL.File}/static${data.avatar}`};
+    return data;
   }
 }

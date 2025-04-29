@@ -3,8 +3,8 @@ POST http://localhost:3000/api/users/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "example@email.com",
-  "password": "Pa$w0rD"
+  "email": "user@local.local",
+  "password": "123456"
 }
 
 ###
@@ -14,3 +14,17 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2N2RiYTE1M
 ###
 GET http://localhost:3000/api/fit/filter-values?authorId=67fe232fe6bab933340924fe
 Content-Type: application/json
+
+###
+GET http://localhost:3000/api/fit/trainings
+Content-Type: application/json
+
+###
+GET http://localhost:3000/api/fit/trainings/c0bca297-7a25-48ab-8514-2d7d08742d74
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NTgxNzBjYmI5NTRlOWY1YjkwNWNjZjQiLCJlbWFpbCI6InVzZXJAbG9jYWwubG9jYWwiLCJuYW1lIjoi0JLQsNC70LXRgNC40Y8iLCJpYXQiOjE3NDU5MjAzMjUsImV4cCI6MTc0NTkyMTIyNX0.pRJmUdJKhV5IqAc0719oSI-uu5tKLTVkBkYZKnePJJ0
+
+###
+GET http://localhost:3000/api/fit/feedback/c0bca297-7a25-48ab-8514-2d7d08742d74
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NTgxNzBjYmI5NTRlOWY1YjkwNWNjZjQiLCJlbWFpbCI6InVzZXJAbG9jYWwubG9jYWwiLCJuYW1lIjoi0JLQsNC70LXRgNC40Y8iLCJpYXQiOjE3NDU5MjAzMjUsImV4cCI6MTc0NTkyMTIyNX0.pRJmUdJKhV5IqAc0719oSI-uu5tKLTVkBkYZKnePJJ0
