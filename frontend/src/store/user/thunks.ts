@@ -66,3 +66,15 @@ export const addQuestionnaireAction = createAsyncThunk<User, Questionnaire, {
     return data;
   }
 );
+
+export const getUserInfoAction = createAsyncThunk<User, string | undefined, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'data/getUserInfo',
+  async (id, { extra: api }) => {
+    const { data } = await api.get<User>(`${APIRoute.Users}/${id}`);
+    return data;
+  },
+);

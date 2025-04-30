@@ -8,3 +8,4 @@ export const getUser = (state: State): User | undefined => state[NameSpace.User]
 export const getIsProcess = (state: State): boolean => state[NameSpace.User].isProcess;
 export const getIsSuccess = (state: State): boolean => state[NameSpace.User].isSuccess;
 export const getIsQuestionnaireCompleted = (state: State): boolean => state[NameSpace.User].isQuestionnaireCompleted;
+export const getUserInfo = (state: State): User | undefined => state[NameSpace.User].userInfo;

@@ -1,7 +1,23 @@
+import { useParams } from "react-router-dom";
 import BackButton from "../../components/back-button/back-button";
 import { BackButtonDisplayMode } from "../../components/back-button/constant";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { getUserInfoAction } from "../../store/user/thunks";
+import { getUserInfo } from "../../store/user/selectors";
+import { UserLocationLabel } from "../../types/user/user-location.enum";
+import { TrainingType, TrainingTypeLabel } from "../../types/training/training-type.enum";
 
 function UserCardScreen(): JSX.Element {
+  const dispatch = useAppDispatch();
+  const params = useParams();
+  useEffect(() => {
+    const { id } = params;
+    if (id) {
+      dispatch(getUserInfoAction(id));
+    }
+  }, [params, dispatch]);
+  const userInfo = useAppSelector(getUserInfo);
   return (
     <main>
       <div className="inner-page inner-page--no-sidebar">
@@ -15,12 +31,12 @@ function UserCardScreen(): JSX.Element {
                   <div className="user-card-coach__card">
                     <div className="user-card-coach__content">
                       <div className="user-card-coach__head">
-                        <h2 className="user-card-coach__title">Валерия</h2>
+                        <h2 className="user-card-coach__title">{userInfo?.name}</h2>
                       </div>
                       <div className="user-card-coach__label">
                         <a href="popup-user-map.html"><svg className="user-card-coach__icon-location" width="12" height="14" aria-hidden="true">
                           <use xlinkHref="#icon-location"></use>
-                        </svg><span>Адмиралтейская</span></a>
+                        </svg><span>{userInfo?.location && UserLocationLabel[userInfo?.location]}</span></a>
                       </div>
                       <div className="user-card-coach__status-container">
                         <div className="user-card-coach__status user-card-coach__status--tag">
@@ -28,11 +44,13 @@ function UserCardScreen(): JSX.Element {
                             <use xlinkHref="#icon-cup"></use>
                           </svg><span>Тренер</span>
                         </div>
-                        <div className="user-card-coach__status user-card-coach__status--check"><span>Готов тренировать</span></div>
+                        {userInfo?.questionnaire?.isReady
+                          ? <div className="user-card-coach__status user-card-coach__status--check"><span>Готов тренировать</span></div>
+                          : <div className="user-card-coach-2__status user-card-coach-2__status--check"><span>Не готов тренировать</span></div>
+                        }
                       </div>
                       <div className="user-card-coach__text">
-                        <p>Привет! Меня зовут Иванова Валерия, мне 34 года. Я&nbsp;профессиональный тренер по&nbsp;боксу. Не&nbsp;боюсь пробовать новое, также увлекаюсь кроссфитом, йогой и&nbsp;силовыми тренировками.</p>
-                        <p>Провожу как индивидуальные тренировки, так и&nbsp;групповые занятия. Помогу вам достигнуть своей цели и&nbsp;сделать это с&nbsp;удовольствием!</p>
+                        {userInfo?.description}
                       </div>
                       <button className="btn-flat user-card-coach__sertificate" type="button">
                         <svg width="12" height="13" aria-hidden="true">
@@ -40,18 +58,17 @@ function UserCardScreen(): JSX.Element {
                         </svg><span>Посмотреть сертификаты</span>
                       </button>
                       <ul className="user-card-coach__hashtag-list">
-                        <li className="user-card-coach__hashtag-item">
-                          <div className="hashtag"><span>#бокс</span></div>
-                        </li>
-                        <li className="user-card-coach__hashtag-item">
-                          <div className="hashtag"><span>#кроссфит</span></div>
-                        </li>
-                        <li className="user-card-coach__hashtag-item">
-                          <div className="hashtag"><span>#силовые</span></div>
-                        </li>
-                        <li className="user-card-coach__hashtag-item">
-                          <div className="hashtag"><span>#йога</span></div>
-                        </li>
+                        {Object.entries(TrainingTypeLabel)
+                          .map(([key, value]) => {
+                            if (userInfo?.questionnaire?.types.includes(key as TrainingType)) {
+                              return (
+                                <li className="user-card-coach__hashtag-item" key={key}>
+                                  <div className="hashtag"><span>{`#${value.toLowerCase()}`}</span></div>
+                                </li>
+                              );
+                            }
+                          })
+                        }
                       </ul>
                       <button className="btn user-card-coach__btn" type="button">Добавить в друзья</button>
                     </div>

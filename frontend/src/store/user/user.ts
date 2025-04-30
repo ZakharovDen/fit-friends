@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { NameSpace } from '../const';
-import { addQuestionnaireAction, checkAuthAction, editUserAction, loginAction, registerAction } from './thunks';
+import { addQuestionnaireAction, checkAuthAction, editUserAction, getUserInfoAction, loginAction, registerAction } from './thunks';
 import { AuthorizationStatus } from '../../constant';
 import { User } from '../../types/user/user';
 
@@ -10,6 +10,7 @@ type InitialState = {
   isProcess: boolean;
   isSuccess: boolean;
   isQuestionnaireCompleted: boolean;
+  userInfo: User | undefined;
 };
 
 const initialState: InitialState = {
@@ -18,6 +19,7 @@ const initialState: InitialState = {
   isProcess: false,
   isSuccess: false,
   isQuestionnaireCompleted: false,
+  userInfo: undefined,
 };
 
 export const user = createSlice({
@@ -88,6 +90,9 @@ export const user = createSlice({
         state.user = action.payload;
         state.isProcess = false;
         state.isSuccess = true;
+      })
+      .addCase(getUserInfoAction.fulfilled, (state, action) => {
+        state.userInfo = action.payload;
       });
   },
 });
