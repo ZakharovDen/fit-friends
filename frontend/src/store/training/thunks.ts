@@ -21,7 +21,8 @@ const getQuery = (queryParams: QueryParams) => {
     isFree, 
     trainingDuration, 
     maxRating, 
-    minRating 
+    minRating,
+    userId
   } = queryParams;
   let query = '';
   if (page) {
@@ -69,6 +70,9 @@ const getQuery = (queryParams: QueryParams) => {
   if (maxRating) {
     query += `&maxRating=${maxRating}`;
   }
+  if (userId) {
+    query += `&userId=${userId}`;
+  }
   return query;
 }
 
@@ -85,7 +89,7 @@ export const fetchTrainingsAction = createAsyncThunk<TrainingsWithPagination, an
   },
 );
 
-export const fetchMyTrainingsAction = createAsyncThunk<TrainingsWithPagination, any, {
+export const fetchMyTrainingsAction = createAsyncThunk<TrainingsWithPagination, QueryParams, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;

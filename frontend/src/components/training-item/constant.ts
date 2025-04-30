@@ -2,6 +2,7 @@ export enum TrainingItemDisplayMode {
   Catalog,
   Popular,
   Purchase,
+  UserCardCoach,
 }
 
 export const TrainingItemSettings = {
@@ -16,5 +17,9 @@ export const TrainingItemSettings = {
   [TrainingItemDisplayMode.Purchase]:
   {
     itemClass: 'my-purchases__item',
+  },
+  [TrainingItemDisplayMode.UserCardCoach]:
+  {
+    itemClass: 'user-card-coach__training-item',
   },
 } as const;

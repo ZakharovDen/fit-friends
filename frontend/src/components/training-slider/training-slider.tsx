@@ -4,12 +4,15 @@ import TrainingItem from '../training-item/training-item';
 import { TrainingItemDisplayMode } from '../training-item/constant';
 import { useNavigate } from 'react-router-dom';
 import { AppRoute } from '../../constant';
+import { TrainingSliderDisplayMode, TrainingSliderSettings } from './constant';
 
 type TrainingSliderProps = {
   trainings: Training[];
+  trainingSliderDisplayMode: TrainingSliderDisplayMode,
+  trainingItemDisplayMode: TrainingItemDisplayMode,
 }
 
-function TrainingSlider({ trainings }: TrainingSliderProps): JSX.Element {
+function TrainingSlider({ trainings, trainingSliderDisplayMode }: TrainingSliderProps): JSX.Element {
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [transitionEnabled, setTransitionEnabled] = useState(true);
@@ -45,8 +48,8 @@ function TrainingSlider({ trainings }: TrainingSliderProps): JSX.Element {
   };
 
   useEffect(() => {
-    if ((!canGoNext && currentIndex === trainings.length - visibleItems) || 
-        (!canGoPrev && currentIndex === 0)) {
+    if ((!canGoNext && currentIndex === trainings.length - visibleItems) ||
+      (!canGoPrev && currentIndex === 0)) {
       setTransitionEnabled(false);
     } else {
       setTransitionEnabled(true);
@@ -69,53 +72,59 @@ function TrainingSlider({ trainings }: TrainingSliderProps): JSX.Element {
   };
 
   return (
-    <section className="popular-trainings">
-      <div className="container">
-        <div className="popular-trainings__wrapper">
-          <div className="popular-trainings__title-wrapper">
-            <h2 className="popular-trainings__title">Популярные тренировки</h2>
-            <button className="btn-flat popular-trainings__button" type="button" onClick={() => navigate(AppRoute.Catalog)}><span>Смотреть все</span>
-            <svg width="14" height="10" aria-hidden="true">
-                  <use xlinkHref="#arrow-right"></use>
-                </svg>
-              </button>
-            <div className="popular-trainings__controls">
-              <button
-                className={`btn-icon popular-trainings__control ${!canGoPrev ? 'disabled' : ''}`}
-                type="button"
-                aria-label="previous"
-                onClick={() => goToSlide('prev')}
-                disabled={!canGoPrev}
-              >
-                <svg width="16" height="14" aria-hidden="true">
-                  <use xlinkHref="#arrow-left"></use>
-                </svg>
-              </button>
-              <button
-                className={`btn-icon popular-trainings__control ${!canGoNext ? 'disabled' : ''}`}
-                type="button"
-                aria-label="next"
-                onClick={() => goToSlide('next')}
-                disabled={!canGoNext}
-              >
-                <svg width="16" height="14" aria-hidden="true">
-                  <use xlinkHref="#arrow-right"></use>
-                </svg>
-              </button>
-            </div>
-          </div>
-          <div 
-            className="popular-trainings__list-wrapper" 
-            ref={containerRef}
-            style={containerStyle}
+    <div className={TrainingSliderSettings[trainingSliderDisplayMode].firstDivClass}>
+      <div className={TrainingSliderSettings[trainingSliderDisplayMode].secondDivClass}>
+        <h2 className={TrainingSliderSettings[trainingSliderDisplayMode].titleClass}>
+          {TrainingSliderSettings[trainingSliderDisplayMode].title}
+        </h2>
+        {trainingSliderDisplayMode === TrainingSliderDisplayMode.Popular &&
+          <button
+            className="btn-flat popular-trainings__button"
+            type="button"
+            onClick={() => navigate(AppRoute.Catalog)}
           >
-            <ul className="popular-trainings__list" ref={listRef} style={listStyle}>
-              {trainings.map((training) => <TrainingItem displayMode={TrainingItemDisplayMode.Popular} training={training} key={training.id} />)}
-            </ul>
-            </div>
+            <span>Смотреть все</span>
+            <svg width="14" height="10" aria-hidden="true">
+              <use xlinkHref="#arrow-right"></use>
+            </svg>
+          </button>
+        }
+
+        <div className="popular-trainings__controls">
+          <button
+            className={`btn-icon popular-trainings__control ${!canGoPrev ? 'disabled' : ''}`}
+            type="button"
+            aria-label="previous"
+            onClick={() => goToSlide('prev')}
+            disabled={!canGoPrev}
+          >
+            <svg width="16" height="14" aria-hidden="true">
+              <use xlinkHref="#arrow-left"></use>
+            </svg>
+          </button>
+          <button
+            className={`btn-icon popular-trainings__control ${!canGoNext ? 'disabled' : ''}`}
+            type="button"
+            aria-label="next"
+            onClick={() => goToSlide('next')}
+            disabled={!canGoNext}
+          >
+            <svg width="16" height="14" aria-hidden="true">
+              <use xlinkHref="#arrow-right"></use>
+            </svg>
+          </button>
         </div>
       </div>
-    </section>
+      <div
+        className="popular-trainings__list-wrapper"
+        ref={containerRef}
+        style={containerStyle}
+      >
+        <ul className="popular-trainings__list" ref={listRef} style={listStyle}>
+          {trainings.map((training) => <TrainingItem displayMode={TrainingItemDisplayMode.Popular} training={training} key={training.id} />)}
+        </ul>
+      </div>
+    </div>
   );
 };
 

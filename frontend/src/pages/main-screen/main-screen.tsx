@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { QueryParams } from "../../types/training/query-params";
 import { fetchTrainingsAction } from "../../store/training/thunks";
 import TrainingSlider from "../../components/training-slider/training-slider";
+import { TrainingSliderDisplayMode } from "../../components/training-slider/constant";
+import { TrainingItemDisplayMode } from "../../components/training-item/constant";
 
 function MainScreen(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -229,7 +231,15 @@ function MainScreen(): JSX.Element {
           </div>
         </div>
       </section>
-      <TrainingSlider trainings={entities} />
+      <section className="popular-trainings">
+        <div className="container">
+          <TrainingSlider 
+            trainings={entities} 
+            trainingSliderDisplayMode={TrainingSliderDisplayMode.Popular} 
+            trainingItemDisplayMode={TrainingItemDisplayMode.Popular} 
+          />
+        </div>
+      </section>
     </main>
   );
 }
