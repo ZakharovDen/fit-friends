@@ -14,5 +14,8 @@ export type TrainingFilter = {
   types: TrainingType[];
   durations: TrainingDuration[];
   sort: TrainingSort;
-  rating: [number, number];
+  rating: {
+    min: number;
+    max: number;
+  };
 };

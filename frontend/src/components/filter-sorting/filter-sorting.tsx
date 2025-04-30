@@ -24,7 +24,7 @@ function FilterSorting({ allowedFilterValues, onFilterChange, backButtonDisplayM
     calories: { min: allowedFilterValues.calories.min ?? 0, max: allowedFilterValues.calories.max ?? 0 },
     types: [],
     sort: TrainingSort.Lower,
-    rating: [1, 5],
+    rating: { min: 1, max: 5 },
     durations: []
   };
   const classPrefix = FilterSortingSettings[displayMode].classPrefix;
@@ -39,6 +39,10 @@ function FilterSorting({ allowedFilterValues, onFilterChange, backButtonDisplayM
 
   const handleChangePrice = (priceValues: TrainingFilter['price']) => {
     setFilterValues({ ...filterValues, price: { min: priceValues.min, max: priceValues.max } });
+  }
+
+  const handleChangeRating = (ratingValues: TrainingFilter['rating']) => {
+    setFilterValues({ ...filterValues, rating: { min: ratingValues.min, max: ratingValues.max } });
   }
 
   const handleChangeCalories = (caloriesValues: TrainingFilter['calories']) => {
@@ -113,9 +117,16 @@ function FilterSorting({ allowedFilterValues, onFilterChange, backButtonDisplayM
           </div>
         </div> */}
           </div>
-
-          <SliderRange className="filter-range" maxRangeValue={5} minRangeValue={1} isShowValues={true} />
-
+          <div className="gym-catalog-form__block gym-catalog-form__block--rating">
+            <h4 className="gym-catalog-form__block-title">Рейтинг</h4>
+            <SliderRange
+              className="filter-raiting"
+              maxRangeValue={defaultFilter.rating.max}
+              minRangeValue={defaultFilter.rating.min}
+              isShowValues={true}
+              onChange={handleChangeRating}
+            />
+          </div>
           {
             (displayMode === FilterSortingDisplayMode.GymCatalog) &&
             <div className={`${classPrefix}-form__block ${classPrefix}-form__block--type`}>
@@ -147,7 +158,7 @@ function FilterSorting({ allowedFilterValues, onFilterChange, backButtonDisplayM
             </div>
           }
 
-{
+          {
             (displayMode === FilterSortingDisplayMode.MyTraining) &&
             <div className={`${classPrefix}-form__block ${classPrefix}-form__block--type`}>
               <h4 className={`${classPrefix}-form__block-title`}>Длительность</h4>

@@ -4,54 +4,95 @@ import {
   useRef,
   useEffect,
   useCallback,
-  useMemo,
+  useLayoutEffect,
 } from 'react';
 
-export type SliderRangeProps = {
+
+export const ToggleRange = {
+  Min: 'min',
+  Max: 'max',
+} as const;
+
+export type RangeValue = { min: number; max: number };
+export type ToggleMinMax = (typeof ToggleRange)[keyof typeof ToggleRange];
+
+type SliderRangeProps = {
   className: string;
   minRangeValue?: number;
   maxRangeValue: number;
   minValue?: number;
   maxValue?: number;
+  step?: number;
   isShowValues?: boolean;
-  onChange?: (values: { min: number; max: number }) => void;
+  onChange: (values: RangeValue) => void;
 };
 
 function SliderRange({
   className,
   minRangeValue = 0,
   maxRangeValue,
-  minValue = 0,
+  minValue = minRangeValue,
   maxValue = maxRangeValue,
+  step = 1,
   isShowValues = false,
   onChange,
 }: SliderRangeProps) {
   const [currentMin, setCurrentMin] = useState(minValue);
   const [currentMax, setCurrentMax] = useState(maxValue);
-  const [isDragging, setIsDragging] = useState<'min' | 'max' | null>(null);
+  const [activeDragging, setActiveDragging] = useState<ToggleMinMax | null>(
+    null
+  );
+  const [minPos, setMinPos] = useState(0);
+  const [maxPos, setMaxPos] = useState(0);
   const scaleRef = useRef<HTMLDivElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
   const valuesRef = useRef({ currentMin, currentMax });
+
+  // Синхронизация с внешними изменениями
+  useEffect(() => {
+    setCurrentMin(minValue);
+  }, [minValue]);
+
+  useEffect(() => {
+    setCurrentMax(maxValue);
+  }, [maxValue]);
+
+  // Пересчитываем позиции после монтирования и при изменении значений
+  useLayoutEffect(() => {
+    if (!scaleRef.current) {
+      return;
+    }
+    const calculatePosition = (value: number) => {
+      const scaleWidth = scaleRef.current?.offsetWidth || 0;
+      return (
+        ((value - minRangeValue) / (maxRangeValue - minRangeValue)) * scaleWidth
+      );
+    };
+
+    const newMinPos = calculatePosition(currentMin);
+    const newMaxPos = calculatePosition(currentMax);
+    setMinPos(newMinPos);
+    setMaxPos(newMaxPos);
+
+    if (barRef.current) {
+      barRef.current.style.left = `${newMinPos}px`;
+      barRef.current.style.width = `${newMaxPos - newMinPos}px`;
+    }
+  }, [currentMin, currentMax, minRangeValue, maxRangeValue]);
+
+  // Обработчик изменения значений
+  useEffect(() => {
+    const { currentMin: prevMin, currentMax: prevMax } = valuesRef.current;
+    // Проверяем, изменилось ли значение (с учётом шага)
+    if (currentMin !== prevMin || currentMax !== prevMax) {
+      onChange({ min: currentMin, max: currentMax });
+    }
+  }, [currentMin, currentMax, onChange]);
 
   // Обновляем ref при изменении значений
   useEffect(() => {
     valuesRef.current = { currentMin, currentMax };
   }, [currentMin, currentMax]);
-
-  useEffect(() => {
-    setCurrentMin(minValue);
-    setCurrentMax(maxValue);
-  }, [minValue, maxValue]);
-
-// Добавляем проверку в `calculateValue` и `calculatePosition`
-const calculatePosition = useCallback(
-  (value: number) => {
-    if (!scaleRef.current || scaleRef.current.offsetWidth === 0) return 0;
-    const scaleWidth = scaleRef.current.offsetWidth;
-    return ((value - minRangeValue) / (maxRangeValue - minRangeValue)) * scaleWidth;
-  },
-  [minRangeValue, maxRangeValue]
-);
 
   const calculateValue = useCallback(
     (position: number) => {
@@ -60,30 +101,27 @@ const calculatePosition = useCallback(
       const value =
         (position / scaleWidth) * (maxRangeValue - minRangeValue) +
         minRangeValue;
-      return Math.round(value);
+      // Округляем до ближайшего шага
+      const roundedValue = Math.round(value / step) * step;
+      return Math.max(minRangeValue, Math.min(roundedValue, maxRangeValue));
     },
-    [minRangeValue, maxRangeValue]
+    [minRangeValue, maxRangeValue, step]
   );
 
-  // Мемоизируем позиции для предотвращения лишних ререндеров
-  const minPos = useMemo(
-    () => calculatePosition(currentMin),
-    [currentMin, calculatePosition]
+  const handleMouseDown = useCallback(
+    (type: ToggleMinMax) => (e: ReactMouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setActiveDragging(type);
+    },
+    []
   );
-  const maxPos = useMemo(
-    () => calculatePosition(currentMax),
-    [currentMax, calculatePosition]
-  );
-
-  useEffect(() => {
-    if (!barRef.current) return;
-    barRef.current.style.left = `${minPos}px`;
-    barRef.current.style.width = `${maxPos - minPos}px`;
-  }, [minPos, maxPos]);
 
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
-      if (!isDragging || !scaleRef.current) return;
+      if (!activeDragging || !scaleRef.current) {
+        return;
+      }
 
       const scaleRect = scaleRef.current.getBoundingClientRect();
       let newPosition = e.clientX - scaleRect.left;
@@ -92,7 +130,7 @@ const calculatePosition = useCallback(
       const newValue = calculateValue(newPosition);
       const { currentMin, currentMax } = valuesRef.current;
 
-      if (isDragging === 'min') {
+      if (activeDragging === ToggleRange.Min) {
         const clampedValue = Math.min(newValue, currentMax - 1);
         setCurrentMin(clampedValue);
       } else {
@@ -100,64 +138,48 @@ const calculatePosition = useCallback(
         setCurrentMax(clampedValue);
       }
     },
-    [isDragging, calculateValue]
+    [activeDragging, calculateValue]
   );
 
-  const handleMouseUp = useCallback(() => {
-    setIsDragging(null);
-    document.removeEventListener('mousemove', handleMouseMove);
-    document.removeEventListener('mouseup', handleMouseUp);
-    document.removeEventListener('mouseleave', handleMouseUp);
+  const handleMouseUp = () => {
+    setActiveDragging(null);
+  };
 
-    onChange?.({
-      min: valuesRef.current.currentMin,
-      max: valuesRef.current.currentMax,
-    });
-  }, [handleMouseMove, onChange]);
-
-  const handleMouseDown = useCallback(
-    (type: 'min' | 'max') => (e: ReactMouseEvent<HTMLButtonElement>) => {
-      e.preventDefault();
-      setIsDragging(type);
-  
-      // Сразу обновляем позицию ползунка
-      if (scaleRef.current) {
-        const scaleRect = scaleRef.current.getBoundingClientRect();
-        const clickX = e.clientX - scaleRect.left;
-        const newValue = calculateValue(clickX);
-  
-        if (type === 'min') {
-          setCurrentMin(Math.min(newValue, currentMax - 1));
-        } else {
-          setCurrentMax(Math.max(newValue, currentMin + 1));
-        }
-      }
-  
+  // Добавляем/удаляем обработчики событий
+  useEffect(() => {
+    if (activeDragging) {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
-      document.addEventListener('mouseleave', handleMouseUp);
-    },
-    [handleMouseMove, handleMouseUp, currentMin, currentMax, calculateValue]
-  );
+    } else {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+    }
 
-useEffect(() => {
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
-      document.removeEventListener('mouseleave', handleMouseUp);
     };
-  }, [handleMouseMove, handleMouseUp]);
+  }, [activeDragging, currentMin, currentMax, handleMouseMove]);
 
   return (
     <div className={className}>
-      <div className={`${className}__scale`} ref={scaleRef}>
-        <div className={`${className}__bar`} ref={barRef}>
+      <div
+        style={{ position: 'relative' }}
+        className={`${className}__scale`}
+        ref={scaleRef}
+      >
+        <div
+          style={{ position: 'absolute' }}
+          className={`${className}__bar`}
+          ref={barRef}
+        >
           <span className="visually-hidden">Полоса прокрутки</span>
         </div>
       </div>
 
       <div className={`${className}__control`}>
         <button
+          type="button"
           className={`${className}__min-toggle`}
           onMouseDown={handleMouseDown('min')}
           style={{ left: `${minPos}px` }}
@@ -171,6 +193,7 @@ useEffect(() => {
         )}
 
         <button
+          type="button"
           className={`${className}__max-toggle`}
           onMouseDown={handleMouseDown('max')}
           style={{ left: `${maxPos}px` }}
