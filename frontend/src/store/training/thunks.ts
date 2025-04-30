@@ -76,7 +76,7 @@ const getQuery = (queryParams: QueryParams) => {
   return query;
 }
 
-export const fetchTrainingsAction = createAsyncThunk<TrainingsWithPagination, any, {
+export const fetchTrainingsAction = createAsyncThunk<TrainingsWithPagination, QueryParams, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;

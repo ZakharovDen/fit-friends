@@ -20,11 +20,15 @@ function UserCardScreen(): JSX.Element {
     const { id } = params;
     if (id) {
       dispatch(getUserInfoAction(id));
-      dispatch(fetchTrainingsAction({ userId: id }))
+      dispatch(fetchTrainingsAction({
+        userId: id,
+        sortBy: 'createdAt',
+        sortOrder: 'desc'
+      }))
     }
   }, [params, dispatch]);
   const userInfo = useAppSelector(getUserInfo);
-  const {entities} = useAppSelector(getTrainings);
+  const { entities } = useAppSelector(getTrainings);
   return (
     <main>
       <div className="inner-page inner-page--no-sidebar">
