@@ -29,9 +29,9 @@ function FilterSorting({ allowedFilterValues, onFilterChange, backButtonDisplayM
   };
   const classPrefix = FilterSortingSettings[displayMode].classPrefix;
   const [filterValues, setFilterValues] = useState<TrainingFilter>(defaultFilter);
-  // useEffect(() => {
-  //   setFilterValues(defaultFilter)
-  // }, [allowedFilterValues]);
+  useEffect(() => {
+    setFilterValues(defaultFilter)
+  }, [allowedFilterValues]);
 
   useEffect(() => {
     onFilterChange(filterValues);
@@ -84,38 +84,32 @@ function FilterSorting({ allowedFilterValues, onFilterChange, backButtonDisplayM
           <div className={`${classPrefix}-form__block ${classPrefix}-form__block--price`}>
             <h4 className={`${classPrefix}-form__block-title`}>Цена, ₽</h4>
             <FilterMinMax
-              minAllowedValue={allowedFilterValues.price.min ?? 0}
-              maxAllowedValue={allowedFilterValues.price.max ?? 0}
+              minAllowedValue={filterValues.price.min ?? 0}
+              maxAllowedValue={filterValues.price.max ?? 0}
               onChangeFilter={handleChangePrice}
               displayMode={FilterMinMaxDisplayMode.Price}
             />
-            {/* <div className="filter-range">
-          <div className="filter-range__scale">
-            <div className="filter-range__bar"><span className="visually-hidden">Полоса прокрутки</span></div>
-          </div>
-          <div className="filter-range__control">
-            <button className="filter-range__min-toggle"><span className="visually-hidden">Минимальное значение</span></button>
-            <button className="filter-range__max-toggle"><span className="visually-hidden">Максимальное значение</span></button>
-          </div>
-        </div> */}
+            <SliderRange
+              className="filter-range"
+              maxRangeValue={defaultFilter.price.max}
+              minRangeValue={defaultFilter.price.min}
+              onChange={handleChangePrice}
+            />
           </div>
           <div className={`${classPrefix}-form__block ${classPrefix}-form__block--calories`}>
             <h4 className={`${classPrefix}-form__block-title`}>Калории</h4>
             <FilterMinMax
-              minAllowedValue={allowedFilterValues.calories.min ?? 0}
-              maxAllowedValue={allowedFilterValues.calories.max ?? 0}
+              minAllowedValue={filterValues.calories.min ?? 0}
+              maxAllowedValue={filterValues.calories.max ?? 0}
               onChangeFilter={handleChangeCalories}
               displayMode={FilterMinMaxDisplayMode.Calories}
             />
-            {/* <div className="filter-range">
-          <div className="filter-range__scale">
-            <div className="filter-range__bar"><span className="visually-hidden">Полоса прокрутки</span></div>
-          </div>
-          <div className="filter-range__control">
-            <button className="filter-range__min-toggle"><span className="visually-hidden">Минимальное значение</span></button>
-            <button className="filter-range__max-toggle"><span className="visually-hidden">Максимальное значение</span></button>
-          </div>
-        </div> */}
+            <SliderRange
+              className="filter-range"
+              maxRangeValue={defaultFilter.calories.max}
+              minRangeValue={defaultFilter.calories.min}
+              onChange={handleChangeCalories}
+            />
           </div>
           <div className="gym-catalog-form__block gym-catalog-form__block--rating">
             <h4 className="gym-catalog-form__block-title">Рейтинг</h4>

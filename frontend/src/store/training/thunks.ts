@@ -8,7 +8,21 @@ import { Training, TrainingUpdateData, TrainingWithUser } from '../../types/trai
 import { AllowedFilterValues } from '../../types/filter/allowed-filter-values';
 
 const getQuery = (queryParams: QueryParams) => {
-  const { page, sortBy, sortOrder, limit, minPrice, maxPrice, minCalories, maxCalories, trainingType, isFree, trainingDuration } = queryParams;
+  const { 
+    page, 
+    sortBy, 
+    sortOrder, 
+    limit, 
+    minPrice, 
+    maxPrice, 
+    minCalories, 
+    maxCalories, 
+    trainingType, 
+    isFree, 
+    trainingDuration, 
+    maxRating, 
+    minRating 
+  } = queryParams;
   let query = '';
   if (page) {
     query += `&page=${page}`;
@@ -47,7 +61,13 @@ const getQuery = (queryParams: QueryParams) => {
     }
     if (maxPrice) {
       query += `&maxPrice=${maxPrice}`;
-    }  
+    }
+  }
+  if (minRating) {
+    query += `&minRating=${minRating}`;
+  }
+  if (maxRating) {
+    query += `&maxRating=${maxRating}`;
   }
   return query;
 }
@@ -114,7 +134,7 @@ export const postTrainingAction = createAsyncThunk<Training, FormData, {
   },
 );
 
-export const patchTrainingAction = createAsyncThunk<Training, TrainingUpdateData & {id?: string}, {
+export const patchTrainingAction = createAsyncThunk<Training, TrainingUpdateData & { id?: string }, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
@@ -135,7 +155,7 @@ export const getFilterValuesAction = createAsyncThunk<AllowedFilterValues, strin
 }>(
   'data/getFilterValues',
   async (authorId, { extra: api }) => {
-    const { data } = await api.get<AllowedFilterValues>(`${APIRoute.Fit}/filter-values`, {params: { authorId }});
+    const { data } = await api.get<AllowedFilterValues>(`${APIRoute.Fit}/filter-values`, { params: { authorId } });
     return data;
   },
 );

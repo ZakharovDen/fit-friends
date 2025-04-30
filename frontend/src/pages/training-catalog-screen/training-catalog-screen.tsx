@@ -54,7 +54,9 @@ function TrainingCatalogScreen(): JSX.Element {
       trainingType: filterValues.types,
       sortBy: 'price',
       sortOrder: sortOrder,
-      isFree: (filterValues.sort === TrainingSort.Free)
+      isFree: (filterValues.sort === TrainingSort.Free),
+      minRating: filterValues.rating.min,
+      maxRating: filterValues.rating.max,
     });
   };
 
