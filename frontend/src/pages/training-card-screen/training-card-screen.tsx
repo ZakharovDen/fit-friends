@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import PopupFeedback from "../../components/popup-feedback/popup-feedback";
 import ReviewItem from "../../components/review-item/review-item";
 import PopupBuy from "../../components/popup-buy/popup-buy";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { getTrainingInfo, getTrainingSaveIsProcess, getTrainingSaveIsSuccess } from "../../store/training/selectors";
 import { getTrainingAction, patchTrainingAction } from "../../store/training/thunks";
@@ -16,6 +16,7 @@ import { BackButtonDisplayMode } from "../../components/back-button/constant";
 import { getUser } from "../../store/user/selectors";
 import { UserRole } from "../../types/user/user-role.enum";
 import { TrainingUpdateData } from "../../types/training/training";
+import { AppRoute } from "../../constant";
 
 const DISCOUNT_PERCENT = 10;
 
@@ -148,6 +149,7 @@ function TrainingCardScreen(): JSX.Element {
               <div className="training-info">
                 <h2 className="visually-hidden">Информация о тренировке</h2>
                 <div className="training-info__header">
+                  <Link to={AppRoute.UserCard.replace(':id', training.user.id)} >
                   <div className="training-info__coach">
                     <div className="training-info__photo">
                       <picture>
@@ -169,6 +171,7 @@ function TrainingCardScreen(): JSX.Element {
                       <span className="training-info__name">{training?.user.name}</span>
                     </div>
                   </div>
+                  </Link>
                   {(authorMode) &&
                     <>
                       <button className="btn-flat btn-flat--light btn-flat--underlined training-info__edit training-info__edit--save" type="button" onClick={handleSaveForm}>
