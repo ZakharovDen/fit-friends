@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PopupFeedback from "../../components/popup-feedback/popup-feedback";
 import ReviewItem from "../../components/review-item/review-item";
 import PopupBuy from "../../components/popup-buy/popup-buy";
@@ -22,7 +22,7 @@ const DISCOUNT_PERCENT = 10;
 
 const setDiscount = (price: number | undefined, isSpecialOffer: boolean) => {
   if (price) {
-    if (isSpecialOffer){
+    if (isSpecialOffer) {
       return price - (price * DISCOUNT_PERCENT / 100);
     } else {
       return price * 100 / (100 - DISCOUNT_PERCENT);
@@ -116,8 +116,22 @@ function TrainingCardScreen(): JSX.Element {
   const handleDiscountButtonClick = (evt: React.MouseEvent<HTMLButtonElement>) => {
     evt.stopPropagation();
     evt.preventDefault();
-    setTrainingData({...trainingData, specialOffer: !trainingData.specialOffer, price: setDiscount(trainingData.price, !trainingData.specialOffer)});
+    setTrainingData({ ...trainingData, specialOffer: !trainingData.specialOffer, price: setDiscount(trainingData.price, !trainingData.specialOffer) });
   }
+
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const handlePlayPause = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
 
   if (!training) {
     return <NotFoundScreen />
@@ -150,27 +164,27 @@ function TrainingCardScreen(): JSX.Element {
                 <h2 className="visually-hidden">Информация о тренировке</h2>
                 <div className="training-info__header">
                   <Link to={AppRoute.UserCard.replace(':id', training.user.id)} >
-                  <div className="training-info__coach">
-                    <div className="training-info__photo">
-                      <picture>
-                        <source
-                          type="image/webp"
-                          srcSet={training?.user.avatar}
-                        />
-                        <img
-                          src={training?.user.avatar}
-                          srcSet={training?.user.avatar}
-                          width="64"
-                          height="64"
-                          alt="Изображение тренера"
-                        />
-                      </picture>
+                    <div className="training-info__coach">
+                      <div className="training-info__photo">
+                        <picture>
+                          <source
+                            type="image/webp"
+                            srcSet={training?.user.avatar}
+                          />
+                          <img
+                            src={training?.user.avatar}
+                            srcSet={training?.user.avatar}
+                            width="64"
+                            height="64"
+                            alt="Изображение тренера"
+                          />
+                        </picture>
+                      </div>
+                      <div className="training-info__coach-info">
+                        <span className="training-info__label">{`Тренер`}</span>
+                        <span className="training-info__name">{training?.user.name}</span>
+                      </div>
                     </div>
-                    <div className="training-info__coach-info">
-                      <span className="training-info__label">{`Тренер`}</span>
-                      <span className="training-info__name">{training?.user.name}</span>
-                    </div>
-                  </div>
                   </Link>
                   {(authorMode) &&
                     <>
@@ -251,28 +265,50 @@ function TrainingCardScreen(): JSX.Element {
               </div>
               <div className="training-video">
                 <h2 className="training-video__title">Видео</h2>
-                <div className="training-video__video">
-                  <div className="training-video__thumbnail">
-                    <picture>
-                      <source
-                        type="image/webp"
-                        srcSet="img/content/training-video/video-thumbnail.webp, img/content/training-video/video-thumbnail@2x.webp 2x"
-                      />
-                      <img
-                        src="img/content/training-video/video-thumbnail.png"
-                        srcSet="img/content/training-video/video-thumbnail@2x.png 2x"
-                        width="922"
-                        height="566"
-                        alt="Обложка видео"
-                      />
-                    </picture>
+                {training.video ? (
+                  <div className="training-video__video">
+                    <video
+                      src={training.video}
+                      ref={videoRef}
+                      controls
+                      width="922"
+                      height="566"
+                      onPause={() => setIsPlaying(false)}
+                      onPlay={() => setIsPlaying(true)}
+                    >
+                      Your browser does not support the video tag.
+                    </video>
+                    {!isPlaying &&
+                      <button
+                        className="training-video__play-button btn-reset"
+                        onClick={handlePlayPause}
+                        aria-label={isPlaying ? 'Пауза' : 'Воспроизвести'}
+                      >
+                        <svg width="18" height="30" aria-hidden="true">
+                          <use xlinkHref="#icon-arrow"></use>
+                        </svg>
+                      </button>
+                    }
                   </div>
-                  <button className="training-video__play-button btn-reset">
-                    <svg width="18" height="30" aria-hidden="true">
-                      <use xlinkHref="#icon-arrow"></use>
-                    </svg>
-                  </button>
-                </div>
+                ) : (
+                  <div className="training-video__video">
+                    <div className="training-video__thumbnail">
+                      <picture>
+                        <source
+                          type="image/webp"
+                          srcSet="img/content/training-video/video-thumbnail.webp, img/content/training-video/video-thumbnail@2x.webp 2x"
+                        />
+                        <img
+                          src="img/content/training-video/video-thumbnail.png"
+                          srcSet="img/content/training-video/video-thumbnail@2x.png 2x"
+                          width="922"
+                          height="566"
+                          alt="Обложка видео"
+                        />
+                      </picture>
+                    </div>
+                  </div>
+                )}
                 {(authorMode)
                   ? <>
                     <div className="training-video__drop-files">

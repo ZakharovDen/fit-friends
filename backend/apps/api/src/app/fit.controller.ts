@@ -44,7 +44,7 @@ export class FitController {
   @UseGuards(CheckAuthGuard, RolesGuard)
   @UseInterceptors(InjectUserIdInterceptor)
   @Roles(UserRole.Coach)
-  @UseInterceptors(new PathInterceptor({ fields: 'image' }))
+  @UseInterceptors(new PathInterceptor({ fields: ['image', 'video'] }))
   public async getMyTrainings(
     @UserId() userId: string,
     @Query() query?: FitTrainingQuery
@@ -71,7 +71,7 @@ export class FitController {
   @SerializeOptions({ type: TrainingWithUserRdo })
   @ApiBearerAuth()
   @UseGuards(CheckAuthGuard)
-  @UseInterceptors(new PathInterceptor({ fields: 'user.avatar' }))
+  @UseInterceptors(new PathInterceptor({ fields: ['user.avatar', 'video'] }))
   public async getTrainingById(@Param('id') id: string) {
     const training: FitTrainingRdo = (await this.httpService.axiosRef.get(`${ApplicationServiceURL.FitTrainings}/${id}`)).data;
     const user: UserRdo = (await this.httpService.axiosRef.get(`${ApplicationServiceURL.Users}/${training.userId}`)).data;
@@ -118,7 +118,7 @@ export class FitController {
   @UseGuards(CheckAuthGuard, RolesGuard)
   @UseInterceptors(InjectUserIdInterceptor)
   @Roles(UserRole.Coach)
-  @UseInterceptors(new PathInterceptor({ fields: 'image' }))
+  @UseInterceptors(new PathInterceptor({ fields: ['image', 'video'] }))
   public async createTraining(
     @UserId() userId: string,
     @Body() dto: CreateTrainingDto,
@@ -141,7 +141,7 @@ export class FitController {
   @UseGuards(CheckAuthGuard, RolesGuard)
   @UseInterceptors(InjectUserIdInterceptor)
   @Roles(UserRole.Coach)
-  @UseInterceptors(new PathInterceptor({ fields: 'image' }))
+  @UseInterceptors(new PathInterceptor({ fields: ['image', 'video'] }))
   public async updateTraining(
     @UserId() userId: string,
     @Body() dto: UpdateTrainingDto,
