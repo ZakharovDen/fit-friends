@@ -98,6 +98,14 @@ npx nx run fit:db:seed
 npm start
 ```
 ### Backend
+Запуск сервисов по отдельности
+```bash
+npx nx run account:serve
+npx nx run fit:serve
+npx nx run file-vault:serve
+npx nx run api:serve
+```
+Или всех сразу
 ```bash
 npm run serve:all
 ```
