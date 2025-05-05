@@ -76,6 +76,7 @@ function CreateTrainingScreen(): JSX.Element {
     formData.append('level', String(trainingData.level));
     formData.append('type', String(trainingData.type));
     formData.append('duration', String(trainingData.duration));
+    formData.delete('import');
     if (selectedFile) {
       formData.append('video', selectedFile);
     }

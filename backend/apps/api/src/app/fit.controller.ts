@@ -1,9 +1,9 @@
-import { Body, Controller, FileTypeValidator, Get, HttpStatus, MaxFileSizeValidator, Param, ParseFilePipe, Patch, Post, Query, SerializeOptions, UploadedFile, UseFilters, UseGuards, UseInterceptors } from "@nestjs/common";
+import { Body, Controller, FileTypeValidator, Get, HttpStatus, Param, ParseFilePipe, Patch, Post, Query, SerializeOptions, UploadedFile, UseFilters, UseGuards, UseInterceptors } from "@nestjs/common";
 import { AxiosExceptionFilter } from "./filters/axios-exception.filter";
 import { HttpService } from "@nestjs/axios";
 import { ApplicationServiceURL } from "./app.config";
 import { ApiBearerAuth, ApiOperation, ApiResponse } from "@nestjs/swagger";
-import { FitTrainingQuery, FitTrainingRdo, FitTrainingWithPaginationRdo, SortDirection, SortField } from '@backend/fit-training';
+import { CreateFitTrainingDto, FitTrainingQuery, FitTrainingRdo, FitTrainingWithPaginationRdo, SortDirection, SortField } from '@backend/fit-training';
 import { CheckAuthGuard } from "./guards/check-auth.guard";
 import { CreateFeedBackDto, FitFeedBackRdo } from '@backend/fit-feedback';
 import { UserRdo } from "@backend/authentications";
@@ -19,6 +19,7 @@ import { Roles } from "./decorators/roles.decorator";
 import { Feedback, UserRole } from "@backend/core";
 import { RolesGuard } from "./guards/roles.guard";
 import { PathInterceptor } from "./interceptors/path.interceptor";
+import { plainToInstance } from "class-transformer";
 
 @Controller('fit')
 @UseFilters(AxiosExceptionFilter)
@@ -124,13 +125,16 @@ export class FitController {
     @Body() dto: CreateTrainingDto,
     @UploadedFile(new ParseFilePipe({
       validators: [
-        new MaxFileSizeValidator({ maxSize: 1000000 }),
-        new FileTypeValidator({ fileType: /(jpg|jpeg|png)$/ }),
+        new FileTypeValidator({ fileType: /(mov|avi|mp4)$/ }),
       ],
       fileIsRequired: false,
-    }),) video?: Express.Multer.File
+    }),) video: Express.Multer.File
   ): Promise<FitTrainingRdo> {
-    const training: FitTrainingRdo = (await this.httpService.axiosRef.post(ApplicationServiceURL.FitTrainings, { ...dto, userId })).data;
+    const newTraining = plainToInstance(CreateFitTrainingDto, dto);
+    if (video) {
+      newTraining.video = await this.appService.uploadFile(video);
+    }
+    const training: FitTrainingRdo = (await this.httpService.axiosRef.post(ApplicationServiceURL.FitTrainings, { ...newTraining, userId })).data;
     return training;
   }
 

@@ -66,7 +66,6 @@ export class UsersController {
       fileIsRequired: false,
     }),) avatar?: Express.Multer.File
   ) {
-    console.dir(dto);
     const newUser = plainToInstance(CreateUserDto, dto);
     if (avatar) {
       newUser.avatar = await this.appService.uploadFile(avatar);

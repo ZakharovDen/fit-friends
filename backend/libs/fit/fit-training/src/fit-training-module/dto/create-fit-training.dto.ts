@@ -53,11 +53,7 @@ export class CreateFitTrainingDto {
   @IsEnum(Sex)
   sex: Sex;
 
-  // @ApiProperty(TrainingFieldDescription.Video)
-  // @IsString()
-  // video: string;
-
-  // @ApiProperty(TrainingFieldDescription.SpecialOffer)
-  // @IsBoolean()
-  // specialOffer: boolean;
+  @ApiProperty(TrainingFieldDescription.Video)
+  @IsString()
+  video: string;
 }

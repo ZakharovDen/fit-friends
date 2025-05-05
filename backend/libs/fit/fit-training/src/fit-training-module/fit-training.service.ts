@@ -10,11 +10,10 @@ import { UpdateFitTrainingDto } from "./dto/update-fit-training.dto";
 export class FitTrainingService {
   constructor(
     private readonly fitTrainingRepository: FitTrainingRepository,
-    //private readonly notifyService: NotifyService
   ) { }
 
   public async create(dto: CreateFitTrainingDto): Promise<FitTrainingEntity> {
-    const newTraining = new FitTrainingEntity({...dto, rating: undefined, image: undefined, specialOffer: undefined, video: undefined });
+    const newTraining = new FitTrainingEntity({...dto, rating: undefined, image: undefined, specialOffer: undefined });
     delete newTraining.rating;
     await this.fitTrainingRepository.save(newTraining);
     return newTraining;

@@ -1,4 +1,12 @@
 import { CreateFitTrainingDto } from "@backend/fit-training";
-import { OmitType } from "@nestjs/swagger";
+import { ApiProperty, OmitType } from "@nestjs/swagger";
 
-export class CreateTrainingDto extends OmitType(CreateFitTrainingDto, ['userId'] as const) {}
+export class CreateTrainingDto extends OmitType(CreateFitTrainingDto, ['userId', 'video'] as const) {
+    @ApiProperty({ 
+      description: 'Training video', 
+      type: 'string',
+      format: 'binary',
+      required: true
+    })
+    public video: Express.Multer.File;
+}
