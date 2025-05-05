@@ -46,8 +46,6 @@ const images = [
 const videos = [
   '/default/training-video-0.mp4',
   '/default/training-video-1.mp4',
-  '/default/training-video-2.mp4',
-  '/default/training-video-3.mp4',
 ]
 
 const feedbacks = [
