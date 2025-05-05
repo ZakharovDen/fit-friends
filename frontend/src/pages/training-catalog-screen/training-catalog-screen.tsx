@@ -35,7 +35,7 @@ function TrainingCatalogScreen(): JSX.Element {
   }, [dispatch, queryParams]);
 
   const handleButtonMoreClick = () => {
-    if (totalItems > queryParams.limit) {
+    if (queryParams.limit && totalItems > queryParams.limit) {
       setQueryParams({ ...queryParams, limit: queryParams.limit + COUNT_ITEMS_PER_PAGE });
     }
   }

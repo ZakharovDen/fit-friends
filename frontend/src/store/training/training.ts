@@ -105,7 +105,7 @@ export const training = createSlice({
         state.isProcess = true;
         state.isSuccess = false;
       })
-      .addCase(patchTrainingAction.fulfilled, (state, action) => {
+      .addCase(patchTrainingAction.fulfilled, (state, _action) => {
         state.isProcess = false;
         state.isSuccess = true;
       })
