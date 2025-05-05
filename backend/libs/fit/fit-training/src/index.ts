@@ -4,4 +4,5 @@ export { FitTrainingWithPaginationRdo } from './fit-training-module/rdo/fit-trai
 export { FitTrainingQuery } from './fit-training-module/fit-training.query';
 export { FitTrainingRdo } from './fit-training-module/rdo/fit-training.rdo';
 export { CreateFitTrainingDto } from './fit-training-module/dto/create-fit-training.dto';
+export { UpdateFitTrainingDto } from './fit-training-module/dto/update-fit-training.dto';
 export * from './fit-training-module/fit-training.constant';

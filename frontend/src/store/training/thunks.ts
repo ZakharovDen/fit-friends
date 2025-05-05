@@ -8,19 +8,19 @@ import { Training, TrainingUpdateData, TrainingWithUser } from '../../types/trai
 import { AllowedFilterValues } from '../../types/filter/allowed-filter-values';
 
 const getQuery = (queryParams: QueryParams) => {
-  const { 
-    page, 
-    sortBy, 
-    sortOrder, 
-    limit, 
-    minPrice, 
-    maxPrice, 
-    minCalories, 
-    maxCalories, 
-    trainingType, 
-    isFree, 
-    trainingDuration, 
-    maxRating, 
+  const {
+    page,
+    sortBy,
+    sortOrder,
+    limit,
+    minPrice,
+    maxPrice,
+    minCalories,
+    maxCalories,
+    trainingType,
+    isFree,
+    trainingDuration,
+    maxRating,
     minRating,
     userId
   } = queryParams;
@@ -160,6 +160,20 @@ export const getFilterValuesAction = createAsyncThunk<AllowedFilterValues, strin
   'data/getFilterValues',
   async (authorId, { extra: api }) => {
     const { data } = await api.get<AllowedFilterValues>(`${APIRoute.Fit}/filter-values`, { params: { authorId } });
+    return data;
+  },
+);
+
+export const loadVideoAction = createAsyncThunk<{ videoUrl: string }, File, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'data/postVideo',
+  async (file, { extra: api }) => {
+    const formData = new FormData();
+    formData.append('video', file);
+    const { data } = await api.post<{ videoUrl: string }>(APIRoute.TrainingsVideo, formData);
     return data;
   },
 );

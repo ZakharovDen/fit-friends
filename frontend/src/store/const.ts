@@ -6,7 +6,8 @@ export enum APIRoute {
   MyTrainings = '/fit/my-trainings',
   Feedbacks = '/fit/feedback',
   Fit = '/fit',
-  Questionnaire = `${Users}/questionnaire`
+  Questionnaire = `${Users}/questionnaire`,
+  TrainingsVideo = '/fit/trainings-video',
 }
 
 export enum NameSpace {

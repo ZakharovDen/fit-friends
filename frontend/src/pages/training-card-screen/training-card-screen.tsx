@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import PopupFeedback from "../../components/popup-feedback/popup-feedback";
 import ReviewItem from "../../components/review-item/review-item";
 import PopupBuy from "../../components/popup-buy/popup-buy";
 import { Link, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { getTrainingInfo, getTrainingSaveIsProcess, getTrainingSaveIsSuccess } from "../../store/training/selectors";
-import { getTrainingAction, patchTrainingAction } from "../../store/training/thunks";
+import { getTrainingAction, loadVideoAction, patchTrainingAction } from "../../store/training/thunks";
 import { TrainingTypeLabel } from "../../types/training/training-type.enum";
 import { SexTrainingLabel } from "../../types/sex.enum";
 import NotFoundScreen from "../not-found-screen/not-found-screen";
@@ -47,11 +47,13 @@ function TrainingCardScreen(): JSX.Element {
   const [isPopupBuyVisible, setPopupBuyVisible] = useState<boolean>(false);
   const [hashTags, setHashTags] = useState<string[]>();
   const [isEdited, setIsEdited] = useState<boolean>(false);
+  //const [videoUrl, setVideoUrl] = useState<string | undefined>(training?.video);
   const [trainingData, setTrainingData] = useState<TrainingUpdateData>({
     description: training?.description,
     price: training?.price,
     title: training?.title,
-    specialOffer: training?.specialOffer
+    specialOffer: training?.specialOffer,
+    video: training?.video,
   });
   const authorMode = (user?.role === UserRole.Coach && training?.user.id === user.id);
   const isProcess = useAppSelector(getTrainingSaveIsProcess);
@@ -70,7 +72,9 @@ function TrainingCardScreen(): JSX.Element {
         price: training.price,
         title: training.title,
         specialOffer: training.specialOffer,
+        video: training.video
       });
+      //setVideoUrl(training.video);
     }
   }, [training]);
 
@@ -131,6 +135,34 @@ function TrainingCardScreen(): JSX.Element {
       }
       setIsPlaying(!isPlaying);
     }
+  };
+
+  const handleDeleteVideo = (evt: React.MouseEvent<HTMLButtonElement>) => {
+    evt.stopPropagation();
+    evt.preventDefault();
+    setTrainingData({ ...trainingData, video: undefined });
+  }
+
+  const handleSaveVideo = async (evt: React.MouseEvent<HTMLButtonElement>) => {
+    evt.stopPropagation();
+    evt.preventDefault();
+    if (selectedFile) {
+      try {
+        const resultAction = dispatch(loadVideoAction(selectedFile)); // Отправляем thunk
+        const { videoUrl } = await resultAction.unwrap(); // Получаем значение (fileUrl)
+        setTrainingData({ ...trainingData, video: videoUrl });
+        console.log('URL файла:', videoUrl);
+      } catch (error) {
+        console.error('Ошибка загрузки:', error);
+      }
+    }
+  }
+
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    const file = files && files[0] ? files[0] : null;
+    setSelectedFile(file);
   };
 
   if (!training) {
@@ -263,12 +295,12 @@ function TrainingCardScreen(): JSX.Element {
                   </form>
                 </div>
               </div>
-              <div className="training-video">
+              <div className={`training-video ${(!trainingData.video) ? `training-video--load` : ''}`}>
                 <h2 className="training-video__title">Видео</h2>
-                {training.video ? (
+                {trainingData.video && (
                   <div className="training-video__video">
                     <video
-                      src={training.video}
+                      src={trainingData.video}
                       ref={videoRef}
                       controls
                       width="922"
@@ -290,24 +322,6 @@ function TrainingCardScreen(): JSX.Element {
                       </button>
                     }
                   </div>
-                ) : (
-                  <div className="training-video__video">
-                    <div className="training-video__thumbnail">
-                      <picture>
-                        <source
-                          type="image/webp"
-                          srcSet="img/content/training-video/video-thumbnail.webp, img/content/training-video/video-thumbnail@2x.webp 2x"
-                        />
-                        <img
-                          src="img/content/training-video/video-thumbnail.png"
-                          srcSet="img/content/training-video/video-thumbnail@2x.png 2x"
-                          width="922"
-                          height="566"
-                          alt="Обложка видео"
-                        />
-                      </picture>
-                    </div>
-                  </div>
                 )}
                 {(authorMode)
                   ? <>
@@ -319,7 +333,13 @@ function TrainingCardScreen(): JSX.Element {
                               <svg width="20" height="20" aria-hidden="true">
                                 <use xlinkHref="#icon-import-video"></use>
                               </svg></span>
-                              <input type="file" name="import" tabIndex={-1} accept=".mov, .avi, .mp4" />
+                              <input
+                                type="file"
+                                name="import"
+                                tabIndex={-1}
+                                accept=".mov, .avi, .mp4"
+                                onChange={handleFileChange}
+                              />
                             </label>
                           </div>
                         </div>
@@ -327,8 +347,20 @@ function TrainingCardScreen(): JSX.Element {
                     </div>
                     <div className="training-video__buttons-wrapper">
                       <div className="training-video__edit-buttons">
-                        <button className="btn" type="button">Сохранить</button>
-                        <button className="btn btn--outlined" type="button">Удалить</button>
+                        <button
+                          className="btn"
+                          type="button"
+                          onClick={handleSaveVideo}
+                        >
+                          Сохранить
+                        </button>
+                        <button
+                          className="btn btn--outlined"
+                          type="button"
+                          onClick={handleDeleteVideo}
+                        >
+                          Удалить
+                        </button>
                       </div>
                     </div>
                   </>

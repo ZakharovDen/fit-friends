@@ -2,7 +2,7 @@ import { Body, Controller, FileTypeValidator, Get, HttpStatus, Param, ParseFileP
 import { AxiosExceptionFilter } from "./filters/axios-exception.filter";
 import { HttpService } from "@nestjs/axios";
 import { ApplicationServiceURL } from "./app.config";
-import { ApiBearerAuth, ApiOperation, ApiResponse } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { CreateFitTrainingDto, FitTrainingQuery, FitTrainingRdo, FitTrainingWithPaginationRdo, SortDirection, SortField } from '@backend/fit-training';
 import { CheckAuthGuard } from "./guards/check-auth.guard";
 import { CreateFeedBackDto, FitFeedBackRdo } from '@backend/fit-feedback';
@@ -20,6 +20,7 @@ import { Feedback, UserRole } from "@backend/core";
 import { RolesGuard } from "./guards/roles.guard";
 import { PathInterceptor } from "./interceptors/path.interceptor";
 import { plainToInstance } from "class-transformer";
+import { LoadVideoDto } from "./dto/load-video.dto";
 
 @Controller('fit')
 @UseFilters(AxiosExceptionFilter)
@@ -52,7 +53,7 @@ export class FitController {
   ): Promise<FitTrainingWithPaginationRdo> {
     query.sortField = SortField.CreateDate;
     query.sortDirection = SortDirection.Desc;
-    const trainings: FitTrainingWithPaginationRdo = (await this.httpService.axiosRef.get(ApplicationServiceURL.FitTrainings, { params: {...query, userId} })).data;
+    const trainings: FitTrainingWithPaginationRdo = (await this.httpService.axiosRef.get(ApplicationServiceURL.FitTrainings, { params: { ...query, userId } })).data;
     return trainings;
   }
 
@@ -61,7 +62,7 @@ export class FitController {
   public async getFilterValues(
     @Query('authorId') authorId?: string
   ) {
-    const params = (authorId) ? {authorId: authorId} : {};
+    const params = (authorId) ? { authorId: authorId } : {};
     const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.FitTrainings}/filter-values`, { params: params })
     return data;
   }
@@ -76,7 +77,7 @@ export class FitController {
   public async getTrainingById(@Param('id') id: string) {
     const training: FitTrainingRdo = (await this.httpService.axiosRef.get(`${ApplicationServiceURL.FitTrainings}/${id}`)).data;
     const user: UserRdo = (await this.httpService.axiosRef.get(`${ApplicationServiceURL.Users}/${training.userId}`)).data;
-    const trainingWithUser: TrainingWithUserRdo = { ...training, user};
+    const trainingWithUser: TrainingWithUserRdo = { ...training, user };
     return trainingWithUser;
   }
 
@@ -151,8 +152,34 @@ export class FitController {
     @Body() dto: UpdateTrainingDto,
     @Param('id') id: string,
   ): Promise<FitTrainingRdo> {
-    const training: FitTrainingRdo = (await this.httpService.axiosRef.patch(`${ApplicationServiceURL.FitTrainings}/${id}`, dto, { params: { userId } })).data;
+    const prefix = `${ApplicationServiceURL.File}/static`;
+    const training: FitTrainingRdo = (await this.httpService.axiosRef.patch(
+      `${ApplicationServiceURL.FitTrainings}/${id}`,
+      { ...dto, video: dto.video.replace(prefix, '') },
+      { params: { userId } })
+    ).data;
     return training;
+  }
+
+  @Post('trainings-video')
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Загрузить видео.' })
+  @UseInterceptors(FileInterceptor('video'))
+  @UseInterceptors(new PathInterceptor({ fields: ['videoUrl'] }))
+  public async loadVideo(
+    @Body() dto: LoadVideoDto,
+    @UploadedFile(new ParseFilePipe({
+      validators: [
+        new FileTypeValidator({ fileType: /(mov|avi|mp4)$/ }),
+      ],
+      fileIsRequired: false,
+    }),) video: Express.Multer.File
+  ) {
+    let videoUrl = '';
+    if (video) {
+      videoUrl = await this.appService.uploadFile(video);
+    }
+    return { videoUrl };
   }
 
 }
