@@ -1,3 +1,6 @@
+import BackButton from "../../components/back-button/back-button";
+import { BackButtonDisplayMode } from "../../components/back-button/constant";
+
 function UserCatalogScreen(): JSX.Element {
   return (
     <main>
@@ -8,11 +11,7 @@ function UserCatalogScreen(): JSX.Element {
             <div className="user-catalog-form">
               <h2 className="visually-hidden">Каталог пользователя</h2>
               <div className="user-catalog-form__wrapper">
-                <button className="btn-flat btn-flat--underlined user-catalog-form__btnback" type="button">
-                  <svg width="14" height="10" aria-hidden="true">
-                    <use xlinkHref="#arrow-left"></use>
-                  </svg><span>Назад</span>
-                </button>
+                <BackButton displayMode={BackButtonDisplayMode.UsersCatalog} />
                 <h3 className="user-catalog-form__title">Фильтры</h3>
                 <form className="user-catalog-form__form">
                   <div className="user-catalog-form__block user-catalog-form__block--location">

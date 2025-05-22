@@ -19,6 +19,7 @@ import PrivateRouteRole from '../private-route-role/private-route-role';
 import { UserRole } from '../../types/user/user-role.enum';
 import MyTrainingsScreen from '../../pages/my-trainings-screen/my-trainings-screen';
 import MyOrdersScreen from '../../pages/my-orders-screen/my-orders-screen';
+import UserCatalogScreen from '../../pages/users-catalog-screen/users-catalog-screen';
 
 function App(): JSX.Element {
   return (
@@ -87,6 +88,14 @@ function App(): JSX.Element {
             element={
               <PrivateRouteRole allowedRoles={[UserRole.Coach]}>
                 <MyOrdersScreen />
+              </PrivateRouteRole>
+            }
+          />
+          <Route
+            path={AppRoute.UsersCatalog}
+            element={
+              <PrivateRouteRole allowedRoles={[UserRole.Sportsman]}>
+                <UserCatalogScreen />
               </PrivateRouteRole>
             }
           />
