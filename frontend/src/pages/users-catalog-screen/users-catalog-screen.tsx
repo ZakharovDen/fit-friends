@@ -1,7 +1,51 @@
+import { useState } from "react";
 import BackButton from "../../components/back-button/back-button";
 import { BackButtonDisplayMode } from "../../components/back-button/constant";
+import { TrainingLevel, TrainingLevelLabel } from "../../types/training/training-level.enum";
+import { TrainingType, TrainingTypeLabel } from "../../types/training/training-type.enum";
+import { UserLocation, UserLocationLabel } from "../../types/user/user-location.enum";
+import FilterCheckbox from "../../components/filter-checkbox/filter-checkbox";
+import FilterRadio from "../../components/filter-radio/filter-radio";
+
+type UserFilter = {
+  locations: UserLocation[],
+  spezializations: TrainingType[],
+  level: TrainingLevel,
+}
 
 function UserCatalogScreen(): JSX.Element {
+  const [filterValues, setFilterValues] = useState<UserFilter>({
+    level: TrainingLevel.Beginner,
+    locations: [],
+    spezializations: []
+  });
+
+  const locations = Object.entries(UserLocationLabel).map(([key, label]) => ({ key, label }));
+  const specializations = Object.entries(TrainingTypeLabel).map(([key, label]) => ({ key, label }));
+  const levels = Object.entries(TrainingLevelLabel).map(([key, label]) => ({ key, label }));
+
+  const handleLocationChange1 = (key: string, checked: boolean) => {
+    if (checked) {
+      setFilterValues({ ...filterValues, locations: [...filterValues.locations, key as UserLocation] });
+    } else {
+      setFilterValues((filterValues) => ({ ...filterValues, locations: filterValues.locations.filter((location) => location !== key) }));
+    }
+  };
+
+  const handleSpecializationChange = (key: string, checked: boolean) => {
+    if (checked) {
+      setFilterValues({ ...filterValues, spezializations: [...filterValues.spezializations, key as TrainingType] });
+    } else {
+      setFilterValues((filterValues) => ({ ...filterValues, spezializations: filterValues.spezializations.filter((spezialization) => spezialization !== key) }));
+    }
+  };
+
+  const handleLevelChange = (key: string, checked: boolean) => {
+    if (checked) {
+      setFilterValues({ ...filterValues, level: key as TrainingLevel });
+    }
+  };
+
   return (
     <main>
       <section className="inner-page">
@@ -14,146 +58,31 @@ function UserCatalogScreen(): JSX.Element {
                 <BackButton displayMode={BackButtonDisplayMode.UsersCatalog} />
                 <h3 className="user-catalog-form__title">Фильтры</h3>
                 <form className="user-catalog-form__form">
-                  <div className="user-catalog-form__block user-catalog-form__block--location">
-                    <h4 className="user-catalog-form__block-title">Локация, станция метро</h4>
-                    <ul className="user-catalog-form__check-list">
-                      <li className="user-catalog-form__check-list-item">
-                        <div className="custom-toggle custom-toggle--checkbox">
-                          <label>
-                            <input type="checkbox" value="user-agreement-1" name="user-agreement" checked /><span className="custom-toggle__icon">
-                              <svg width="9" height="6" aria-hidden="true">
-                                <use xlinkHref="#arrow-check"></use>
-                              </svg></span><span className="custom-toggle__label">Автово</span>
-                          </label>
-                        </div>
-                      </li>
-                      <li className="user-catalog-form__check-list-item">
-                        <div className="custom-toggle custom-toggle--checkbox">
-                          <label>
-                            <input type="checkbox" value="user-agreement-1" name="user-agreement" checked /><span className="custom-toggle__icon">
-                              <svg width="9" height="6" aria-hidden="true">
-                                <use xlinkHref="#arrow-check"></use>
-                              </svg></span><span className="custom-toggle__label">Адмиралтейская</span>
-                          </label>
-                        </div>
-                      </li>
-                      <li className="user-catalog-form__check-list-item">
-                        <div className="custom-toggle custom-toggle--checkbox">
-                          <label>
-                            <input type="checkbox" value="user-agreement-1" name="user-agreement" checked /><span className="custom-toggle__icon">
-                              <svg width="9" height="6" aria-hidden="true">
-                                <use xlinkHref="#arrow-check"></use>
-                              </svg></span><span className="custom-toggle__label">Академическая</span>
-                          </label>
-                        </div>
-                      </li>
-                      <li className="user-catalog-form__check-list-item">
-                        <div className="custom-toggle custom-toggle--checkbox">
-                          <label>
-                            <input type="checkbox" value="user-agreement-1" name="user-agreement" /><span className="custom-toggle__icon">
-                              <svg width="9" height="6" aria-hidden="true">
-                                <use xlinkHref="#arrow-check"></use>
-                              </svg></span><span className="custom-toggle__label">Балтийская</span>
-                          </label>
-                        </div>
-                      </li>
-                      <li className="user-catalog-form__check-list-item">
-                        <div className="custom-toggle custom-toggle--checkbox">
-                          <label>
-                            <input type="checkbox" value="user-agreement-1" name="user-agreement" /><span className="custom-toggle__icon">
-                              <svg width="9" height="6" aria-hidden="true">
-                                <use xlinkHref="#arrow-check"></use>
-                              </svg></span><span className="custom-toggle__label">Бухарестская</span>
-                          </label>
-                        </div>
-                      </li>
-                    </ul>
-                    <button className="btn-show-more user-catalog-form__btn-show" type="button"><span>Посмотреть все</span>
-                      <svg className="btn-show-more__icon" width="10" height="4" aria-hidden="true">
-                        <use xlinkHref="#arrow-down"></use>
-                      </svg>
-                    </button>
-                  </div>
-                  <div className="user-catalog-form__block user-catalog-form__block--spezialization">
-                    <h4 className="user-catalog-form__block-title">Специализация</h4>
-                    <ul className="user-catalog-form__check-list">
-                      <li className="user-catalog-form__check-list-item">
-                        <div className="custom-toggle custom-toggle--checkbox">
-                          <label>
-                            <input type="checkbox" value="spezialization-1" name="spezialization" checked /><span className="custom-toggle__icon">
-                              <svg width="9" height="6" aria-hidden="true">
-                                <use xlinkHref="#arrow-check"></use>
-                              </svg></span><span className="custom-toggle__label">Аэробика</span>
-                          </label>
-                        </div>
-                      </li>
-                      <li className="user-catalog-form__check-list-item">
-                        <div className="custom-toggle custom-toggle--checkbox">
-                          <label>
-                            <input type="checkbox" value="spezialization-1" name="spezialization" checked /><span className="custom-toggle__icon">
-                              <svg width="9" height="6" aria-hidden="true">
-                                <use xlinkHref="#arrow-check"></use>
-                              </svg></span><span className="custom-toggle__label">Бег</span>
-                          </label>
-                        </div>
-                      </li>
-                      <li className="user-catalog-form__check-list-item">
-                        <div className="custom-toggle custom-toggle--checkbox">
-                          <label>
-                            <input type="checkbox" value="spezialization-1" name="spezialization" checked /><span className="custom-toggle__icon">
-                              <svg width="9" height="6" aria-hidden="true">
-                                <use xlinkHref="#arrow-check"></use>
-                              </svg></span><span className="custom-toggle__label">Бокс</span>
-                          </label>
-                        </div>
-                      </li>
-                      <li className="user-catalog-form__check-list-item">
-                        <div className="custom-toggle custom-toggle--checkbox">
-                          <label>
-                            <input type="checkbox" value="spezialization-1" name="spezialization" /><span className="custom-toggle__icon">
-                              <svg width="9" height="6" aria-hidden="true">
-                                <use xlinkHref="#arrow-check"></use>
-                              </svg></span><span className="custom-toggle__label">Йога</span>
-                          </label>
-                        </div>
-                      </li>
-                      <li className="user-catalog-form__check-list-item">
-                        <div className="custom-toggle custom-toggle--checkbox">
-                          <label>
-                            <input type="checkbox" value="spezialization-1" name="spezialization" /><span className="custom-toggle__icon">
-                              <svg width="9" height="6" aria-hidden="true">
-                                <use xlinkHref="#arrow-check"></use>
-                              </svg></span><span className="custom-toggle__label">Кроссфит</span>
-                          </label>
-                        </div>
-                      </li>
-                    </ul>
-                    <button className="btn-show-more user-catalog-form__btn-show" type="button"><span>Посмотреть все</span>
-                      <svg className="btn-show-more__icon" width="10" height="4" aria-hidden="true">
-                        <use xlinkHref="#arrow-down"></use>
-                      </svg>
-                    </button>
-                  </div>
-                  <div className="user-catalog-form__block user-catalog-form__block--level">
-                    <h4 className="user-catalog-form__block-title">Ваш уровень</h4>
-                    <div className="custom-toggle-radio">
-                      <div className="custom-toggle-radio__block">
-                        <label>
-                          <input type="radio" name="user-agreement" /><span className="custom-toggle-radio__icon"></span><span className="custom-toggle-radio__label">Новичок</span>
-                        </label>
-                      </div>
-                      <div className="custom-toggle-radio__block">
-                        <label>
-                          <input type="radio" name="user-agreement" checked /><span className="custom-toggle-radio__icon"></span><span className="custom-toggle-radio__label">Любитель</span>
-                        </label>
-                      </div>
-                      <div className="custom-toggle-radio__block">
-                        <label>
-                          <input type="radio" name="user-agreement" value="user-agreement-1" /><span className="custom-toggle-radio__icon"></span><span className="custom-toggle-radio__label">Профессионал</span>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
+
+                  <FilterCheckbox
+                    onChange={handleLocationChange1}
+                    options={locations}
+                    selectedKeys={filterValues.locations}
+                    title="Локация, станция метро"
+                    className="user-catalog-form__block--location"
+                  />
+
+                  <FilterCheckbox
+                    onChange={handleSpecializationChange}
+                    options={specializations}
+                    selectedKeys={filterValues.spezializations}
+                    title="Специализация"
+                    className="user-catalog-form__block--spezialization"
+                  />
+
+                  <FilterRadio
+                    onChange={handleLevelChange}
+                    options={levels}
+                    selectedKey={filterValues.level}
+                    title="Ваш уровень"
+                    className="user-catalog-form__block--level"
+                  />
+
                   <div className="user-catalog-form__block">
                     <h3 className="user-catalog-form__title user-catalog-form__title--sort">Сортировка</h3>
                     <div className="btn-radio-sort">
