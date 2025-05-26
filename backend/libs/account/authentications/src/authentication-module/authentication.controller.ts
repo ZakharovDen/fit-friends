@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpException, HttpStatus, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpException, HttpStatus, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -15,6 +15,7 @@ import { RequestWithTokenPayload } from './request-with-token-payload.interface'
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { CreateQuestionnaireDto } from '../dto/create-user-questionnaire.dto';
 import { UpdateQuestionnaireDto } from '../dto/update-user-questionnaire.dto';
+import { UserQuery } from '@backend/user';
 
 @ApiTags('authentication')
 @Controller('auth')
@@ -78,8 +79,10 @@ export class AuthenticationController {
     status: HttpStatus.OK,
   })
   @Get()
-  public async showAll() {
-    const users = await this.authService.getUsers();
+  public async showAll(
+    @Query() query: UserQuery
+  ) {
+    const users = await this.authService.getUsers(query);
     return fillDto(UserRdo, users);
   }
 

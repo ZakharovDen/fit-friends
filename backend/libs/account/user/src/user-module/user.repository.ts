@@ -6,6 +6,7 @@ import { Injectable } from '@nestjs/common';
 import { UserModel } from './user.model';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { UserQuery } from './user.query';
 
 @Injectable()
 export class UserRepository extends BaseMongoRepository<UserEntity, UserModel> {
@@ -21,8 +22,26 @@ export class UserRepository extends BaseMongoRepository<UserEntity, UserModel> {
     return this.createEntityFromDocument(document);
   }
 
-  public async findAll() {
-    const documents = await this.model.find().exec();
+  public async findAll(query: UserQuery) {
+    const filter: Record<string, any> = {};
+
+    if (query.locations) {
+      filter.location = { $in: query.locations };
+    }
+
+    if (query.specializations) {
+      filter['questionnaire.types'] = { $in: query.specializations };
+    }
+
+    if (query.level) {
+      filter['questionnaire.level'] = query.level;
+    }
+
+    if (query.role) {
+      filter.role = query.role;
+    }
+
+    const documents = await this.model.find(filter).exec();
     return documents.map((document) => this.createEntityFromDocument(document));
   }
 

@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import {
   Body, Controller, FileTypeValidator, Get, HttpStatus, MaxFileSizeValidator, Param,
-  ParseFilePipe, Patch, Post, Req, UploadedFile, UseFilters, UseGuards, UseInterceptors
+  ParseFilePipe, Patch, Post, Query, Req, UploadedFile, UseFilters, UseGuards, UseInterceptors
 } from '@nestjs/common';
 import 'multer';
 import { AuthenticationResponseMessage, CreateQuestionnaireDto, CreateUserDto, LoggedUserRdo, LoginUserDto, UpdateQuestionnaireDto, UpdateUserDto, UserRdo } from '@backend/authentications';
@@ -21,6 +21,7 @@ import { PathInterceptor } from './interceptors/path.interceptor';
 import { RolesGuard } from './guards/roles.guard';
 import { Roles } from './decorators/roles.decorator';
 import { UserRole } from '@backend/core';
+import { UserQuery } from '@backend/user';
 
 @Controller('users')
 @UseFilters(AxiosExceptionFilter)
@@ -41,8 +42,10 @@ export class UsersController {
   @UseInterceptors(InjectUserIdInterceptor)
   @Roles(UserRole.Sportsman)
   @Get()
-  public async getAll(): Promise<UserRdo[]> {
-    const data: UserRdo[] = (await this.httpService.axiosRef.get(`${ApplicationServiceURL.Users}`)).data;
+  public async getAll(
+    @Query() query: UserQuery
+  ): Promise<UserRdo[]> {
+    const data: UserRdo[] = (await this.httpService.axiosRef.get(`${ApplicationServiceURL.Users}`, {params: query})).data;
     return data;
   }
 

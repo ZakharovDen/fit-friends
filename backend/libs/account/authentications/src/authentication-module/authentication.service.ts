@@ -1,5 +1,5 @@
 import { ConflictException, HttpException, HttpStatus, Inject, Injectable, Logger, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { UserEntity, UserRepository } from '@backend/user';
+import { UserEntity, UserQuery, UserRepository } from '@backend/user';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { AUTH_USER_EXISTS, AUTH_USER_NOT_FOUND, AUTH_USER_PASSWORD_WRONG } from './authentication.constant';
 import { LoginUserDto } from '../dto/login-user.dto';
@@ -72,8 +72,8 @@ export class AuthenticationService {
     return user;
   }
 
-  public async getUsers() {
-    return this.userRepository.findAll();
+  public async getUsers(query: UserQuery) {
+    return this.userRepository.findAll(query);
   }
 
   public async createUserToken(user: User): Promise<Token> {
