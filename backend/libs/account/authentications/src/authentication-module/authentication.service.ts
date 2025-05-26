@@ -72,6 +72,10 @@ export class AuthenticationService {
     return user;
   }
 
+  public async getUsers() {
+    return this.userRepository.findAll();
+  }
+
   public async createUserToken(user: User): Promise<Token> {
     const accessTokenPayload = createJWTPayload(user);
     const refreshTokenPayload = { ...accessTokenPayload, tokenId: randomUUID() };

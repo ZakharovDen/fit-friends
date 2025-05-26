@@ -72,6 +72,17 @@ export class AuthenticationController {
     return fillDto(UserRdo, existUser.toPOJO());
   }
 
+  @ApiOperation({ summary: 'Список пользователей.' })
+  @ApiResponse({
+    type: [UserRdo],
+    status: HttpStatus.OK,
+  })
+  @Get()
+  public async showAll() {
+    const users = await this.authService.getUsers();
+    return fillDto(UserRdo, users);
+  }
+
   @ApiOperation({ summary: 'Получение новой пары токенов.' })
   @UseGuards(JwtRefreshGuard)
   @Post('refresh')

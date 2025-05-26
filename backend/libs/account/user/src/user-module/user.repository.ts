@@ -21,4 +21,9 @@ export class UserRepository extends BaseMongoRepository<UserEntity, UserModel> {
     return this.createEntityFromDocument(document);
   }
 
+  public async findAll() {
+    const documents = await this.model.find().exec();
+    return documents.map((document) => this.createEntityFromDocument(document));
+  }
+
 }

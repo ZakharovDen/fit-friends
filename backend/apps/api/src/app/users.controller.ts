@@ -1,6 +1,8 @@
 import { HttpService } from '@nestjs/axios';
-import { Body, Controller, FileTypeValidator, Get, HttpStatus, MaxFileSizeValidator, Param, 
-        ParseFilePipe, Patch, Post, Req, UploadedFile, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
+import {
+  Body, Controller, FileTypeValidator, Get, HttpStatus, MaxFileSizeValidator, Param,
+  ParseFilePipe, Patch, Post, Req, UploadedFile, UseFilters, UseGuards, UseInterceptors
+} from '@nestjs/common';
 import 'multer';
 import { AuthenticationResponseMessage, CreateQuestionnaireDto, CreateUserDto, LoggedUserRdo, LoginUserDto, UpdateQuestionnaireDto, UpdateUserDto, UserRdo } from '@backend/authentications';
 import { ApplicationServiceURL } from './app.config';
@@ -16,6 +18,9 @@ import { RegisterUserDto } from './dto/register-user.dto';
 import { plainToInstance } from 'class-transformer';
 import { UserId } from './decorators/user-id.decorator';
 import { PathInterceptor } from './interceptors/path.interceptor';
+import { RolesGuard } from './guards/roles.guard';
+import { Roles } from './decorators/roles.decorator';
+import { UserRole } from '@backend/core';
 
 @Controller('users')
 @UseFilters(AxiosExceptionFilter)
@@ -25,6 +30,21 @@ export class UsersController {
     private readonly httpService: HttpService,
     private readonly appService: AppService,
   ) { }
+
+  @ApiOperation({ summary: 'Список пользователей.' })
+  @ApiResponse({
+    type: [UserRdo],
+    status: HttpStatus.OK,
+  })
+  @ApiBearerAuth()
+  @UseGuards(CheckAuthGuard, RolesGuard)
+  @UseInterceptors(InjectUserIdInterceptor)
+  @Roles(UserRole.Sportsman)
+  @Get()
+  public async getAll(): Promise<UserRdo[]> {
+    const data: UserRdo[] = (await this.httpService.axiosRef.get(`${ApplicationServiceURL.Users}`)).data;
+    return data;
+  }
 
   @ApiOperation({ summary: 'Получение детальной информации о пользователе.' })
   @ApiResponse({
