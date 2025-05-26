@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { getTrainings } from "../../store/training/selectors";
 import { useEffect, useState } from "react";
-import { QueryParams } from "../../types/training/query-params";
+import { QueryParams } from "../../types/training/training-query-params";
 import { fetchTrainingsAction } from "../../store/training/thunks";
 import TrainingSlider from "../../components/training-slider/training-slider";
 import { TrainingSliderDisplayMode } from "../../components/training-slider/constant";

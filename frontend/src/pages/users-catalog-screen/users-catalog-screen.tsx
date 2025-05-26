@@ -6,6 +6,99 @@ import { TrainingType, TrainingTypeLabel } from "../../types/training/training-t
 import { UserLocation, UserLocationLabel } from "../../types/user/user-location.enum";
 import FilterCheckbox from "../../components/filter-checkbox/filter-checkbox";
 import FilterRadio from "../../components/filter-radio/filter-radio";
+import UsersCatalogItem from "../../components/users-catalog-item/users-catalog-item";
+
+const users = [
+  {
+    "id": "658170cbb954e9f5b905ccf4",
+    "email": "user@local.local",
+    "name": "Валерия",
+    "avatar": "/default/avatars/user-03.jpg",
+    "sex": "female",
+    "dateOfBirth": "1989-12-31T18:00:00.000Z",
+    "description": "Привет! Меня зовут Иванова Валерия, мне 34 года. Я профессиональный тренер по боксу. Не боюсь пробовать новое, также увлекаюсь кроссфитом, йогой и силовыми тренировками.",
+    "location": "Petrogradskaya",
+    "backgroundImage": "backend\\uploads\\2025\\03\\11aa6d8d-3ebd-4dda-82ca-6012a5709db7.png",
+    "role": "sportsman",
+    "createdAt": "2025-05-05T08:17:46.945Z",
+    "questionnaire": {
+      "level": "professional",
+      "types": [
+        "crossfit",
+        "yoga",
+        "boxing"
+      ],
+      "duration": "80-100",
+      "caloriesTotal": 5000,
+      "caloriesByDay": 5000,
+      "isReady": true
+    }
+  },
+  {
+    "id": "6581762309c030b503e30512",
+    "email": "user2@local.local",
+    "name": "Катерина",
+    "avatar": "/default/avatars/user-20.jpg",
+    "sex": "female",
+    "dateOfBirth": "2000-12-31T18:00:00.000Z",
+    "description": "Привет! Я Катерина и мне 27 лет. Обожаю спорт и все, что с ним связанно. Регулярно хожу на тренировки по кроссфиту, также занимаюсь йогой, рястяжкой и пилатесом.",
+    "location": "Pionerskaya",
+    "backgroundImage": "backend\\uploads\\2025\\03\\11aa6d8d-3ebd-4dda-82ca-6012a5709db7.png",
+    "role": "sportsman",
+    "createdAt": "2025-05-05T08:17:47.000Z",
+    "questionnaire": {
+      "level": "amateur",
+      "types": [
+        "pilates",
+        "yoga",
+        "stretching"
+      ],
+      "duration": "30-50",
+      "caloriesTotal": 5000,
+      "caloriesByDay": 1000,
+      "isReady": false
+    }
+  },
+  {
+    "id": "682ef7bef245a27a3a91aace",
+    "email": "example@email.com",
+    "name": "Иван",
+    "avatar": "/2025/05/2aeec67a-fd2d-41fe-953e-6246a2956542.jpeg",
+    "sex": "male",
+    "location": "Pionerskaya",
+    "role": "coach",
+    "createdAt": "2025-05-22T10:09:02.560Z",
+    "questionnaire": {
+      "level": "professional",
+      "types": [
+        "running",
+        "boxing",
+        "crossfit"
+      ],
+      "duration": "10-30",
+      "caloriesTotal": 5000,
+      "caloriesByDay": 1000,
+      "isReady": true
+    }
+  },
+  {
+    "id": "683310f6f245a27a3a91aaea",
+    "email": "example1@email.com",
+    "name": "Валерия",
+    "sex": "male",
+    "location": "Pionerskaya",
+    "role": "sportsman",
+    "createdAt": "2025-05-25T12:45:42.763Z",
+    "questionnaire": {
+      "level": "beginner",
+      "types": [],
+      "duration": "10-30",
+      "caloriesTotal": 5000,
+      "caloriesByDay": 1000,
+      "isReady": true
+    }
+  }
+]
 
 type UserFilter = {
   locations: UserLocation[],
@@ -100,137 +193,7 @@ function UserCatalogScreen(): JSX.Element {
             <div className="inner-page__content">
               <div className="users-catalog">
                 <ul className="users-catalog__list">
-                  <li className="users-catalog__item">
-                    <div className="thumbnail-user thumbnail-user--role-user">
-                      <div className="thumbnail-user__image">
-                        <picture>
-                          <source type="image/webp" srcSet="img/content/thumbnails/user-01.webp, img/content/thumbnails/user-01@2x.webp 2x" />
-                          <img src="img/content/thumbnails/user-01.jpg" srcSet="img/content/thumbnails/user-01@2x.jpg 2x" width="82" height="82" alt="" />
-                        </picture>
-                      </div>
-                      <div className="thumbnail-user__header">
-                        <h3 className="thumbnail-user__name">Елизавета</h3>
-                        <div className="thumbnail-user__location">
-                          <svg width="14" height="16" aria-hidden="true">
-                            <use xlinkHref="#icon-location"></use>
-                          </svg>
-                          <address className="thumbnail-user__location-address">Петроградская</address>
-                        </div>
-                      </div>
-                      <ul className="thumbnail-user__hashtags-list">
-                        <li className="thumbnail-user__hashtags-item">
-                          <div className="hashtag thumbnail-user__hashtag"><span>#стретчинг</span></div>
-                        </li>
-                        <li className="thumbnail-user__hashtags-item">
-                          <div className="hashtag thumbnail-user__hashtag"><span>#йога</span></div>
-                        </li>
-                      </ul>
-                      <a className="btn btn--medium thumbnail-user__button" href="#">Подробнее</a>
-                    </div>
-                  </li>
-                  <li className="users-catalog__item">
-                    <div className="thumbnail-user thumbnail-user--role-coach">
-                      <div className="thumbnail-user__image">
-                        <picture>
-                          <source type="image/webp" srcSet="img/content/thumbnails/user-02.webp, img/content/thumbnails/user-02@2x.webp 2x" />
-                          <img src="img/content/thumbnails/user-02.jpg" srcSet="img/content/thumbnails/user-02@2x.jpg 2x" width="82" height="82" alt="" />
-                        </picture>
-                      </div>
-                      <div className="thumbnail-user__header">
-                        <h3 className="thumbnail-user__name">Дарья</h3>
-                        <div className="thumbnail-user__location">
-                          <svg width="14" height="16" aria-hidden="true">
-                            <use xlinkHref="#icon-location"></use>
-                          </svg>
-                          <address className="thumbnail-user__location-address">Адмиралтейская</address>
-                        </div>
-                      </div>
-                      <ul className="thumbnail-user__hashtags-list">
-                        <li className="thumbnail-user__hashtags-item">
-                          <div className="hashtag thumbnail-user__hashtag"><span>#стретчинг</span></div>
-                        </li>
-                      </ul>
-                      <a className="btn btn--dark-bg btn--medium thumbnail-user__button" href="#">Подробнее</a>
-                    </div>
-                  </li>
-                  <li className="users-catalog__item">
-                    <div className="thumbnail-user thumbnail-user--role-coach">
-                      <div className="thumbnail-user__image">
-                        <picture>
-                          <source type="image/webp" srcSet="img/content/thumbnails/user-03.webp, img/content/thumbnails/user-03@2x.webp 2x" />
-                          <img src="img/content/thumbnails/user-03.jpg" srcSet="img/content/thumbnails/user-03@2x.jpg 2x" width="82" height="82" alt="" />
-                        </picture>
-                      </div>
-                      <div className="thumbnail-user__header">
-                        <h3 className="thumbnail-user__name">Наталья</h3>
-                        <div className="thumbnail-user__location">
-                          <svg width="14" height="16" aria-hidden="true">
-                            <use xlinkHref="#icon-location"></use>
-                          </svg>
-                          <address className="thumbnail-user__location-address">Василеостровская</address>
-                        </div>
-                      </div>
-                      <ul className="thumbnail-user__hashtags-list">
-                        <li className="thumbnail-user__hashtags-item">
-                          <div className="hashtag thumbnail-user__hashtag"><span>#пилатес</span></div>
-                        </li>
-                      </ul>
-                      <a className="btn btn--dark-bg btn--medium thumbnail-user__button" href="#">Подробнее</a>
-                    </div>
-                  </li>
-                  <li className="users-catalog__item">
-                    <div className="thumbnail-user thumbnail-user--role-coach">
-                      <div className="thumbnail-user__image">
-                        <picture>
-                          <source type="image/webp" srcSet="img/content/thumbnails/user-08.webp, img/content/thumbnails/user-08@2x.webp 2x" />
-                          <img src="img/content/thumbnails/user-08.jpg" srcSet="img/content/thumbnails/user-08@2x.jpg 2x" width="82" height="82" alt="" />
-                        </picture>
-                      </div>
-                      <div className="thumbnail-user__header">
-                        <h3 className="thumbnail-user__name">Никита</h3>
-                        <div className="thumbnail-user__location">
-                          <svg width="14" height="16" aria-hidden="true">
-                            <use xlinkHref="#icon-location"></use>
-                          </svg>
-                          <address className="thumbnail-user__location-address">Садовая</address>
-                        </div>
-                      </div>
-                      <ul className="thumbnail-user__hashtags-list">
-                        <li className="thumbnail-user__hashtags-item">
-                          <div className="hashtag thumbnail-user__hashtag"><span>#йога</span></div>
-                        </li>
-                      </ul>
-                      <a className="btn btn--dark-bg btn--medium thumbnail-user__button" href="#">Подробнее</a>
-                    </div>
-                  </li>
-                  <li className="users-catalog__item">
-                    <div className="thumbnail-user thumbnail-user--role-user">
-                      <div className="thumbnail-user__image">
-                        <picture>
-                          <source type="image/webp" srcSet="img/content/thumbnails/user-09.webp, img/content/thumbnails/user-09@2x.webp 2x" />
-                          <img src="img/content/thumbnails/user-09.jpg" srcSet="img/content/thumbnails/user-09@2x.jpg 2x" width="82" height="82" alt="" />
-                        </picture>
-                      </div>
-                      <div className="thumbnail-user__header">
-                        <h3 className="thumbnail-user__name">Татьяна</h3>
-                        <div className="thumbnail-user__location">
-                          <svg width="14" height="16" aria-hidden="true">
-                            <use xlinkHref="#icon-location"></use>
-                          </svg>
-                          <address className="thumbnail-user__location-address">Площадь Александра Невского</address>
-                        </div>
-                      </div>
-                      <ul className="thumbnail-user__hashtags-list">
-                        <li className="thumbnail-user__hashtags-item">
-                          <div className="hashtag thumbnail-user__hashtag"><span>#стретчинг</span></div>
-                        </li>
-                        <li className="thumbnail-user__hashtags-item">
-                          <div className="hashtag thumbnail-user__hashtag"><span>#йога</span></div>
-                        </li>
-                      </ul>
-                      <a className="btn btn--medium thumbnail-user__button" href="#">Подробнее</a>
-                    </div>
-                  </li>
+                  {users.map((user) => <UsersCatalogItem user={user} />)}
                 </ul>
                 <div className="show-more users-catalog__show-more">
                   <button className="btn show-more__button show-more__button--more" type="button">Показать еще</button>

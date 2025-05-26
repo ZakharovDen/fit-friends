@@ -4,7 +4,7 @@ import TrainingCatalogList from "../../components/training-catalog/training-cata
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { getAllowedFilterValues, getTrainings } from "../../store/training/selectors";
 import { fetchTrainingsAction, getFilterValuesAction } from "../../store/training/thunks";
-import { QueryParams } from "../../types/training/query-params";
+import { QueryParams } from "../../types/training/training-query-params";
 import { COUNT_ITEMS_PER_PAGE } from './constant';
 import { TrainingFilter } from "../../types/filter/training-filter";
 import { TrainingSort } from "../../types/filter/training-sort";

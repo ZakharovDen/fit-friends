@@ -3,11 +3,11 @@ import { AxiosInstance } from 'axios';
 import { AppDispatch, State } from '../../types/state';
 import { APIRoute } from '../const';
 import { TrainingsWithPagination } from '../../types/training/trainings-with-pagination';
-import { QueryParams } from '../../types/training/query-params';
 import { Training, TrainingUpdateData, TrainingWithUser } from '../../types/training/training';
 import { AllowedFilterValues } from '../../types/filter/allowed-filter-values';
+import { TrainingQueryParams } from '../../types/training/training-query-params';
 
-const getQuery = (queryParams: QueryParams) => {
+const getQuery = (queryParams: TrainingQueryParams) => {
   const {
     page,
     sortBy,
@@ -76,26 +76,26 @@ const getQuery = (queryParams: QueryParams) => {
   return query;
 }
 
-export const fetchTrainingsAction = createAsyncThunk<TrainingsWithPagination, QueryParams, {
+export const fetchTrainingsAction = createAsyncThunk<TrainingsWithPagination, TrainingQueryParams, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }>(
   'data/fetchTrainings',
-  async (queryParams: QueryParams, { extra: api }) => {
+  async (queryParams: TrainingQueryParams, { extra: api }) => {
     const query = getQuery(queryParams);
     const result = await api.get<TrainingsWithPagination>(`${APIRoute.Trainings}?${query}`);
     return result.data;
   },
 );
 
-export const fetchMyTrainingsAction = createAsyncThunk<TrainingsWithPagination, QueryParams, {
+export const fetchMyTrainingsAction = createAsyncThunk<TrainingsWithPagination, TrainingQueryParams, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }>(
   'data/fetchMyTrainings',
-  async (queryParams: QueryParams, { extra: api }) => {
+  async (queryParams: TrainingQueryParams, { extra: api }) => {
     const query = getQuery(queryParams);
     const result = await api.get<TrainingsWithPagination>(`${APIRoute.MyTrainings}?${query}`);
     return result.data;

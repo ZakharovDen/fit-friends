@@ -1,7 +1,7 @@
 import { TrainingDuration } from "./training-duration.enum";
 import { TrainingType } from "./training-type.enum";
 
-export interface QueryParams {
+export interface TrainingQueryParams {
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
   page?: number;
