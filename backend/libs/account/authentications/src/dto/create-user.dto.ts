@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDateString, IsEmail, IsEnum, IsOptional, IsString, Length } from "class-validator";
+import { IsEmail, IsEnum, IsOptional, IsString, Length } from "class-validator";
 import { AuthenticationValidateMessage, AuthFieldDescription, AuthValidateValue } from "../authentication-module/authentication.constant";
 import 'multer';
 import { UserLocation, UserRole, Sex } from "@backend/core";
@@ -10,8 +10,8 @@ export class CreateUserDto {
 
   @ApiProperty(AuthFieldDescription.Name)
   @Length(
-    AuthValidateValue.Name.MinLength, 
-    AuthValidateValue.Name.MaxLength, 
+    AuthValidateValue.Name.MinLength,
+    AuthValidateValue.Name.MaxLength,
     { message: AuthenticationValidateMessage.Name }
   )
   @IsString()
@@ -19,8 +19,8 @@ export class CreateUserDto {
 
   @ApiProperty(AuthFieldDescription.Password)
   @Length(
-    AuthValidateValue.Password.MinLength, 
-    AuthValidateValue.Password.MaxLength, 
+    AuthValidateValue.Password.MinLength,
+    AuthValidateValue.Password.MaxLength,
     { message: AuthenticationValidateMessage.Password }
   )
   @IsString()
@@ -35,7 +35,6 @@ export class CreateUserDto {
   public sex: Sex;
 
   @ApiProperty(AuthFieldDescription.DateOfBirth)
-  @IsDateString()
   @IsOptional()
   public dateOfBirth?: Date;
 
