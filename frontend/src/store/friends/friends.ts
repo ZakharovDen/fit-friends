@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { User } from "../../types/user/user";
 import { NameSpace } from "../const";
-import { getUsers } from "./thunks";
+import { fetchUsersAction } from "./thunks";
 
 type InitialState = {
   users: User[];
@@ -17,7 +17,7 @@ export const friends = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
-      .addCase(getUsers.fulfilled, (state, action) => {
+      .addCase(fetchUsersAction.fulfilled, (state, action) => {
         state.users = action.payload;
       });
   },

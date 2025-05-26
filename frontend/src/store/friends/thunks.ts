@@ -5,7 +5,7 @@ import { AppDispatch, State } from "../../types/state";
 import { AxiosInstance } from "axios";
 import { APIRoute } from "../const";
 
-export const getUsers = createAsyncThunk<User[], UserQueryParams, {
+export const fetchUsersAction = createAsyncThunk<User[], UserQueryParams, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;

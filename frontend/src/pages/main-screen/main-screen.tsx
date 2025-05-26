@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { getTrainings } from "../../store/training/selectors";
 import { useEffect, useState } from "react";
-import { QueryParams } from "../../types/training/training-query-params";
+import { TrainingQueryParams } from "../../types/training/training-query-params";
 import { fetchTrainingsAction } from "../../store/training/thunks";
 import TrainingSlider from "../../components/training-slider/training-slider";
 import { TrainingSliderDisplayMode } from "../../components/training-slider/constant";
@@ -10,7 +10,7 @@ import { TrainingItemDisplayMode } from "../../components/training-item/constant
 function MainScreen(): JSX.Element {
   const dispatch = useAppDispatch();
   const { entities } = useAppSelector(getTrainings);
-  const [queryParams, _setQueryParams] = useState<QueryParams>({
+  const [queryParams, _setQueryParams] = useState<TrainingQueryParams>({
     page: 1,
     limit: 20,
     sortBy: 'rating',
