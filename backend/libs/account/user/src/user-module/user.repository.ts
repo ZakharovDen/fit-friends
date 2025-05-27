@@ -5,8 +5,9 @@ import { UserFactory } from './user.factory';
 import { Injectable } from '@nestjs/common';
 import { UserModel } from './user.model';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, SortOrder } from 'mongoose';
 import { UserQuery } from './user.query';
+import { UserRole } from '@backend/core';
 
 @Injectable()
 export class UserRepository extends BaseMongoRepository<UserEntity, UserModel> {
@@ -24,6 +25,7 @@ export class UserRepository extends BaseMongoRepository<UserEntity, UserModel> {
 
   public async findAll(query: UserQuery) {
     const filter: Record<string, any> = {};
+    let sortOrder: SortOrder = 'asc';
 
     if (query.locations) {
       filter.location = { $in: query.locations };
@@ -37,11 +39,11 @@ export class UserRepository extends BaseMongoRepository<UserEntity, UserModel> {
       filter['questionnaire.level'] = query.level;
     }
 
-    if (query.role) {
-      filter.role = query.role;
+    if (query.role === UserRole.Sportsman) {
+      sortOrder = 'desc';
     }
 
-    const documents = await this.model.find(filter).exec();
+    const documents = await this.model.find(filter).sort([['role', sortOrder], ['createdAt', 'desc']]).exec();
     return documents.map((document) => this.createEntityFromDocument(document));
   }
 
