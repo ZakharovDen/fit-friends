@@ -22,12 +22,12 @@ export const fetchUsersAction = createAsyncThunk<User[], UserQueryParams, {
     }
     if (locations) {
       for (const location of locations) {
-        query += `&location=${location}`;
+        query += `&locations=${location}`;
       }
     }
     if (specializations) {
       for (const specialization of specializations) {
-        query += `&specialization=${specialization}`;
+        query += `&specializations=${specialization}`;
       }
     }
     const { data } = await api.get<User[]>(`${APIRoute.Users}?${query}`);
