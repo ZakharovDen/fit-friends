@@ -102,7 +102,7 @@ function UserCatalogScreen(): JSX.Element {
                     <h3 className="user-catalog-form__title user-catalog-form__title--sort">Сортировка</h3>
                     <div className="btn-radio-sort">
                       {Object.entries(UserRoleSortLabel).map(([key, value]) => (
-                        <label>
+                        <label key={key}>
                           <input
                             type="radio"
                             name="sort"
@@ -122,7 +122,7 @@ function UserCatalogScreen(): JSX.Element {
             <div className="inner-page__content">
               <div className="users-catalog">
                 <ul className="users-catalog__list">
-                  {users.map((user) => <UsersCatalogItem user={user} />)}
+                  {users.map((user) => <UsersCatalogItem user={user} key={user.id} />)}
                 </ul>
                 <div className="show-more users-catalog__show-more">
                   <button className="btn show-more__button show-more__button--more" type="button">Показать еще</button>

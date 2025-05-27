@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+import { AppRoute } from "../../constant";
 import { TrainingTypeLabel } from "../../types/training/training-type.enum";
 import { User } from "../../types/user/user";
 import { UserLocationLabel } from "../../types/user/user-location.enum";
@@ -9,6 +11,7 @@ type UsersCatalogItemProps = {
 
 function UsersCatalogItem({ user }: UsersCatalogItemProps): JSX.Element {
   const { id, avatar, name, location, role, questionnaire } = user;
+  const linkToInfo = AppRoute.UserCard.replace(':id', id);
   return (
     <li className="users-catalog__item" key={id}>
       <div className={`thumbnail-user thumbnail-user--role-${(role === UserRole.Coach) ? 'coach' : 'user'}`}>
@@ -29,12 +32,12 @@ function UsersCatalogItem({ user }: UsersCatalogItemProps): JSX.Element {
         </div>
         <ul className="thumbnail-user__hashtags-list">
           {questionnaire?.types.map((type) =>
-            <li className="thumbnail-user__hashtags-item">
+            <li className="thumbnail-user__hashtags-item" key={type}>
               <div className="hashtag thumbnail-user__hashtag"><span>{`#${TrainingTypeLabel[type].toLowerCase()}`}</span></div>
             </li>
           )}
         </ul>
-        <a className="btn btn--medium thumbnail-user__button" href="#">Подробнее</a>
+        <Link className="btn btn--medium thumbnail-user__button" to={linkToInfo}>Подробнее</Link>
       </div>
     </li>
   );

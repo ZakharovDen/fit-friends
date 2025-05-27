@@ -12,6 +12,7 @@ import { getTrainings } from "../../store/training/selectors";
 import TrainingSlider from "../../components/training-slider/training-slider";
 import { TrainingSliderDisplayMode } from "../../components/training-slider/constant";
 import { TrainingItemDisplayMode } from "../../components/training-item/constant";
+import { UserRole } from "../../types/user/user-role.enum";
 
 function UserCardScreen(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -29,6 +30,8 @@ function UserCardScreen(): JSX.Element {
   }, [params, dispatch]);
   const userInfo = useAppSelector(getUserInfo);
   const { entities } = useAppSelector(getTrainings);
+  //const classSuffix = (userInfo?.role === UserRole.Coach) ? '-coach' : '';
+  const classSuffix = '-coach';
   return (
     <main>
       <div className="inner-page inner-page--no-sidebar">
@@ -36,44 +39,48 @@ function UserCardScreen(): JSX.Element {
           <div className="inner-page__wrapper">
             <BackButton displayMode={BackButtonDisplayMode.User} />
             <div className="inner-page__content">
-              <section className="user-card-coach">
+              <section className={`user-card`}>
                 <h1 className="visually-hidden">Карточка пользователя роль тренер</h1>
-                <div className="user-card-coach__wrapper">
-                  <div className="user-card-coach__card">
-                    <div className="user-card-coach__content">
-                      <div className="user-card-coach__head">
-                        <h2 className="user-card-coach__title">{userInfo?.name}</h2>
+                <div className={`user-card${classSuffix}__wrapper`}>
+                  <div className={`user-card${classSuffix}__card`}>
+                    <div className={`user-card${classSuffix}__content`}>
+                      <div className={`user-card${classSuffix}__head`}>
+                        <h2 className={`user-card${classSuffix}__title`}>{userInfo?.name}</h2>
                       </div>
-                      <div className="user-card-coach__label">
-                        <a href="popup-user-map.html"><svg className="user-card-coach__icon-location" width="12" height="14" aria-hidden="true">
+                      <div className={`user-card${classSuffix}__label`}>
+                        <a href="popup-user-map.html"><svg className={`user-card${classSuffix}__icon-location`} width="12" height="14" aria-hidden="true">
                           <use xlinkHref="#icon-location"></use>
                         </svg><span>{userInfo?.location && UserLocationLabel[userInfo?.location]}</span></a>
                       </div>
-                      <div className="user-card-coach__status-container">
-                        <div className="user-card-coach__status user-card-coach__status--tag">
-                          <svg className="user-card-coach__icon-cup" width="12" height="13" aria-hidden="true">
+                      <div className={`user-card${classSuffix}__status-container`}>
+                        <div className={`user-card${classSuffix}__status user-card${classSuffix}__status--tag`}>
+                          <svg className={`user-card${classSuffix}__icon-cup`} width="12" height="13" aria-hidden="true">
                             <use xlinkHref="#icon-cup"></use>
                           </svg><span>Тренер</span>
                         </div>
                         {userInfo?.questionnaire?.isReady
-                          ? <div className="user-card-coach__status user-card-coach__status--check"><span>Готов тренировать</span></div>
-                          : <div className="user-card-coach-2__status user-card-coach-2__status--check"><span>Не готов тренировать</span></div>
+                          ? <div className={`user-card-coach__status user-card-coach__status--check`}><span>Готов тренировать</span></div>
+                          : <div className={`user-card-coach-2__status user-card-coach-2__status--check`}><span>Не готов тренировать</span></div>
                         }
+                        <div className="thumbnail-friend__ready-status thumbnail-friend__ready-status--is-ready"><span>Готов к тренировке</span></div>
+                        <div className="thumbnail-friend__ready-status thumbnail-friend__ready-status--is-not-ready"><span>Не готов к тренировке</span></div>
                       </div>
-                      <div className="user-card-coach__text">
+                      <div className={`user-card${classSuffix}__text`}>
                         {userInfo?.description}
                       </div>
-                      <button className="btn-flat user-card-coach__sertificate" type="button">
-                        <svg width="12" height="13" aria-hidden="true">
-                          <use xlinkHref="#icon-teacher"></use>
-                        </svg><span>Посмотреть сертификаты</span>
-                      </button>
-                      <ul className="user-card-coach__hashtag-list">
+                      {(userInfo?.role === UserRole.Coach) &&
+                        <button className="btn-flat user-card-coach__sertificate" type="button">
+                          <svg width="12" height="13" aria-hidden="true">
+                            <use xlinkHref="#icon-teacher"></use>
+                          </svg><span>Посмотреть сертификаты</span>
+                        </button>
+                      }
+                      <ul className={`user-card${classSuffix}__hashtag-list`}>
                         {Object.entries(TrainingTypeLabel)
                           .map(([key, value]) => {
                             if (userInfo?.questionnaire?.types.includes(key as TrainingType)) {
                               return (
-                                <li className="user-card-coach__hashtag-item" key={key}>
+                                <li className={`user-card${classSuffix}__hashtag-item`} key={key}>
                                   <div className="hashtag"><span>{`#${value.toLowerCase()}`}</span></div>
                                 </li>
                               );
@@ -81,22 +88,38 @@ function UserCardScreen(): JSX.Element {
                           })
                         }
                       </ul>
-                      <button className="btn user-card-coach__btn" type="button">Добавить в друзья</button>
+                      <button className={`btn user-card${classSuffix}__btn`} type="button">Добавить в друзья</button>
                     </div>
-                    <div className="user-card-coach__gallary">
-                      <ul className="user-card-coach__gallary-list">
-                        <li className="user-card-coach__gallary-item"><img src="img/content/user-coach-photo1.jpg" srcSet="img/content/user-coach-photo1@2x.jpg 2x" width="334" height="573" alt="photo1" />
+                    <div className={`user-card${classSuffix}__gallary`}>
+                      <ul className={`user-card${classSuffix}__gallary-list`}>
+                        <li className={`user-card${classSuffix}__gallary-item`}>
+                          <img 
+                            src="img/content/user-coach-photo1.jpg" 
+                            srcSet="img/content/user-coach-photo1@2x.jpg 2x" 
+                            width="334" 
+                            height="573" 
+                            alt="photo1" 
+                          />
                         </li>
-                        <li className="user-card-coach__gallary-item"><img src="img/content/user-coach-photo2.jpg" srcSet="img/content/user-coach-photo2@2x.jpg 2x" width="334" height="573" alt="photo2" />
+                        <li className={`user-card${classSuffix}__gallary-item`}>
+                          <img 
+                            src="img/content/user-coach-photo2.jpg" 
+                            srcSet="img/content/user-coach-photo2@2x.jpg 2x" 
+                            width="334" 
+                            height="573" 
+                            alt="photo2" 
+                          />
                         </li>
                       </ul>
                     </div>
                   </div>
-                  <TrainingSlider
-                    trainings={entities}
-                    trainingSliderDisplayMode={TrainingSliderDisplayMode.UserCardCoach}
-                    trainingItemDisplayMode={TrainingItemDisplayMode.UserCardCoach}
-                  />
+                  {(userInfo?.role === UserRole.Coach) &&
+                    <TrainingSlider
+                      trainings={entities}
+                      trainingSliderDisplayMode={TrainingSliderDisplayMode.UserCardCoach}
+                      trainingItemDisplayMode={TrainingItemDisplayMode.UserCardCoach}
+                    />
+                  }
                 </div>
               </section>
             </div>
