@@ -9,7 +9,7 @@ import FilterRadio from "../../components/filter-radio/filter-radio";
 import UsersCatalogItem from "../../components/users-catalog-item/users-catalog-item";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { UserQueryParams } from "../../types/user/user-query-params";
-import { UserRole } from "../../types/user/user-role.enum";
+import { UserRole, UserRoleSortLabel } from "../../types/user/user-role.enum";
 import { fetchUsersAction } from "../../store/friends/thunks";
 import { getUsers } from "../../store/friends/selectors";
 
@@ -32,7 +32,7 @@ function UserCatalogScreen(): JSX.Element {
   const specializations = Object.entries(TrainingTypeLabel).map(([key, label]) => ({ key, label }));
   const levels = Object.entries(TrainingLevelLabel).map(([key, label]) => ({ key, label }));
 
-  const handleLocationChange1 = (key: string, checked: boolean) => {
+  const handleLocationChange = (key: string, checked: boolean) => {
     if (checked) {
       setFilterValues({ ...filterValues, locations: [...filterValues.locations, key as UserLocation] });
     } else {
@@ -54,6 +54,13 @@ function UserCatalogScreen(): JSX.Element {
     }
   };
 
+  const handleRoleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, checked } = event.target;
+    if (checked) {
+      setFilterValues({ ...filterValues, role: value as UserRole })
+    }
+  }
+
   return (
     <main>
       <section className="inner-page">
@@ -68,7 +75,7 @@ function UserCatalogScreen(): JSX.Element {
                 <form className="user-catalog-form__form">
 
                   <FilterCheckbox
-                    onChange={handleLocationChange1}
+                    onChange={handleLocationChange}
                     options={locations}
                     selectedKeys={filterValues.locations ?? []}
                     title="Локация, станция метро"
@@ -94,12 +101,19 @@ function UserCatalogScreen(): JSX.Element {
                   <div className="user-catalog-form__block">
                     <h3 className="user-catalog-form__title user-catalog-form__title--sort">Сортировка</h3>
                     <div className="btn-radio-sort">
-                      <label>
-                        <input type="radio" name="sort" checked /><span className="btn-radio-sort__label">Тренеры</span>
-                      </label>
-                      <label>
-                        <input type="radio" name="sort" /><span className="btn-radio-sort__label">Пользователи</span>
-                      </label>
+                      {Object.entries(UserRoleSortLabel).map(([key, value]) => (
+                        <label>
+                          <input
+                            type="radio"
+                            name="sort"
+                            checked={(filterValues.role === key)}
+                            key={key}
+                            value={key}
+                            onChange={handleRoleChange}
+                          />
+                          <span className="btn-radio-sort__label">{value}</span>
+                        </label>
+                      ))}
                     </div>
                   </div>
                 </form>

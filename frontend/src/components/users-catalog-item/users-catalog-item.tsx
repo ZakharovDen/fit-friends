@@ -1,15 +1,17 @@
+import { TrainingTypeLabel } from "../../types/training/training-type.enum";
 import { User } from "../../types/user/user";
 import { UserLocationLabel } from "../../types/user/user-location.enum";
+import { UserRole } from "../../types/user/user-role.enum";
 
 type UsersCatalogItemProps = {
   user: User;
 }
 
-function UsersCatalogItem({user}: UsersCatalogItemProps): JSX.Element {
-  const {id, avatar, name, location} = user;
+function UsersCatalogItem({ user }: UsersCatalogItemProps): JSX.Element {
+  const { id, avatar, name, location, role, questionnaire } = user;
   return (
     <li className="users-catalog__item" key={id}>
-      <div className="thumbnail-user thumbnail-user--role-user">
+      <div className={`thumbnail-user thumbnail-user--role-${(role === UserRole.Coach) ? 'coach' : 'user'}`}>
         <div className="thumbnail-user__image">
           <picture>
             <source type="image/webp" srcSet={avatar} />
@@ -26,12 +28,11 @@ function UsersCatalogItem({user}: UsersCatalogItemProps): JSX.Element {
           </div>
         </div>
         <ul className="thumbnail-user__hashtags-list">
-          <li className="thumbnail-user__hashtags-item">
-            <div className="hashtag thumbnail-user__hashtag"><span>#стретчинг</span></div>
-          </li>
-          <li className="thumbnail-user__hashtags-item">
-            <div className="hashtag thumbnail-user__hashtag"><span>#йога</span></div>
-          </li>
+          {questionnaire?.types.map((type) =>
+            <li className="thumbnail-user__hashtags-item">
+              <div className="hashtag thumbnail-user__hashtag"><span>{`#${TrainingTypeLabel[type].toLowerCase()}`}</span></div>
+            </li>
+          )}
         </ul>
         <a className="btn btn--medium thumbnail-user__button" href="#">Подробнее</a>
       </div>
