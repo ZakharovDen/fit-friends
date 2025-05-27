@@ -4,18 +4,18 @@ import TrainingCatalogList from "../../components/training-catalog/training-cata
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { getAllowedFilterValues, getTrainings } from "../../store/training/selectors";
 import { fetchTrainingsAction, getFilterValuesAction } from "../../store/training/thunks";
-import { QueryParams } from "../../types/training/training-query-params";
 import { COUNT_ITEMS_PER_PAGE } from './constant';
 import { TrainingFilter } from "../../types/filter/training-filter";
 import { TrainingSort } from "../../types/filter/training-sort";
 import { BackButtonDisplayMode } from "../../components/back-button/constant";
 import { FilterSortingDisplayMode } from "../../components/filter-sorting/constant";
+import { TrainingQueryParams } from "../../types/training/training-query-params";
 
 function TrainingCatalogScreen(): JSX.Element {
   const dispatch = useAppDispatch();
   const allowedFilterValues = useAppSelector(getAllowedFilterValues);
   const { entities, totalItems } = useAppSelector(getTrainings);
-  const [queryParams, setQueryParams] = useState<QueryParams>({
+  const [queryParams, setQueryParams] = useState<TrainingQueryParams>({
     sortBy: 'price',
     sortOrder: 'asc',
     page: 1,
@@ -41,7 +41,7 @@ function TrainingCatalogScreen(): JSX.Element {
   }
 
   const handleChangeFilter = (filterValues: TrainingFilter) => {
-    let sortOrder: QueryParams['sortOrder'] = 'asc';
+    let sortOrder: TrainingQueryParams['sortOrder'] = 'asc';
     if (filterValues.sort === TrainingSort.Higher) {
       sortOrder = 'desc';
     }
