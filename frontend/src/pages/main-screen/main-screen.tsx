@@ -6,6 +6,7 @@ import { fetchTrainingsAction } from "../../store/training/thunks";
 import TrainingSlider from "../../components/training-slider/training-slider";
 import { TrainingSliderDisplayMode } from "../../components/training-slider/constant";
 import { TrainingItemDisplayMode } from "../../components/training-item/constant";
+import LookForCompany from "../../components/look-for-company/look-for-company";
 
 function MainScreen(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -240,6 +241,7 @@ function MainScreen(): JSX.Element {
           />
         </div>
       </section>
+      <LookForCompany />
     </main>
   );
 }

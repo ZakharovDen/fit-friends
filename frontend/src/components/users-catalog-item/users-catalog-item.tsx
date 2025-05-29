@@ -4,17 +4,29 @@ import { TrainingTypeLabel } from "../../types/training/training-type.enum";
 import { User } from "../../types/user/user";
 import { UserLocationLabel } from "../../types/user/user-location.enum";
 import { UserRole } from "../../types/user/user-role.enum";
+import { UserCatalogItemDisplayMode } from "./constant";
 
 type UsersCatalogItemProps = {
   user: User;
+  displayMode: UserCatalogItemDisplayMode
 }
 
-function UsersCatalogItem({ user }: UsersCatalogItemProps): JSX.Element {
+function UsersCatalogItem({ user, displayMode }: UsersCatalogItemProps): JSX.Element {
   const { id, avatar, name, location, role, questionnaire } = user;
   const linkToInfo = AppRoute.UserCard.replace(':id', id);
   return (
-    <li className="users-catalog__item" key={id}>
-      <div className={`thumbnail-user thumbnail-user--role-${(role === UserRole.Coach) ? 'coach' : 'user'}`}>
+    <li className={`${(displayMode === UserCatalogItemDisplayMode.LookForCompany ? 'look-for-company' : 'users-catalog')}__item`} key={id}>
+      <div className={
+        `thumbnail-user thumbnail-user--role-${
+          (role === UserRole.Coach) 
+          ? 'coach' 
+          : 'user'
+        }${
+          (displayMode === UserCatalogItemDisplayMode.LookForCompany 
+          ? ' thumbnail-user--dark' 
+          : '')
+        }`
+      }>
         <div className="thumbnail-user__image">
           <picture>
             <source type="image/webp" srcSet={avatar} />
@@ -37,7 +49,10 @@ function UsersCatalogItem({ user }: UsersCatalogItemProps): JSX.Element {
             </li>
           )}
         </ul>
-        <Link className="btn btn--medium thumbnail-user__button" to={linkToInfo}>Подробнее</Link>
+        <Link 
+          className={`btn${(displayMode === UserCatalogItemDisplayMode.LookForCompany ? ' btn--outlined' : '')} btn--dark-bg btn--medium thumbnail-user__button`} 
+          to={linkToInfo}>Подробнее
+        </Link>
       </div>
     </li>
   );

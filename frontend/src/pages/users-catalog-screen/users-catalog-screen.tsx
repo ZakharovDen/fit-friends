@@ -12,6 +12,7 @@ import { UserQueryParams } from "../../types/user/user-query-params";
 import { UserRole, UserRoleSortLabel } from "../../types/user/user-role.enum";
 import { fetchUsersAction } from "../../store/friends/thunks";
 import { getUsers } from "../../store/friends/selectors";
+import { UserCatalogItemDisplayMode } from "../../components/users-catalog-item/constant";
 
 type UserFilter = Required<UserQueryParams>;
 
@@ -122,7 +123,7 @@ function UserCatalogScreen(): JSX.Element {
             <div className="inner-page__content">
               <div className="users-catalog">
                 <ul className="users-catalog__list">
-                  {users.map((user) => <UsersCatalogItem user={user} key={user.id} />)}
+                  {users.map((user) => <UsersCatalogItem user={user} key={user.id} displayMode={UserCatalogItemDisplayMode.UserCatalog} />)}
                 </ul>
                 <div className="show-more users-catalog__show-more">
                   <button className="btn show-more__button show-more__button--more" type="button">Показать еще</button>
