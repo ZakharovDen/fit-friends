@@ -44,7 +44,7 @@ function LookForCompany(): JSX.Element {
             </div>
           </div>
           <ul className="look-for-company__list">
-            {users.map((user) => <UsersCatalogItem user={user} displayMode={UserCatalogItemDisplayMode.LookForCompany} />)}
+            {users.map((user) => <UsersCatalogItem user={user} displayMode={UserCatalogItemDisplayMode.LookForCompany} key={user.id} />)}
           </ul>
         </div>
       </div>
