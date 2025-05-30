@@ -3,17 +3,29 @@ import { AppRoute } from "../../constant";
 import UsersCatalogItem from "../users-catalog-item/users-catalog-item";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { getUsers } from "../../store/friends/selectors";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { fetchUsersAction } from "../../store/friends/thunks";
 import { UserCatalogItemDisplayMode } from "../users-catalog-item/constant";
 
+// Импортируем Swiper
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+
 function LookForCompany(): JSX.Element {
   const navigate = useNavigate();
-    const dispatch = useAppDispatch();
-    const users = useAppSelector(getUsers);
-    useEffect(() => {
-      dispatch(fetchUsersAction())
-    }, [dispatch]);
+  const dispatch = useAppDispatch();
+  const users = useAppSelector(getUsers);
+  
+  // Референсы для кнопок навигации
+  const prevButtonRef = useRef<HTMLButtonElement>(null);
+  const nextButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    dispatch(fetchUsersAction());
+  }, [dispatch]);
+
   return (
     <section className="look-for-company">
       <div className="container">
@@ -31,21 +43,57 @@ function LookForCompany(): JSX.Element {
               </svg>
             </button>
             <div className="look-for-company__controls">
-              <button className="btn-icon btn-icon--outlined look-for-company__control" type="button" aria-label="previous">
+              <button 
+                ref={prevButtonRef}
+                className="btn-icon btn-icon--outlined look-for-company__control" 
+                type="button" 
+                aria-label="previous"
+              >
                 <svg width="16" height="14" aria-hidden="true">
                   <use xlinkHref="#arrow-left"></use>
                 </svg>
               </button>
-              <button className="btn-icon btn-icon--outlined look-for-company__control" type="button" aria-label="next">
+              <button 
+                ref={nextButtonRef}
+                className="btn-icon btn-icon--outlined look-for-company__control" 
+                type="button" 
+                aria-label="next"
+              >
                 <svg width="16" height="14" aria-hidden="true">
                   <use xlinkHref="#arrow-right"></use>
                 </svg>
               </button>
             </div>
           </div>
-          <ul className="look-for-company__list">
-            {users.map((user) => <UsersCatalogItem user={user} displayMode={UserCatalogItemDisplayMode.LookForCompany} key={user.id} />)}
-          </ul>
+          
+          <Swiper
+            modules={[Navigation]}
+            spaceBetween={20} // расстояние между слайдами
+            slidesPerView={4} // количество видимых слайдов
+            navigation={{
+              prevEl: prevButtonRef.current,
+              nextEl: nextButtonRef.current,
+            }}
+            onInit={(swiper) => {
+              // Переопределяем navigation после инициализации
+              // @ts-ignore
+              swiper.params.navigation.prevEl = prevButtonRef.current;
+              // @ts-ignore
+              swiper.params.navigation.nextEl = nextButtonRef.current;
+              swiper.navigation.init();
+              swiper.navigation.update();
+            }}
+            className="look-for-company__list"
+          >
+            {users.map((user) => (
+              <SwiperSlide key={user.id}>
+                <UsersCatalogItem 
+                  user={user} 
+                  displayMode={UserCatalogItemDisplayMode.LookForCompany}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
       </div>
     </section>
