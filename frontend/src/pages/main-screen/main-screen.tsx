@@ -21,6 +21,8 @@ function MainScreen(): JSX.Element {
     dispatch(fetchTrainingsAction(queryParams));
   }, [dispatch, queryParams]);
 
+
+
   return (
     <main>
       <h1 className="visually-hidden">FitFriends — Время находить тренировки, спортзалы и друзей спортсменов</h1>

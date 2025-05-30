@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { AppRoute } from "../../constant";
 import UsersCatalogItem from "../users-catalog-item/users-catalog-item";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { getUsers } from "../../store/friends/selectors";
+import { getUsers, getUsersLoadingStatus } from "../../store/friends/selectors";
 import { useEffect, useRef } from "react";
 import { fetchUsersAction } from "../../store/friends/thunks";
 import { UserCatalogItemDisplayMode } from "../users-catalog-item/constant";
@@ -12,19 +12,26 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
+import Spinner from "../spinner/spinner";
 
 function LookForCompany(): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const users = useAppSelector(getUsers);
+  const isLoading = useAppSelector(getUsersLoadingStatus); // Добавьте этот селектор в ваш store
   
   // Референсы для кнопок навигации
   const prevButtonRef = useRef<HTMLButtonElement>(null);
   const nextButtonRef = useRef<HTMLButtonElement>(null);
 
-  useEffect(() => {
+    useEffect(() => {
     dispatch(fetchUsersAction());
   }, [dispatch]);
+
+  // Обработка состояний загрузки и ошибок
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <section className="look-for-company">
@@ -85,7 +92,7 @@ function LookForCompany(): JSX.Element {
             }}
             className="look-for-company__list"
           >
-            {users.map((user) => (
+            {Array.isArray(users) && users.map((user) => (
               <SwiperSlide key={user.id}>
                 <UsersCatalogItem 
                   user={user} 
