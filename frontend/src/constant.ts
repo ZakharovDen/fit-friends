@@ -15,6 +15,7 @@ export enum AppRoute {
   MyTrainings = '/my-trainings',
   MyOrders = '/my-orders',
   UsersCatalog = '/users-catalog',
+  MyFriends = '/my-friends',
 }
 
 export enum AuthorizationStatus {

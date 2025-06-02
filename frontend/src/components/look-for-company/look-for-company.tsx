@@ -20,7 +20,6 @@ function LookForCompany(): JSX.Element {
   const users = useAppSelector(getUsers);
   const isLoading = useAppSelector(getUsersLoadingStatus); // Добавьте этот селектор в ваш store
   
-  // Референсы для кнопок навигации
   const prevButtonRef = useRef<HTMLButtonElement>(null);
   const nextButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -28,7 +27,6 @@ function LookForCompany(): JSX.Element {
     dispatch(fetchUsersAction());
   }, [dispatch]);
 
-  // Обработка состояний загрузки и ошибок
   if (isLoading) {
     return <Spinner />;
   }

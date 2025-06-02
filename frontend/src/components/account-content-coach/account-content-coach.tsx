@@ -21,7 +21,13 @@ function AccountContentCoach(): JSX.Element {
               </svg>
             </div><span className="thumbnail-link__text">Создать тренировку</span>
           </Link>
-          <Link className="thumbnail-link thumbnail-link--theme-light" to={AppRoute.MyOrders}>
+          <Link className="thumbnail-link thumbnail-link--theme-light" to={AppRoute.MyFriends}>
+            <div className="thumbnail-link__icon thumbnail-link__icon--theme-light">
+              <svg width="30" height="26" aria-hidden="true">
+                <use xlinkHref="#icon-bag"></use>
+              </svg>
+            </div><span className="thumbnail-link__text">Мои друзья</span>
+          </Link>          <Link className="thumbnail-link thumbnail-link--theme-light" to={AppRoute.MyOrders}>
             <div className="thumbnail-link__icon thumbnail-link__icon--theme-light">
               <svg width="30" height="26" aria-hidden="true">
                 <use xlinkHref="#icon-bag"></use>

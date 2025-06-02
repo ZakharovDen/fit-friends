@@ -20,6 +20,7 @@ import { UserRole } from '../../types/user/user-role.enum';
 import MyTrainingsScreen from '../../pages/my-trainings-screen/my-trainings-screen';
 import MyOrdersScreen from '../../pages/my-orders-screen/my-orders-screen';
 import UserCatalogScreen from '../../pages/users-catalog-screen/users-catalog-screen';
+import MyFriendsScreen from '../../pages/my-friends-screen/my-friends-screen';
 
 function App(): JSX.Element {
   return (
@@ -98,6 +99,10 @@ function App(): JSX.Element {
                 <UserCatalogScreen />
               </PrivateRouteRole>
             }
+          />
+          <Route
+            path={AppRoute.MyFriends}
+            element={<MyFriendsScreen />}
           />
         </Route>
         <Route

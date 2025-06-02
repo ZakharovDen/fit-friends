@@ -38,6 +38,17 @@ function Header(): JSX.Element {
                 </svg>
               </Link>
             </li>
+            <li className="main-nav__item">
+              <Link 
+                className={`main-nav__link ${isActive(AppRoute.MyFriends) ? 'is-active' : ''}`} 
+                to={AppRoute.MyFriends}
+                aria-label="Друзья"
+              >
+                <svg width="22" height="16" aria-hidden="true">
+                  <use xlinkHref="#icon-friends"></use>
+                </svg>
+              </Link>
+            </li>
           </ul>
         </nav>
         <div className="search">
