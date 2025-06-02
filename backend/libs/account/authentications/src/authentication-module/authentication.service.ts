@@ -124,4 +124,8 @@ export class AuthenticationService {
     await this.userRepository.update(user);
     return user;
   }
+
+  public async getFriends(userId: string) {
+    return this.userRepository.getFriends(userId);
+  }
 }

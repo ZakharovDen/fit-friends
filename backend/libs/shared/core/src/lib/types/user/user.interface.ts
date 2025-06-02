@@ -17,6 +17,7 @@ export interface User {
   backgroundImage?: string;
   role: UserRole;
   questionnaire?: Questionnaire;
+  friends?: string[];
   createdAt?: Date;
   updatedAt?: Date;
 }

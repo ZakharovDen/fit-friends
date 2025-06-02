@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { AuthUser, UserLocation, UserRole, Sex, TrainingLevel, TrainingType, TrainingDuration } from "@backend/core";
 
@@ -69,6 +69,9 @@ export class UserModel extends Document implements AuthUser {
     caloriesByDay: number;
     isReady: boolean;
   };
+
+  @Prop({ type: [Types.ObjectId], ref: 'UserModel', required: false })
+  public friends?: string[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserModel);

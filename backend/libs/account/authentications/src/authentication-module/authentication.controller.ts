@@ -143,4 +143,12 @@ export class AuthenticationController {
     }
     return user;
   }
+
+  @Get('/friends/:userId')
+  @ApiOperation({ summary: 'Получение друзей пользователя.' })
+  async getFriends(
+        @Param('userId') userId: string,
+  ) {
+    return this.authService.getFriends(userId)
+  }
 }
