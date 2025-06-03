@@ -49,7 +49,7 @@ export class UserRepository extends BaseMongoRepository<UserEntity, UserModel> {
 
   public async getFriends(id: string) {
     const { friends } = await this.findById(id);
-    const documents = await this.model.find({ id: { $in: friends } }).exec();
+    const documents = await this.model.find({ _id: { $in: friends } }).exec();
     return documents.map((document) => this.createEntityFromDocument(document));
   }
 

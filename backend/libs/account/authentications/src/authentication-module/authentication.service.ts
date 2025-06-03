@@ -97,7 +97,7 @@ export class AuthenticationService {
   public async getUserByEmail(email: string): Promise<UserEntity> {
     const existUser = await this.userRepository.findByEmail(email);
 
-    if (! existUser) {
+    if (!existUser) {
       throw new NotFoundException(`User with email ${email} not found`);
     }
 
@@ -128,4 +128,26 @@ export class AuthenticationService {
   public async getFriends(userId: string) {
     return this.userRepository.getFriends(userId);
   }
+
+  public async addFriend(userId: string, friendId: string) {
+    if (userId === friendId) {
+      return;
+    }
+    const user = await this.getUser(userId);
+    if (user.friends.find((friend) => friend === friendId)) {
+      return;
+    }
+    user.friends.push(friendId);
+    await this.update(userId, user);
+  }
+
+  public async deleteFriend(userId: string, friendId: string) {
+    const user = await this.getUser(userId);
+    const index = user.friends.indexOf(friendId);
+    if (index !== -1) {
+      user.friends.splice(index, 1);
+    }
+    await this.update(userId, user);
+  }
+
 }

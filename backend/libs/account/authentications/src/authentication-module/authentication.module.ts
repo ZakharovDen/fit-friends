@@ -10,6 +10,7 @@ import { JwtAccessStrategy } from '../strategies/jwt-access.strategy';
 import { LocalStrategy } from '../strategies/local.strategy';
 import { JwtRefreshStrategy } from '../strategies/jwt-refresh.strategy';
 import { RefreshTokenModule } from '../refresh-token-module/refresh-token.module';
+import { FriendsController } from './friends.controller';
 
 @Module({
   imports: [
@@ -21,7 +22,10 @@ import { RefreshTokenModule } from '../refresh-token-module/refresh-token.module
     //NotifyModule,
     RefreshTokenModule
   ],
-  controllers: [AuthenticationController],
+  controllers: [
+    AuthenticationController, 
+    FriendsController
+  ],
   providers: [
     AuthenticationService,
     JwtAccessStrategy,
