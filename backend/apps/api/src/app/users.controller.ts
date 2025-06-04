@@ -1,10 +1,10 @@
 import { HttpService } from '@nestjs/axios';
 import {
-  Body, Controller, FileTypeValidator, Get, HttpStatus, MaxFileSizeValidator, Param,
+  Body, Controller, Delete, FileTypeValidator, Get, HttpStatus, MaxFileSizeValidator, Param,
   ParseFilePipe, Patch, Post, Query, Req, UploadedFile, UseFilters, UseGuards, UseInterceptors
 } from '@nestjs/common';
 import 'multer';
-import { AuthenticationResponseMessage, CreateQuestionnaireDto, CreateUserDto, LoggedUserRdo, LoginUserDto, UpdateQuestionnaireDto, UpdateUserDto, UserRdo } from '@backend/authentications';
+import { AddFriendDto, AuthenticationResponseMessage, CreateQuestionnaireDto, CreateUserDto, LoggedUserRdo, LoginUserDto, UpdateQuestionnaireDto, UpdateUserDto, UserRdo } from '@backend/authentications';
 import { ApplicationServiceURL } from './app.config';
 import { AxiosExceptionFilter } from './filters/axios-exception.filter';
 import { ApiBearerAuth, ApiConsumes, ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -31,6 +31,47 @@ export class UsersController {
     private readonly httpService: HttpService,
     private readonly appService: AppService,
   ) { }
+
+  @Get('/friends')
+  @ApiOperation({ summary: 'Получение списка друзей пользователя.' })
+  @ApiResponse({ status: HttpStatus.OK, type: [UserRdo] })
+  @ApiBearerAuth()
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(InjectUserIdInterceptor)
+  async getFriends(
+    @UserId() userId: string,
+  ) {
+    const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Friends}/${userId}`);
+    return data;
+  }
+
+  @Post('/friends')
+  @ApiOperation({ summary: 'Добавление пользователя в друзья.' })
+  @ApiResponse({ status: HttpStatus.CREATED })
+  @ApiBearerAuth()
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(InjectUserIdInterceptor)
+  async addFriend(
+    @UserId() userId: string,
+    @Body() dto: AddFriendDto,
+  ) {
+    const { data } = await this.httpService.axiosRef.post(`${ApplicationServiceURL.Friends}/${userId}`, dto);
+    return data;
+  }
+
+  @Delete('/friends')
+  @ApiOperation({ summary: 'Удаление пользователя из друзей.' })
+  @ApiResponse({ status: HttpStatus.OK })
+  @ApiBearerAuth()
+  @UseGuards(CheckAuthGuard)
+  @UseInterceptors(InjectUserIdInterceptor)
+  async deleteFriend(
+    @UserId() userId: string,
+    @Body() dto: AddFriendDto,
+  ) {
+    const { data } = await this.httpService.axiosRef.delete(`${ApplicationServiceURL.Friends}/${userId}`, {data: dto});
+    return data;
+  }
 
   @ApiOperation({ summary: 'Список пользователей.' })
   @ApiResponse({
@@ -168,4 +209,5 @@ export class UsersController {
     const { data } = await this.httpService.axiosRef.patch(`${ApplicationServiceURL.Users}/questionnaire/${userId}`, dto);
     return data;
   }
+
 }
