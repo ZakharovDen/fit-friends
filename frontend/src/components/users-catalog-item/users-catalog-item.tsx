@@ -50,7 +50,12 @@ function UsersCatalogItem({ user, displayMode }: UsersCatalogItemProps): JSX.Ele
           )}
         </ul>
         <Link 
-          className={`btn${(displayMode === UserCatalogItemDisplayMode.LookForCompany ? ' btn--outlined' : '')} btn--dark-bg btn--medium thumbnail-user__button`} 
+          className={`btn${
+            (displayMode === UserCatalogItemDisplayMode.LookForCompany 
+              ? ' btn--outlined' 
+              : ''
+            )
+          } btn--dark-bg btn--medium thumbnail-user__button`} 
           to={linkToInfo}>Подробнее
         </Link>
       </div>

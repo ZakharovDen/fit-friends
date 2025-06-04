@@ -48,3 +48,25 @@ export const fetchFriendsAction = createAsyncThunk<User[], undefined, {
     return data;
   }
 );
+
+export const addFriendAction = createAsyncThunk<void, { friendId: string }, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'data/addFriend',
+  async(data, { extra: api }) => {
+    await api.post<void>(`${APIRoute.Friends}`, data);
+  }
+);
+
+export const deleteFriendAction = createAsyncThunk<void, { friendId: string }, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'data/deleteFriend',
+  async(data, { extra: api }) => {
+    await api.delete<void>(`${APIRoute.Friends}`, {data});
+  }
+);
