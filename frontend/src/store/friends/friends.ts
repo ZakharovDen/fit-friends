@@ -1,18 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { User } from "../../types/user/user";
 import { NameSpace } from "../const";
-import { fetchUsersAction } from "./thunks";
+import { fetchFriendsAction, fetchUsersAction } from "./thunks";
 
 type InitialState = {
   users: User[];
   isLoading: boolean;
   error: boolean;
+  friends: User[];
 };
 
 const initialState: InitialState = {
   users: [],
   isLoading: false,
-  error: false
+  error: false,
+  friends: []
 };
 
 export const friends = createSlice({
@@ -32,6 +34,19 @@ export const friends = createSlice({
       })
       .addCase(fetchUsersAction.rejected, (state) => {
         state.users = [];
+        state.isLoading = false;
+        state.error = true;
+      }).addCase(fetchFriendsAction.fulfilled, (state, action) => {
+        state.friends = action.payload;
+        state.isLoading = false;
+        state.error = false;
+      })
+      .addCase(fetchFriendsAction.pending, (state) => {
+        state.isLoading = true;
+        state.error = false;
+      })
+      .addCase(fetchFriendsAction.rejected, (state) => {
+        state.friends = [];
         state.isLoading = false;
         state.error = true;
       });

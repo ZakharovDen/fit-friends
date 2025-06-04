@@ -10,9 +10,9 @@ export const fetchUsersAction = createAsyncThunk<User[], UserQueryParams | undef
   state: State;
   extra: AxiosInstance;
 }>(
-  'data/getUserInfo',
+  'data/getUsersLookForCompany',
   async (queryParams: UserQueryParams | undefined, { extra: api }) => {
-      let query = '';
+    let query = '';
     if (queryParams) {
       const { level, locations, role, specializations } = queryParams;
       if (level) {
@@ -35,4 +35,16 @@ export const fetchUsersAction = createAsyncThunk<User[], UserQueryParams | undef
     const { data } = await api.get<User[]>(`${APIRoute.Users}?${query}`);
     return data;
   },
+);
+
+export const fetchFriendsAction = createAsyncThunk<User[], undefined, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'data/getFriends',
+  async (_arg, { extra: api }) => {
+    const { data } = await api.get<User[]>(`${APIRoute.Friends}`);
+    return data;
+  }
 );
