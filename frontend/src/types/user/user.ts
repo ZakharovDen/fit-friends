@@ -27,6 +27,7 @@ export type User = {
   role: UserRole;
   createdAt?: Date;
   questionnaire?: Questionnaire;
+  friends?: string[];
 };
 
 export type LoggedUser = User & {

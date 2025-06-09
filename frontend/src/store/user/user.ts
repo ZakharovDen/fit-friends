@@ -3,6 +3,7 @@ import { NameSpace } from '../const';
 import { addQuestionnaireAction, checkAuthAction, editUserAction, getUserInfoAction, loginAction, registerAction } from './thunks';
 import { AuthorizationStatus } from '../../constant';
 import { User } from '../../types/user/user';
+import { addFriendAction, deleteFriendAction } from '../friends/thunks';
 
 type InitialState = {
   authorizationStatus: AuthorizationStatus;
@@ -93,6 +94,36 @@ export const user = createSlice({
       })
       .addCase(getUserInfoAction.fulfilled, (state, action) => {
         state.userInfo = action.payload;
+      })
+      .addCase(addFriendAction.pending, (state) => {
+        state.isProcess = true;
+        state.isSuccess = false;
+      })
+      .addCase(addFriendAction.rejected, (state) => {
+        state.isProcess = false;
+        state.isSuccess = false;
+      })
+      .addCase(addFriendAction.fulfilled, (state, action) => {
+        const { friendId } = action.payload;
+        state.user?.friends?.push(friendId);
+        state.isProcess = false;
+        state.isSuccess = true;
+      })
+      .addCase(deleteFriendAction.pending, (state) => {
+        state.isProcess = true;
+        state.isSuccess = false;
+      })
+      .addCase(deleteFriendAction.rejected, (state) => {
+        state.isProcess = false;
+        state.isSuccess = false;
+      })
+      .addCase(deleteFriendAction.fulfilled, (state, action) => {
+        const { friendId } = action.payload;
+        if (state.user?.friends) {
+          state.user.friends = state.user.friends.filter((friend) => friend !== friendId);
+        }
+        state.isProcess = false;
+        state.isSuccess = true;
       });
   },
 });

@@ -4,7 +4,7 @@ import { BackButtonDisplayMode } from "../../components/back-button/constant";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { getUserInfoAction } from "../../store/user/thunks";
-import { getUserInfo } from "../../store/user/selectors";
+import { getUser, getUserInfo } from "../../store/user/selectors";
 import { UserLocationLabel } from "../../types/user/user-location.enum";
 import { TrainingType, TrainingTypeLabel } from "../../types/training/training-type.enum";
 import { fetchTrainingsAction } from "../../store/training/thunks";
@@ -13,12 +13,13 @@ import TrainingSlider from "../../components/training-slider/training-slider";
 import { TrainingSliderDisplayMode } from "../../components/training-slider/constant";
 import { TrainingItemDisplayMode } from "../../components/training-item/constant";
 import { UserRole } from "../../types/user/user-role.enum";
+import { addFriendAction, deleteFriendAction } from "../../store/friends/thunks";
 
 function UserCardScreen(): JSX.Element {
   const dispatch = useAppDispatch();
   const params = useParams();
+  const { id } = params;
   useEffect(() => {
-    const { id } = params;
     if (id) {
       dispatch(getUserInfoAction(id));
       dispatch(fetchTrainingsAction({
@@ -30,6 +31,36 @@ function UserCardScreen(): JSX.Element {
   }, [params, dispatch]);
   const userInfo = useAppSelector(getUserInfo);
   const { entities } = useAppSelector(getTrainings);
+  const user = useAppSelector(getUser);
+
+  const handleAddFriend = () => {
+    if (id) {
+      dispatch(addFriendAction({ friendId: id }));
+    }
+  }
+
+  const handleDeleteFriend = () => {
+    if (id) {
+      dispatch(deleteFriendAction({ friendId: id }));
+    }
+  }
+
+  const friendButton = (user?.friends && id && user.friends.includes(id))
+    ? <button
+      className="btn btn--outlined user-card-coach-2__btn"
+      type="button"
+      onClick={handleDeleteFriend}
+    >
+      Удалить из друзей
+    </button>
+    : <button
+      className={`btn user-card-coach__btn`}
+      type="button"
+      onClick={handleAddFriend}
+    >
+      Добавить в друзья
+    </button>;
+
   //const classSuffix = (userInfo?.role === UserRole.Coach) ? '-coach' : '';
   const classSuffix = '-coach';
   const coachStatus = <div className={`user-card${classSuffix}__status user-card${classSuffix}__status--tag`}>
@@ -39,8 +70,8 @@ function UserCardScreen(): JSX.Element {
   </div>
   {
     userInfo?.questionnaire?.isReady
-    ? <div className={`user-card-coach__status user-card-coach__status--check`}><span>Готов тренировать</span></div>
-    : <div className={`user-card-coach-2__status user-card-coach-2__status--check`}><span>Не готов тренировать</span></div>
+      ? <div className={`user-card-coach__status user-card-coach__status--check`}><span>Готов тренировать</span></div>
+      : <div className={`user-card-coach-2__status user-card-coach-2__status--check`}><span>Не готов тренировать</span></div>
   };
   const sportsmanStatus = userInfo?.questionnaire?.isReady
     ? <div className="thumbnail-friend__ready-status thumbnail-friend__ready-status--is-ready"><span>Готов к тренировке</span></div>
@@ -92,7 +123,7 @@ function UserCardScreen(): JSX.Element {
                           })
                         }
                       </ul>
-                      <button className={`btn user-card${classSuffix}__btn`} type="button">Добавить в друзья</button>
+                      {friendButton}
                     </div>
                     <div className={`user-card${classSuffix}__gallary`}>
                       <ul className={`user-card${classSuffix}__gallary-list`}>

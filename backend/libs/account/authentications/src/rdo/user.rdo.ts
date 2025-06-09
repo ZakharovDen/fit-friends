@@ -53,4 +53,8 @@ export class UserRdo {
   @ApiProperty({type: QuestionnaireRdo})
   @Type(() => QuestionnaireRdo)
   questionnaire?: QuestionnaireRdo;
+
+  @Expose()
+  @ApiProperty()
+  friends?: string[]
 }

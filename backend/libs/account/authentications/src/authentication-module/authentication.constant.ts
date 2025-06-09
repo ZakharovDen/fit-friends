@@ -55,6 +55,7 @@ export const AuthFieldDescription = {
   Location: { description: 'Станция метро', example: UserLocation.Petrogradskaya, enum: UserLocation },
   BackgroundImage:  { description: 'Фоновая картинка для карточки пользователя' },
   Role:  { description: 'Роль пользователя', example: UserRole.Coach, enum: UserRole },
+  Friends: { description: 'Друзья', example: ['683310f6f245a27a3a91aaea'] },
 } as const;
 
 export const QuestionnaireDescription = {

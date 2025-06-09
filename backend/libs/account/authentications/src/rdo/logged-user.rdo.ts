@@ -61,4 +61,8 @@ export class LoggedUserRdo {
   @ApiProperty(AuthFieldDescription.RefreshToken)
   @Expose()
   public refreshToken: string;
+
+  @Expose()
+  @ApiProperty(AuthFieldDescription.Friends)
+  friends?: string[]
 }
