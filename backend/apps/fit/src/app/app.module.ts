@@ -3,13 +3,15 @@ import { FitTrainingModule } from '@backend/fit-training';
 import { FitConfigModule } from '@backend/fit-config';
 import { FitFeedbackModule } from '@backend/fit-feedback';
 import { FitOrderModule } from '@backend/fit-order';
+import { FitRequestModule} from '@backend/fit-request';
 
 @Module({
   imports: [
     FitTrainingModule,
     FitConfigModule,
     FitFeedbackModule,
-    FitOrderModule
+    FitOrderModule,
+    FitRequestModule,
   ],
   controllers: [],
   providers: [],
