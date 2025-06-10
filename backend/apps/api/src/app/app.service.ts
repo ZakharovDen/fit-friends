@@ -59,8 +59,6 @@ export class AppService {
   public async appendRequest(initiatorId: string, friends: FriendWithRequestRdo[]): Promise<FriendWithRequestRdo[]> {
     const result: FriendWithRequestRdo[] = [];
     for (const friend of friends) {
-      console.log(friend.id);
-      //delete friend.request;
       const request = (await this.httpService.axiosRef.get(
         `${ApplicationServiceURL.FitRequests}?initiatorId=${initiatorId}&userId=${friend.id}`
       )).data;

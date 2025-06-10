@@ -2,12 +2,13 @@ import { createSlice } from "@reduxjs/toolkit";
 import { User } from "../../types/user/user";
 import { NameSpace } from "../const";
 import { fetchFriendsAction, fetchUsersAction } from "./thunks";
+import { Friend } from "../../types/friend/friend";
 
 type InitialState = {
   users: User[];
   isLoading: boolean;
   error: boolean;
-  friends: User[];
+  friends: Friend[];
 };
 
 const initialState: InitialState = {

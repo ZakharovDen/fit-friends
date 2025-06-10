@@ -4,6 +4,7 @@ import { UserQueryParams } from "../../types/user/user-query-params";
 import { AppDispatch, State } from "../../types/state";
 import { AxiosInstance } from "axios";
 import { APIRoute } from "../const";
+import { Friend } from "../../types/friend/friend";
 
 export const fetchUsersAction = createAsyncThunk<User[], UserQueryParams | undefined, {
   dispatch: AppDispatch;
@@ -37,14 +38,14 @@ export const fetchUsersAction = createAsyncThunk<User[], UserQueryParams | undef
   },
 );
 
-export const fetchFriendsAction = createAsyncThunk<User[], undefined, {
+export const fetchFriendsAction = createAsyncThunk<Friend[], undefined, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;
 }>(
   'data/getFriends',
   async (_arg, { extra: api }) => {
-    const { data } = await api.get<User[]>(`${APIRoute.Friends}`);
+    const { data } = await api.get<Friend[]>(`${APIRoute.Friends}`);
     return data;
   }
 );

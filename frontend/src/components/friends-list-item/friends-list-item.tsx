@@ -1,17 +1,43 @@
 import { Link } from "react-router-dom";
 import { TrainingTypeLabel } from "../../types/training/training-type.enum";
-import { User } from "../../types/user/user";
 import { UserLocationLabel } from "../../types/user/user-location.enum";
 import { AppRoute } from "../../constant";
 import { UserRole } from "../../types/user/user-role.enum";
+import { Friend } from "../../types/friend/friend";
+import { RequestStatus } from "../../types/friend/request-status.enum";
 
 type FriendsListItemProps = {
-  friend: User;
+  friend: Friend;
   userRole: UserRole | undefined;
 }
 
 function FriendsListItem({ friend, userRole }: FriendsListItemProps): JSX.Element {
-  const { avatar, name, id, location, questionnaire } = friend;
+  const { avatar, name, id, location, questionnaire, request } = friend;
+  const trainingCaption = (userRole === UserRole.Coach) 
+    ? 'Запрос на персональную тренировку' 
+    : 'Запрос на совместную тренировку';
+  let requestElement: JSX.Element = <></>;
+  if (request.status === RequestStatus.pending) {
+    requestElement =
+      <div className="thumbnail-friend__request-status thumbnail-friend__request-status--role-user">
+        <p className="thumbnail-friend__request-text">{trainingCaption}</p>
+        <div className="thumbnail-friend__button-wrapper">
+          <button className="btn btn--medium btn--dark-bg thumbnail-friend__button" type="button">Принять</button>
+          <button className="btn btn--medium btn--outlined btn--dark-bg thumbnail-friend__button" type="button">Отклонить</button>
+        </div>
+      </div>;
+  } else if (request.status === RequestStatus.accepted) {
+    requestElement =
+      <div className="thumbnail-friend__request-status thumbnail-friend__request-status--role-user">
+        <p className="thumbnail-friend__request-text">{`${trainingCaption} принят`}</p>
+      </div>;
+  } else if (request.status === RequestStatus.rejected) {
+    requestElement =
+      <div className="thumbnail-friend__request-status thumbnail-friend__request-status--role-user">
+        <p className="thumbnail-friend__request-text">{`${trainingCaption} отклонён`}</p>
+      </div>
+  };
+
   return (
     <li className="friends-list__item" key={id}>
       <div className="thumbnail-friend">
@@ -61,13 +87,7 @@ function FriendsListItem({ friend, userRole }: FriendsListItemProps): JSX.Elemen
               : ''}
           </div>
         </div>
-        <div className="thumbnail-friend__request-status thumbnail-friend__request-status--role-user">
-          <p className="thumbnail-friend__request-text">Запрос на&nbsp;совместную тренировку</p>
-          <div className="thumbnail-friend__button-wrapper">
-            <button className="btn btn--medium btn--dark-bg thumbnail-friend__button" type="button">Принять</button>
-            <button className="btn btn--medium btn--outlined btn--dark-bg thumbnail-friend__button" type="button">Отклонить</button>
-          </div>
-        </div>
+        {requestElement}
       </div>
     </li>
   );
