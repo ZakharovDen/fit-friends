@@ -21,7 +21,7 @@ export class FitRequestEntity extends Entity implements StorableEntity<Request> 
     this.userId = request.userId;
     this.createdAt = request.createdAt ?? undefined;
     this.statusDate = request.statusDate ?? undefined;
-    this.status = request.status;
+    this.status = request.status ?? RequestStatus.pending;
   }
 
   toPOJO(): Request {

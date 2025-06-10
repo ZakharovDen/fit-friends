@@ -39,14 +39,14 @@ POST http://localhost:3000/api/users/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "example@email.com",
+  "email": "example1@email.com",
   "password": "123456"
 }
 
 ###
 GET http://localhost:3000/api/users/friends
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ODJlZjdiZWYyNDVhMjdhM2E5MWFhY2UiLCJlbWFpbCI6ImV4YW1wbGVAZW1haWwuY29tIiwibmFtZSI6ItCY0LLQsNC9IiwiaWF0IjoxNzQ5MDE1NjgxLCJleHAiOjE3NDkwMTY1ODF9.mEkAH88lq2XTqxX8d5Gf88XZVMrLEnNp9ntiNdcK9Kc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ODMzMTBmNmYyNDVhMjdhM2E5MWFhZWEiLCJlbWFpbCI6ImV4YW1wbGUxQGVtYWlsLmNvbSIsIm5hbWUiOiLQktCw0LvQtdGA0LjRjyIsImlhdCI6MTc0OTU0OTA0MiwiZXhwIjoxNzQ5NTQ5OTQyfQ.eJClh4hSxDvT-3oNdLXHYH_wbkng9-4LTzsvZros2w8
 
 ###
 POST http://localhost:3000/api/users/friends

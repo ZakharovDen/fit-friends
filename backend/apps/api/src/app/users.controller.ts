@@ -22,6 +22,7 @@ import { RolesGuard } from './guards/roles.guard';
 import { Roles } from './decorators/roles.decorator';
 import { UserRole } from '@backend/core';
 import { UserQuery } from '@backend/user';
+import { FriendWithRequestRdo } from './rdo/friend-with-request.rdo';
 
 @Controller('users')
 @UseFilters(AxiosExceptionFilter)
@@ -34,15 +35,15 @@ export class UsersController {
 
   @Get('/friends')
   @ApiOperation({ summary: 'Получение списка друзей пользователя.' })
-  @ApiResponse({ status: HttpStatus.OK, type: [UserRdo] })
+  @ApiResponse({ status: HttpStatus.OK, type: [FriendWithRequestRdo] })
   @ApiBearerAuth()
   @UseGuards(CheckAuthGuard)
   @UseInterceptors(InjectUserIdInterceptor)
   async getFriends(
     @UserId() userId: string,
   ) {
-    const { data } = await this.httpService.axiosRef.get(`${ApplicationServiceURL.Friends}/${userId}`);
-    return data;
+    const { data } = await this.httpService.axiosRef.get<FriendWithRequestRdo[]>(`${ApplicationServiceURL.Friends}/${userId}`);
+    return await this.appService.appendRequest(userId, data);
   }
 
   @Post('/friends')

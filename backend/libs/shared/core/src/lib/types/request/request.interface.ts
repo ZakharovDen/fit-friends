@@ -1,7 +1,7 @@
 import { RequestStatus } from "./request-status.enum";
 
 export interface Request {
-  id: string;
+  id?: string;
   initiatorId: string;
   userId: string
   createdAt?: Date;

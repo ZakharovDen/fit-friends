@@ -1,0 +1,2 @@
+GET http://localhost:3334/api/requests?userId=682ef7bef245a27a3a91aace&initiatorId=683310f6f245a27a3a91aaea
+Content-Type: application/json

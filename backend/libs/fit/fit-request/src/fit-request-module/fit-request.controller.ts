@@ -1,7 +1,8 @@
-import { Body, Controller, HttpStatus, Post } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Post, Query } from "@nestjs/common";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { FitRequestService } from "./fit-request.service";
 import { CreateRequestDto } from "./dto/create-request.dto";
+import { FitRequestQuery } from "./fit-request.query";
 
 @ApiTags('Заявки (запросы) на тренировку')
 @Controller('requests')
@@ -18,12 +19,11 @@ export class FitRequestController {
     return request;
   }
 
-  // @Get('/:userId')
-  // @ApiOperation({ summary: 'Список покупок пользователя.' })
-  // @ApiResponse({ status: HttpStatus.CREATED, type: FitRequestRdo })
-  // @SerializeOptions({ type: FitRequestRdo })
-  // public async findAllByUserId(@Param('userId') userId: string){
-  //   const orders = await this.fitRequestService.findAllByUserId(userId);
-  //   return orders;
-  // }
+  @Get('/')
+  @ApiOperation({ summary: 'Получение информации о запросе на тренировку.' })
+  @ApiResponse({ status: HttpStatus.OK })
+  public async getRequestByUserId(@Query() query: FitRequestQuery){
+    const order = await this.fitRequestService.getRequestByUserId(query);
+    return order;
+  }
 }

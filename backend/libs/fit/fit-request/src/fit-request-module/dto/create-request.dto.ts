@@ -12,7 +12,7 @@ export class CreateRequestDto {
   @IsMongoId()
   userId: string;
 
-  @ApiProperty(RequestFieldDescription.Status)
-  @IsEnum(RequestStatus)
-  status: RequestStatus;
+  // @ApiProperty(RequestFieldDescription.Status)
+  // @IsEnum(RequestStatus)
+  // status: RequestStatus;
 }

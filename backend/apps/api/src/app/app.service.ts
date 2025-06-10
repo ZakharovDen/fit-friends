@@ -7,12 +7,13 @@ import { createUrlForFile } from "@backend/helpers";
 import FormData from 'form-data';
 import { UserRdo } from "@backend/authentications";
 import { FeedbackWithUserRdo } from "./rdo/feedback-with-user.rdo";
+import { FriendWithRequestRdo } from "./rdo/friend-with-request.rdo";
 
 @Injectable()
 export class AppService {
-    constructor(
-      private readonly httpService: HttpService,
-    ) { }
+  constructor(
+    private readonly httpService: HttpService,
+  ) { }
 
   public async uploadFile(file: Express.Multer.File) {
     const formData = new FormData();
@@ -51,7 +52,20 @@ export class AppService {
     return feedbacksWithUser;
   }
 
-  public async matchRoles(roles: UserRole[], role: UserRole){
+  public async matchRoles(roles: UserRole[], role: UserRole) {
     return roles.includes(role);
+  }
+
+  public async appendRequest(initiatorId: string, friends: FriendWithRequestRdo[]): Promise<FriendWithRequestRdo[]> {
+    const result: FriendWithRequestRdo[] = [];
+    for (const friend of friends) {
+      console.log(friend.id);
+      //delete friend.request;
+      const request = (await this.httpService.axiosRef.get(
+        `${ApplicationServiceURL.FitRequests}?initiatorId=${initiatorId}&userId=${friend.id}`
+      )).data;
+      result.push({...friend, request: request});
+    }
+    return result;
   }
 }
