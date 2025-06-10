@@ -1,9 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsMongoId } from 'class-validator';
-import { RequestStatus } from "@backend/core";
+import { IsMongoId } from 'class-validator';
 import { RequestFieldDescription } from "../fit-request.constant";
 
-export class CreateRequestDto {
+export class CreateFitRequestDto {
   @ApiProperty(RequestFieldDescription.InitiatorId)
   @IsMongoId()
   initiatorId: string;
@@ -11,8 +10,4 @@ export class CreateRequestDto {
   @ApiProperty(RequestFieldDescription.UserId)
   @IsMongoId()
   userId: string;
-
-  // @ApiProperty(RequestFieldDescription.Status)
-  // @IsEnum(RequestStatus)
-  // status: RequestStatus;
 }

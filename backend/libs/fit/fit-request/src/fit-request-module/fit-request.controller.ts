@@ -1,8 +1,9 @@
-import { Body, Controller, Get, HttpStatus, Post, Query } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Param, Patch, Post, Query } from "@nestjs/common";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { FitRequestService } from "./fit-request.service";
-import { CreateRequestDto } from "./dto/create-request.dto";
+import { CreateFitRequestDto } from "./dto/create-fit-request.dto";
 import { FitRequestQuery } from "./fit-request.query";
+import { UpdateFitRequestDto } from "./dto/update-fit-request.dto";
 
 @ApiTags('Заявки (запросы) на тренировку')
 @Controller('requests')
@@ -14,8 +15,19 @@ export class FitRequestController {
   @Post('/')
   @ApiOperation({ summary: 'Создание запроса на тренировку.' })
   @ApiResponse({ status: HttpStatus.CREATED })
-  public async create(@Body() dto: CreateRequestDto){
+  public async create(@Body() dto: CreateFitRequestDto){
     const request = await this.fitRequestService.create(dto);
+    return request;
+  }
+
+  @Patch('/:id')
+  @ApiOperation({ summary: 'Редактирование запроса на тренировку.' })
+  @ApiResponse({ status: HttpStatus.CREATED })
+  public async update(
+    @Param('id') id: string,
+    @Body() dto: UpdateFitRequestDto
+  ){
+    const request = await this.fitRequestService.update(id, dto);
     return request;
   }
 
@@ -23,7 +35,8 @@ export class FitRequestController {
   @ApiOperation({ summary: 'Получение информации о запросе на тренировку.' })
   @ApiResponse({ status: HttpStatus.OK })
   public async getRequestByUserId(@Query() query: FitRequestQuery){
-    const order = await this.fitRequestService.getRequestByUserId(query);
-    return order;
+    const request = await this.fitRequestService.getRequestByUserId(query);
+    return request;
   }
+  
 }

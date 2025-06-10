@@ -21,6 +21,8 @@ import { RolesGuard } from "./guards/roles.guard";
 import { PathInterceptor } from "./interceptors/path.interceptor";
 import { plainToInstance } from "class-transformer";
 import { LoadVideoDto } from "./dto/load-video.dto";
+import { CreateRequestDto } from "./dto/create-request.dto";
+import { CreateFitRequestDto, UpdateFitRequestDto } from "@backend/fit-request";
 
 @Controller('fit')
 @UseFilters(AxiosExceptionFilter)
@@ -182,4 +184,30 @@ export class FitController {
     return { videoUrl };
   }
 
+  @Post('request')
+  @ApiOperation({ summary: 'Создать запрос на совместную/персональную тренировку.' })
+  @ApiBearerAuth()
+  @UseGuards(CheckAuthGuard, RolesGuard)
+  @UseInterceptors(InjectUserIdInterceptor)
+  @Roles(UserRole.Sportsman)
+  public async createRequest(
+    @UserId() userId: string,
+    @Body() dto: CreateRequestDto,
+  ) {
+    const newDto: CreateFitRequestDto = {...dto, initiatorId: userId};
+    return (await this.httpService.axiosRef.post(ApplicationServiceURL.FitRequests, newDto)).data;
+  }
+
+  @Patch('request/:id')
+  @ApiOperation({ summary: 'Редактировать запрос на совместную/персональную тренировку.' })
+  @ApiBearerAuth()
+  @UseGuards(CheckAuthGuard, RolesGuard)
+  @UseInterceptors(InjectUserIdInterceptor)
+  @Roles(UserRole.Sportsman)
+  public async updateRequest(
+    @Body() dto: UpdateFitRequestDto,
+    @Param('id') id: string
+  ) {
+    return (await this.httpService.axiosRef.patch(`${ApplicationServiceURL.FitRequests}/${id}`, dto)).data;
+  }
 }
