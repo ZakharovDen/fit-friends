@@ -4,7 +4,8 @@ import { UserQueryParams } from "../../types/user/user-query-params";
 import { AppDispatch, State } from "../../types/state";
 import { AxiosInstance } from "axios";
 import { APIRoute } from "../const";
-import { Friend } from "../../types/friend/friend";
+import { Friend, Request } from "../../types/friend/friend";
+import { RequestStatus } from "../../types/friend/request-status.enum";
 
 export const fetchUsersAction = createAsyncThunk<User[], UserQueryParams | undefined, {
   dispatch: AppDispatch;
@@ -70,6 +71,31 @@ export const deleteFriendAction = createAsyncThunk<{ friendId: string }, { frien
   'data/deleteFriend',
   async (data, { extra: api }) => {
     await api.delete<void>(`${APIRoute.Friends}`, { data });
+    return data;
+  }
+);
+
+export const postRequestAction = createAsyncThunk<Request, { userId: string }, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'data/postRequest',
+  async (data, { extra: api }) => {
+    const request = (await api.post<Request>(`${APIRoute.Request}`, data)).data;
+    return request;
+  }
+);
+
+export const patchRequestAction = createAsyncThunk<{ id: string, status: RequestStatus }, { id: string, status: RequestStatus }, {
+  dispatch: AppDispatch;
+  state: State;
+  extra: AxiosInstance;
+}>(
+  'data/patchRequest',
+  async (data, { extra: api }) => {
+    const {id, status} = data;
+    await api.patch<void>(`${APIRoute.Request}/${id}`, {status});
     return data;
   }
 );

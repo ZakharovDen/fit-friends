@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { User } from "../../types/user/user";
 import { NameSpace } from "../const";
-import { fetchFriendsAction, fetchUsersAction } from "./thunks";
+import { fetchFriendsAction, fetchUsersAction, patchRequestAction, postRequestAction } from "./thunks";
 import { Friend } from "../../types/friend/friend";
 
 type InitialState = {
@@ -50,6 +50,34 @@ export const friends = createSlice({
         state.friends = [];
         state.isLoading = false;
         state.error = true;
+      })
+      .addCase(patchRequestAction.pending, (state) => {
+        state.isLoading = true;
+        state.error = false;
+      })
+      .addCase(patchRequestAction.rejected, (state) => {
+        state.isLoading = false;
+        state.error = true;
+      })
+      .addCase(patchRequestAction.fulfilled, (state, action) => {
+        const index = state.friends.findIndex((item) => item.request.id === action.payload.id);
+        state.friends[index].request.status = action.payload.status;
+        state.isLoading = false;
+        state.error = false;
+      })
+      .addCase(postRequestAction.pending, (state) => {
+        state.isLoading = true;
+        state.error = false;
+      })
+      .addCase(postRequestAction.rejected, (state) => {
+        state.isLoading = false;
+        state.error = true;
+      })
+      .addCase(postRequestAction.fulfilled, (state, action) => {
+        const index = state.friends.findIndex((item) => item.id === action.payload.userId);
+        state.friends[index].request = action.payload;
+        state.isLoading = false;
+        state.error = false;
       });
   },
 })

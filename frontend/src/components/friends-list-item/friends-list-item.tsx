@@ -5,6 +5,8 @@ import { AppRoute } from "../../constant";
 import { UserRole } from "../../types/user/user-role.enum";
 import { Friend } from "../../types/friend/friend";
 import { RequestStatus } from "../../types/friend/request-status.enum";
+import { useAppDispatch } from "../../hooks";
+import { patchRequestAction, postRequestAction } from "../../store/friends/thunks";
 
 type FriendsListItemProps = {
   friend: Friend;
@@ -12,7 +14,22 @@ type FriendsListItemProps = {
 }
 
 function FriendsListItem({ friend, userRole }: FriendsListItemProps): JSX.Element {
+  const dispatch = useAppDispatch();
   const { avatar, name, id, location, questionnaire, request } = friend;
+  const handleAcceptRequest = () => {
+    if (!request.id) {
+      return;
+    }
+    dispatch(patchRequestAction({
+      id: request.id,
+      status: RequestStatus.accepted
+    }));
+  }
+    const handleCreateRequest = () => {
+    dispatch(postRequestAction({
+      userId: id
+    }));
+  }
   const trainingCaption = (userRole === UserRole.Coach) 
     ? 'Запрос на персональную тренировку' 
     : 'Запрос на совместную тренировку';
@@ -22,8 +39,19 @@ function FriendsListItem({ friend, userRole }: FriendsListItemProps): JSX.Elemen
       <div className="thumbnail-friend__request-status thumbnail-friend__request-status--role-user">
         <p className="thumbnail-friend__request-text">{trainingCaption}</p>
         <div className="thumbnail-friend__button-wrapper">
-          <button className="btn btn--medium btn--dark-bg thumbnail-friend__button" type="button">Принять</button>
-          <button className="btn btn--medium btn--outlined btn--dark-bg thumbnail-friend__button" type="button">Отклонить</button>
+          <button 
+            className="btn btn--medium btn--dark-bg thumbnail-friend__button" 
+            type="button"
+            onClick={handleAcceptRequest}
+          >
+            Принять
+          </button>
+          <button 
+            className="btn btn--medium btn--outlined btn--dark-bg thumbnail-friend__button" 
+            type="button"
+          >
+            Отклонить
+          </button>
         </div>
       </div>;
   } else if (request.status === RequestStatus.accepted) {
@@ -79,7 +107,7 @@ function FriendsListItem({ friend, userRole }: FriendsListItemProps): JSX.Elemen
                 <span>Не&nbsp;готов к&nbsp;тренировке</span>
               </div>}
             {(userRole === UserRole.Sportsman)
-              ? <button className="thumbnail-friend__invite-button" type="button">
+              ? <button className="thumbnail-friend__invite-button" type="button" onClick={handleCreateRequest}>
                 <svg width="43" height="46" aria-hidden="true" focusable="false">
                   <use xlinkHref="#icon-invite"></use>
                 </svg><span className="visually-hidden">Пригласить друга на совместную тренировку</span>
