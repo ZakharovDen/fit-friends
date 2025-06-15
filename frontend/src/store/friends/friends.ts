@@ -62,10 +62,10 @@ export const friends = createSlice({
       .addCase(patchRequestAction.fulfilled, (state, action) => {
         const requestId = action.payload.id;
         state.friends = state.friends.map(friend => {
-          if (friend.request.outgoing.id === requestId) {
+          if (friend.request.incoming.id === requestId) {
             return {
               ...friend,
-              request: {...friend.request, status: action.payload.status}
+              request: {...friend.request, incoming: {...friend.request.incoming, status: action.payload.status}}
             };
           }
           return friend;

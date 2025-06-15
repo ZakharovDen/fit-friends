@@ -16,55 +16,64 @@ type FriendsListItemProps = {
 function FriendsListItem({ friend, userRole }: FriendsListItemProps): JSX.Element {
   const dispatch = useAppDispatch();
   const { avatar, name, id, location, questionnaire, request } = friend;
-  const handleAcceptRequest = () => {
-    if (!request.id) {
+  const { incoming, outgoing } = request;
+  const handleAcceptRequest = (status: RequestStatus) => {
+    if (!incoming.id) {
       return;
     }
     dispatch(patchRequestAction({
-      id: request.id,
-      status: RequestStatus.accepted
+      id: incoming.id,
+      status
     }));
   }
-    const handleCreateRequest = () => {
+  const handleCreateRequest = () => {
     dispatch(postRequestAction({
       userId: id
     }));
   }
-  const trainingCaption = (userRole === UserRole.Coach) 
-    ? 'Запрос на персональную тренировку' 
+  const trainingCaption = (userRole === UserRole.Coach)
+    ? 'Запрос на персональную тренировку'
     : 'Запрос на совместную тренировку';
   let requestElement: JSX.Element = <></>;
-  if (request.status === RequestStatus.pending) {
+  if (incoming.status === RequestStatus.pending) {
     requestElement =
       <div className="thumbnail-friend__request-status thumbnail-friend__request-status--role-user">
         <p className="thumbnail-friend__request-text">{trainingCaption}</p>
         <div className="thumbnail-friend__button-wrapper">
-          <button 
-            className="btn btn--medium btn--dark-bg thumbnail-friend__button" 
+          <button
+            className="btn btn--medium btn--dark-bg thumbnail-friend__button"
             type="button"
-            onClick={handleAcceptRequest}
+            onClick={() => handleAcceptRequest(RequestStatus.accepted)}
           >
             Принять
           </button>
-          <button 
-            className="btn btn--medium btn--outlined btn--dark-bg thumbnail-friend__button" 
+          <button
+            className="btn btn--medium btn--outlined btn--dark-bg thumbnail-friend__button"
             type="button"
+            onClick={() => handleAcceptRequest(RequestStatus.rejected)}
           >
             Отклонить
           </button>
         </div>
       </div>;
-  } else if (request.status === RequestStatus.accepted) {
+  } else if (outgoing.status === RequestStatus.pending) {
+    requestElement =
+      <div className="thumbnail-friend__request-status thumbnail-friend__request-status--role-user">
+        <p className="thumbnail-friend__request-text">{`${trainingCaption} отправлен`}</p>
+      </div>;
+  } else if (outgoing.status === RequestStatus.accepted || incoming.status === RequestStatus.accepted) {
     requestElement =
       <div className="thumbnail-friend__request-status thumbnail-friend__request-status--role-user">
         <p className="thumbnail-friend__request-text">{`${trainingCaption} принят`}</p>
       </div>;
-  } else if (request.status === RequestStatus.rejected) {
+  } else if (outgoing.status === RequestStatus.rejected || incoming.status === RequestStatus.rejected) {
     requestElement =
       <div className="thumbnail-friend__request-status thumbnail-friend__request-status--role-user">
         <p className="thumbnail-friend__request-text">{`${trainingCaption} отклонён`}</p>
       </div>
   };
+
+  const disableInvite = !questionnaire?.isReady || incoming || outgoing;
 
   return (
     <li className="friends-list__item" key={id}>
@@ -107,10 +116,15 @@ function FriendsListItem({ friend, userRole }: FriendsListItemProps): JSX.Elemen
                 <span>Не&nbsp;готов к&nbsp;тренировке</span>
               </div>}
             {(userRole === UserRole.Sportsman)
-              ? <button className="thumbnail-friend__invite-button" type="button" onClick={handleCreateRequest}>
+              ? <button
+                className={`thumbnail-friend__invite-button ${disableInvite && 'is-disabled'}`}
+                type="button"
+                onClick={handleCreateRequest}
+              >
                 <svg width="43" height="46" aria-hidden="true" focusable="false">
                   <use xlinkHref="#icon-invite"></use>
-                </svg><span className="visually-hidden">Пригласить друга на совместную тренировку</span>
+                </svg>
+                <span className="visually-hidden">Пригласить друга на совместную тренировку</span>
               </button>
               : ''}
           </div>
