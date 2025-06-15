@@ -3,6 +3,11 @@ import { Expose, Type } from 'class-transformer';
 import { UserLocation, UserRole, Sex, Request } from '@backend/core';
 import { AuthFieldDescription, QuestionnaireRdo } from '@backend/authentications';
 
+interface TrainingRequest {
+  incoming?: Request;
+  outgoing?: Request;
+}
+
 export class FriendWithRequestRdo {
   @ApiProperty(AuthFieldDescription.Id)
   @Expose()
@@ -55,5 +60,5 @@ export class FriendWithRequestRdo {
 
   @Expose()
   @ApiProperty()
-  request?: Request
+  request?: TrainingRequest
 }

@@ -8,6 +8,11 @@ export type Request = {
   createdAt?: Date;
   statusDate?: Date;
   status: RequestStatus;
-}
+};
 
-export type Friend = Omit<User, 'friends'> & {request: Request};
+export type TrainingRequest = {
+  incoming: Request;
+  outgoing: Request;
+};
+
+export type Friend = Omit<User, 'friends'> & {request: TrainingRequest};
