@@ -60,8 +60,16 @@ export const friends = createSlice({
         state.error = true;
       })
       .addCase(patchRequestAction.fulfilled, (state, action) => {
-        const index = state.friends.findIndex((item) => item.request.id === action.payload.id);
-        state.friends[index].request.status = action.payload.status;
+        const requestId = action.payload.id;
+        state.friends = state.friends.map(friend => {
+          if (friend.request.id === requestId) {
+            return {
+              ...friend,
+              request: {...friend.request, status: action.payload.status}
+            };
+          }
+          return friend;
+        });
         state.isLoading = false;
         state.error = false;
       })
@@ -74,8 +82,16 @@ export const friends = createSlice({
         state.error = true;
       })
       .addCase(postRequestAction.fulfilled, (state, action) => {
-        const index = state.friends.findIndex((item) => item.id === action.payload.userId);
-        state.friends[index].request = action.payload;
+        const userId = action.payload.userId;
+        state.friends = state.friends.map(friend => {
+          if (friend.id === userId) {
+            return {
+              ...friend,
+              request: action.payload,
+            };
+          }
+          return friend;
+        });
         state.isLoading = false;
         state.error = false;
       });

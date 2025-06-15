@@ -56,11 +56,11 @@ export class AppService {
     return roles.includes(role);
   }
 
-  public async appendRequest(initiatorId: string, friends: FriendWithRequestRdo[]): Promise<FriendWithRequestRdo[]> {
+  public async appendRequest(userId: string, friends: FriendWithRequestRdo[]): Promise<FriendWithRequestRdo[]> {
     const result: FriendWithRequestRdo[] = [];
     for (const friend of friends) {
       const request = (await this.httpService.axiosRef.get(
-        `${ApplicationServiceURL.FitRequests}?initiatorId=${initiatorId}&userId=${friend.id}`
+        `${ApplicationServiceURL.FitRequests}?initiatorId=${friend.id}&userId=${userId}`
       )).data;
       result.push({...friend, request: request});
     }

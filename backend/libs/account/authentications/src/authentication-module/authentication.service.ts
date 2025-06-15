@@ -133,21 +133,38 @@ export class AuthenticationService {
     if (userId === friendId) {
       return;
     }
+    // добавляем друга
     const user = await this.getUser(userId);
     if (user.friends.find((friend) => friend === friendId)) {
       return;
     }
     user.friends.push(friendId);
     await this.update(userId, user);
+    // добавляем себя другу
+    const friend = await this.getUser(friendId);
+    if (friend.friends.find((friend) => friend === friendId)) {
+      return;
+    }
+    friend.friends.push(userId);
+    await this.update(friendId, friend);
   }
 
   public async deleteFriend(userId: string, friendId: string) {
+    let index = -1;
+    // удаляем друга
     const user = await this.getUser(userId);
-    const index = user.friends.indexOf(friendId);
+    index = user.friends.indexOf(friendId);
     if (index !== -1) {
       user.friends.splice(index, 1);
     }
     await this.update(userId, user);
+    // удаляем себя у друга
+    const friend = await this.getUser(friendId);
+    index = friend.friends.indexOf(userId);
+    if (index !== -1) {
+      friend.friends.splice(index, 1);
+    }
+    await this.update(friendId, friend);
   }
 
 }

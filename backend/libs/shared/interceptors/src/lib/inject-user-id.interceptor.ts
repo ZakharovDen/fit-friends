@@ -11,7 +11,9 @@ export class InjectUserIdInterceptor implements NestInterceptor {
   public intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const request = context.switchToHttp().getRequest();
     if (request.user) {
-      request.body['userId'] = request.user.id;
+      if (!request.body['userId']) {
+        request.body['userId'] = request.user.id;
+      }
       request.headers['X-User-Id'] = request.user.id;
     }
 
