@@ -168,6 +168,7 @@ export class UsersController {
     @UserId() userId: string,
     @Body() dto: UpdateUserDto
   ) {
+    dto.avatar = dto.avatar.replace(`${ApplicationServiceURL.File}/static`, '');
     const { data } = await this.httpService.axiosRef.patch(`${ApplicationServiceURL.Users}/user/${userId}`, dto);
     return data;
   }
