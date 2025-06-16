@@ -171,7 +171,7 @@ function UserCardScreen(): JSX.Element {
                   {(userInfo?.role === UserRole.Coach) &&
                     <form className="user-card-coach__training-form">
                       <button
-                        className={`btn user-card-coach__btn-training ${!isFriend ? 'is-disabled' : ''}`}
+                        className={`btn user-card-coach__btn-training ${(!isFriend || !userInfo?.questionnaire?.isReady) ? 'is-disabled' : ''}`}
                         type="button"
                         onClick={handleCreateRequest}
                       >
