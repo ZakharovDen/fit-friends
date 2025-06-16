@@ -203,7 +203,6 @@ export class FitController {
   @ApiBearerAuth()
   @UseGuards(CheckAuthGuard, RolesGuard)
   @UseInterceptors(InjectUserIdInterceptor)
-  @Roles(UserRole.Sportsman)
   public async updateRequest(
     @Body() dto: UpdateFitRequestDto,
     @Param('id') id: string

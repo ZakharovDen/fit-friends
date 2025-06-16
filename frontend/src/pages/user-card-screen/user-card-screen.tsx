@@ -13,7 +13,7 @@ import TrainingSlider from "../../components/training-slider/training-slider";
 import { TrainingSliderDisplayMode } from "../../components/training-slider/constant";
 import { TrainingItemDisplayMode } from "../../components/training-item/constant";
 import { UserRole } from "../../types/user/user-role.enum";
-import { addFriendAction, deleteFriendAction } from "../../store/friends/thunks";
+import { addFriendAction, deleteFriendAction, postRequestAction } from "../../store/friends/thunks";
 
 function UserCardScreen(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -44,8 +44,8 @@ function UserCardScreen(): JSX.Element {
       dispatch(deleteFriendAction({ friendId: id }));
     }
   }
-
-  const friendButton = (user?.friends && id && user.friends.includes(id))
+  const isFriend = (user?.friends && id && user.friends.includes(id));
+  const friendButton = isFriend
     ? <button
       className="btn btn--outlined user-card-coach-2__btn"
       type="button"
@@ -76,6 +76,15 @@ function UserCardScreen(): JSX.Element {
   const sportsmanStatus = userInfo?.questionnaire?.isReady
     ? <div className="thumbnail-friend__ready-status thumbnail-friend__ready-status--is-ready"><span>Готов к тренировке</span></div>
     : <div className="thumbnail-friend__ready-status thumbnail-friend__ready-status--is-not-ready"><span>Не готов к тренировке</span></div>;
+
+  const handleCreateRequest = () => {
+    if (!id) {
+      return;
+    }
+    dispatch(postRequestAction({
+      userId: id
+    }));
+  }
 
   return (
     <main>
@@ -154,6 +163,21 @@ function UserCardScreen(): JSX.Element {
                       trainingSliderDisplayMode={TrainingSliderDisplayMode.UserCardCoach}
                       trainingItemDisplayMode={TrainingItemDisplayMode.UserCardCoach}
                     />
+                  }
+                  {(userInfo?.role === UserRole.Coach) &&
+                    <form className="user-card-coach__training-form">
+                      <button
+                        className={`btn user-card-coach__btn-training ${!isFriend && 'is-disabled'}`}
+                        type="button"
+                        onClick={handleCreateRequest}
+                      >
+                        Хочу персональную тренировку
+                      </button>
+                      <div className="user-card-coach__training-check">
+                        <div className="custom-toggle custom-toggle--checkbox">
+                        </div>
+                      </div>
+                    </form>
                   }
                 </div>
               </section>

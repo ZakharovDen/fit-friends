@@ -26,11 +26,13 @@ function FriendsListItem({ friend, userRole }: FriendsListItemProps): JSX.Elemen
       status
     }));
   }
+  
   const handleCreateRequest = () => {
     dispatch(postRequestAction({
       userId: id
     }));
   }
+  
   const trainingCaption = (userRole === UserRole.Coach)
     ? 'Запрос на персональную тренировку'
     : 'Запрос на совместную тренировку';

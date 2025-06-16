@@ -9,10 +9,12 @@ import { TrainingQueryParams } from "../../types/training/training-query-params"
 import { COUNT_ITEMS_PER_PAGE } from "../training-catalog-screen/constant";
 import TrainingCatalogList from "../../components/training-catalog/training-catalog-list";
 import { fetchMyTrainingsAction, getFilterValuesAction } from "../../store/training/thunks";
+import { getUser } from "../../store/user/selectors";
 
 function MyTrainingsScreen(): JSX.Element {
   const dispatch = useAppDispatch();
   const allowedFilterValues = useAppSelector(getAllowedFilterValues);
+  const user = useAppSelector(getUser);
   const [queryParams, setQueryParams] = useState<TrainingQueryParams>({
     page: 1,
     limit: COUNT_ITEMS_PER_PAGE,
@@ -41,7 +43,7 @@ function MyTrainingsScreen(): JSX.Element {
   };
 
   useEffect(() => {
-    dispatch(getFilterValuesAction('67fe232fe6bab933340924fe'));
+    dispatch(getFilterValuesAction(user?.id));
   }, [dispatch]);
 
   useEffect(() => {
