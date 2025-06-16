@@ -35,7 +35,7 @@ function FilterSorting({ allowedFilterValues, onFilterChange, backButtonDisplayM
 
   useEffect(() => {
     onFilterChange(filterValues);
-  }, [filterValues, onFilterChange]);
+  }, [filterValues]);
 
   const handleChangePrice = (priceValues: TrainingFilter['price']) => {
     setFilterValues({ ...filterValues, price: { min: priceValues.min, max: priceValues.max } });
