@@ -1,18 +1,18 @@
-import { useEffect, useState } from "react";
-import BackButton from "../../components/back-button/back-button";
-import { BackButtonDisplayMode } from "../../components/back-button/constant";
-import { TrainingLevel, TrainingLevelLabel } from "../../types/training/training-level.enum";
-import { TrainingType, TrainingTypeLabel } from "../../types/training/training-type.enum";
-import { UserLocation, UserLocationLabel } from "../../types/user/user-location.enum";
-import FilterCheckbox from "../../components/filter-checkbox/filter-checkbox";
-import FilterRadio from "../../components/filter-radio/filter-radio";
-import UsersCatalogItem from "../../components/users-catalog-item/users-catalog-item";
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import { UserQueryParams } from "../../types/user/user-query-params";
-import { UserRole, UserRoleSortLabel } from "../../types/user/user-role.enum";
-import { fetchUsersAction } from "../../store/friends/thunks";
-import { getUsers } from "../../store/friends/selectors";
-import { UserCatalogItemDisplayMode } from "../../components/users-catalog-item/constant";
+import { useEffect, useState } from 'react';
+import BackButton from '../../components/back-button/back-button';
+import { BackButtonDisplayMode } from '../../components/back-button/constant';
+import { TrainingLevel, TrainingLevelLabel } from '../../types/training/training-level.enum';
+import { TrainingType, TrainingTypeLabel } from '../../types/training/training-type.enum';
+import { UserLocation, UserLocationLabel } from '../../types/user/user-location.enum';
+import FilterCheckbox from '../../components/filter-checkbox/filter-checkbox';
+import FilterRadio from '../../components/filter-radio/filter-radio';
+import UsersCatalogItem from '../../components/users-catalog-item/users-catalog-item';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { UserQueryParams } from '../../types/user/user-query-params';
+import { UserRole, UserRoleSortLabel } from '../../types/user/user-role.enum';
+import { fetchUsersAction } from '../../store/friends/thunks';
+import { getUsers } from '../../store/friends/selectors';
+import { UserCatalogItemDisplayMode } from '../../components/users-catalog-item/constant';
 
 type UserFilter = Required<UserQueryParams>;
 
@@ -26,7 +26,7 @@ function UserCatalogScreen(): JSX.Element {
   const dispatch = useAppDispatch();
   const users = useAppSelector(getUsers);
   useEffect(() => {
-    dispatch(fetchUsersAction(filterValues))
+    dispatch(fetchUsersAction(filterValues));
   }, [dispatch, filterValues]);
 
   const locations = Object.entries(UserLocationLabel).map(([key, label]) => ({ key, label }));
@@ -37,7 +37,7 @@ function UserCatalogScreen(): JSX.Element {
     if (checked) {
       setFilterValues({ ...filterValues, locations: [...filterValues.locations, key as UserLocation] });
     } else {
-      setFilterValues((filterValues) => ({ ...filterValues, locations: filterValues.locations.filter((location) => location !== key) }));
+      setFilterValues({ ...filterValues, locations: filterValues.locations.filter((location) => location !== key) });
     }
   };
 
@@ -45,7 +45,7 @@ function UserCatalogScreen(): JSX.Element {
     if (checked) {
       setFilterValues({ ...filterValues, specializations: [...filterValues.specializations, key as TrainingType] });
     } else {
-      setFilterValues((filterValues) => ({ ...filterValues, specializations: filterValues.specializations.filter((spezialization) => spezialization !== key) }));
+      setFilterValues({ ...filterValues, specializations: filterValues.specializations.filter((spezialization) => spezialization !== key) });
     }
   };
 
@@ -58,9 +58,9 @@ function UserCatalogScreen(): JSX.Element {
   const handleRoleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = event.target;
     if (checked) {
-      setFilterValues({ ...filterValues, role: value as UserRole })
+      setFilterValues({ ...filterValues, role: value as UserRole });
     }
-  }
+  };
 
   return (
     <main>

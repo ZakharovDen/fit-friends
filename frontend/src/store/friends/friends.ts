@@ -1,8 +1,8 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { User } from "../../types/user/user";
-import { NameSpace } from "../const";
-import { fetchFriendsAction, fetchUsersAction, patchRequestAction, postRequestAction } from "./thunks";
-import { Friend } from "../../types/friend/friend";
+import { createSlice } from '@reduxjs/toolkit';
+import { User } from '../../types/user/user';
+import { NameSpace } from '../const';
+import { fetchFriendsAction, fetchUsersAction, patchRequestAction, postRequestAction } from './thunks';
+import { Friend } from '../../types/friend/friend';
 
 type InitialState = {
   users: User[];
@@ -61,7 +61,7 @@ export const friends = createSlice({
       })
       .addCase(patchRequestAction.fulfilled, (state, action) => {
         const requestId = action.payload.id;
-        state.friends = state.friends.map(friend => {
+        state.friends = state.friends.map((friend) => {
           if (friend.request.incoming.id === requestId) {
             return {
               ...friend,
@@ -83,7 +83,7 @@ export const friends = createSlice({
       })
       .addCase(postRequestAction.fulfilled, (state, action) => {
         const userId = action.payload.userId;
-        state.friends = state.friends.map(friend => {
+        state.friends = state.friends.map((friend) => {
           if (friend.id === userId) {
             return {
               ...friend,
@@ -96,4 +96,4 @@ export const friends = createSlice({
         state.error = false;
       });
   },
-})
+});

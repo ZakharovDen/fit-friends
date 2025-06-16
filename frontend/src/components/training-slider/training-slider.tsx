@@ -8,8 +8,8 @@ import { TrainingSliderDisplayMode, TrainingSliderSettings } from './constant';
 
 type TrainingSliderProps = {
   trainings: Training[];
-  trainingSliderDisplayMode: TrainingSliderDisplayMode,
-  trainingItemDisplayMode: TrainingItemDisplayMode,
+  trainingSliderDisplayMode: TrainingSliderDisplayMode;
+  trainingItemDisplayMode: TrainingItemDisplayMode;
 }
 
 function TrainingSlider({ trainings, trainingSliderDisplayMode }: TrainingSliderProps): JSX.Element {
@@ -41,9 +41,9 @@ function TrainingSlider({ trainings, trainingSliderDisplayMode }: TrainingSlider
 
   const goToSlide = (direction: 'prev' | 'next') => {
     if (direction === 'prev' && canGoPrev) {
-      setCurrentIndex(prev => prev - 1);
+      setCurrentIndex((prev) => prev - 1);
     } else if (direction === 'next' && canGoNext) {
-      setCurrentIndex(prev => prev + 1);
+      setCurrentIndex((prev) => prev + 1);
     }
   };
 
@@ -87,8 +87,7 @@ function TrainingSlider({ trainings, trainingSliderDisplayMode }: TrainingSlider
             <svg width="14" height="10" aria-hidden="true">
               <use xlinkHref="#arrow-right"></use>
             </svg>
-          </button>
-        }
+          </button>}
 
         <div className="popular-trainings__controls">
           <button
@@ -126,6 +125,6 @@ function TrainingSlider({ trainings, trainingSliderDisplayMode }: TrainingSlider
       </div>
     </div>
   );
-};
+}
 
 export default TrainingSlider;

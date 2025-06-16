@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 type PopupBuyProps = {
   isVisible: boolean;
@@ -77,30 +77,36 @@ function PopupBuy({ isVisible, onClose }: PopupBuyProps): JSX.Element | null {
                   <li className="payment-method__item">
                     <div className="btn-radio-image">
                       <label>
-                        <input type="radio" name="payment-purchases" aria-label="Visa." checked /><span className="btn-radio-image__image">
+                        <input type="radio" name="payment-purchases" aria-label="Visa." checked />
+                        <span className="btn-radio-image__image">
                           <svg width="58" height="20" aria-hidden="true">
                             <use xlinkHref="#visa-logo"></use>
-                          </svg></span>
+                          </svg>
+                        </span>
                       </label>
                     </div>
                   </li>
                   <li className="payment-method__item">
                     <div className="btn-radio-image">
                       <label>
-                        <input type="radio" name="payment-purchases" aria-label="Мир." /><span className="btn-radio-image__image">
+                        <input type="radio" name="payment-purchases" aria-label="Мир." />
+                        <span className="btn-radio-image__image">
                           <svg width="66" height="20" aria-hidden="true">
                             <use xlinkHref="#mir-logo"></use>
-                          </svg></span>
+                          </svg>
+                        </span>
                       </label>
                     </div>
                   </li>
                   <li className="payment-method__item">
                     <div className="btn-radio-image">
                       <label>
-                        <input type="radio" name="payment-purchases" aria-label="Iomoney." /><span className="btn-radio-image__image">
+                        <input type="radio" name="payment-purchases" aria-label="Iomoney." />
+                        <span className="btn-radio-image__image">
                           <svg width="106" height="24" aria-hidden="true">
                             <use xlinkHref="#iomoney-logo"></use>
-                          </svg></span>
+                          </svg>
+                        </span>
                       </label>
                     </div>
                   </li>

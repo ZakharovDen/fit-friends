@@ -1,7 +1,7 @@
-import { FeedbackWithUser } from "../../types/feedback/feedback";
+import { FeedbackWithUser } from '../../types/feedback/feedback';
 
 type ReviewItemProps = {
-  feedback: FeedbackWithUser
+  feedback: FeedbackWithUser;
 }
 
 function ReviewItem({feedback}: ReviewItemProps): JSX.Element {
@@ -14,7 +14,8 @@ function ReviewItem({feedback}: ReviewItemProps): JSX.Element {
             <picture>
               <source
                 type="image/webp"
-                srcSet={user.avatar} />
+                srcSet={user.avatar}
+              />
               <img
                 src="img/content/avatars/users//photo-1.png"
                 srcSet="img/content/avatars/users//photo-1@2x.png 2x"

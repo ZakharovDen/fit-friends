@@ -1,5 +1,5 @@
-import BackButton from "../../components/back-button/back-button";
-import { BackButtonDisplayMode } from "../../components/back-button/constant";
+import BackButton from '../../components/back-button/back-button';
+import { BackButtonDisplayMode } from '../../components/back-button/constant';
 
 function MyOrdersScreen(): JSX.Element {
   return (

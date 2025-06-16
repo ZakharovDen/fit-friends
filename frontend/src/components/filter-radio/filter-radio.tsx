@@ -33,8 +33,8 @@ function FilterRadio({
         {options.map(({ key, label }) => (
           <div className="custom-toggle-radio__block" key={key}>
             <label>
-              <input 
-                type="radio" 
+              <input
+                type="radio"
                 name="user-agreement"
                 value={key}
                 checked={key === selectedKey}
@@ -48,6 +48,6 @@ function FilterRadio({
       </div>
     </div>
   );
-};
+}
 
 export default FilterRadio;

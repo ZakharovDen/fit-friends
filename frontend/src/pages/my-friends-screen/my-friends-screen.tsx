@@ -1,11 +1,11 @@
-import { useEffect } from "react";
-import BackButton from "../../components/back-button/back-button";
-import { BackButtonDisplayMode } from "../../components/back-button/constant";
-import FriendsListItem from "../../components/friends-list-item/friends-list-item";
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import { getFriends } from "../../store/friends/selectors";
-import { fetchFriendsAction } from "../../store/friends/thunks";
-import { getUser } from "../../store/user/selectors";
+import { useEffect } from 'react';
+import BackButton from '../../components/back-button/back-button';
+import { BackButtonDisplayMode } from '../../components/back-button/constant';
+import FriendsListItem from '../../components/friends-list-item/friends-list-item';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { getFriends } from '../../store/friends/selectors';
+import { fetchFriendsAction } from '../../store/friends/thunks';
+import { getUser } from '../../store/user/selectors';
 
 function MyFriendsScreen(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -14,7 +14,7 @@ function MyFriendsScreen(): JSX.Element {
 
   useEffect(() => {
     dispatch(fetchFriendsAction());
-  }, [dispatch])
+  }, [dispatch]);
 
   return (
     <main>

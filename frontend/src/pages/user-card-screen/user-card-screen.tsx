@@ -1,19 +1,19 @@
-import { useParams } from "react-router-dom";
-import BackButton from "../../components/back-button/back-button";
-import { BackButtonDisplayMode } from "../../components/back-button/constant";
-import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import { getUserInfoAction } from "../../store/user/thunks";
-import { getUser, getUserInfo } from "../../store/user/selectors";
-import { UserLocationLabel } from "../../types/user/user-location.enum";
-import { TrainingType, TrainingTypeLabel } from "../../types/training/training-type.enum";
-import { fetchTrainingsAction } from "../../store/training/thunks";
-import { getTrainings } from "../../store/training/selectors";
-import TrainingSlider from "../../components/training-slider/training-slider";
-import { TrainingSliderDisplayMode } from "../../components/training-slider/constant";
-import { TrainingItemDisplayMode } from "../../components/training-item/constant";
-import { UserRole } from "../../types/user/user-role.enum";
-import { addFriendAction, deleteFriendAction, postRequestAction } from "../../store/friends/thunks";
+import { useParams } from 'react-router-dom';
+import BackButton from '../../components/back-button/back-button';
+import { BackButtonDisplayMode } from '../../components/back-button/constant';
+import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { getUserInfoAction } from '../../store/user/thunks';
+import { getUser, getUserInfo } from '../../store/user/selectors';
+import { UserLocationLabel } from '../../types/user/user-location.enum';
+import { TrainingType, TrainingTypeLabel } from '../../types/training/training-type.enum';
+import { fetchTrainingsAction } from '../../store/training/thunks';
+import { getTrainings } from '../../store/training/selectors';
+import TrainingSlider from '../../components/training-slider/training-slider';
+import { TrainingSliderDisplayMode } from '../../components/training-slider/constant';
+import { TrainingItemDisplayMode } from '../../components/training-item/constant';
+import { UserRole } from '../../types/user/user-role.enum';
+import { addFriendAction, deleteFriendAction, postRequestAction } from '../../store/friends/thunks';
 
 function UserCardScreen(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -26,9 +26,9 @@ function UserCardScreen(): JSX.Element {
         userId: id,
         sortBy: 'createdAt',
         sortOrder: 'desc'
-      }))
+      }));
     }
-  }, [params, dispatch]);
+  }, [params, dispatch, id]);
   const userInfo = useAppSelector(getUserInfo);
   const { entities } = useAppSelector(getTrainings);
   const user = useAppSelector(getUser);
@@ -37,42 +37,47 @@ function UserCardScreen(): JSX.Element {
     if (id) {
       dispatch(addFriendAction({ friendId: id }));
     }
-  }
+  };
 
   const handleDeleteFriend = () => {
     if (id) {
       dispatch(deleteFriendAction({ friendId: id }));
     }
-  }
+  };
   const isFriend = (user?.friends && id && user.friends.includes(id));
   const friendButton = isFriend
-    ? <button
-      className="btn btn--outlined user-card-coach-2__btn"
-      type="button"
-      onClick={handleDeleteFriend}
-    >
+    ? (
+      <button
+        className="btn btn--outlined user-card-coach-2__btn"
+        type="button"
+        onClick={handleDeleteFriend}
+      >
       Удалить из друзей
-    </button>
-    : <button
-      className={`btn user-card-coach__btn`}
-      type="button"
-      onClick={handleAddFriend}
-    >
-      Добавить в друзья
-    </button>;
+      </button>
+    )
+    : (
+      <button
+        className={'btn user-card-coach__btn'}
+        type="button"
+        onClick={handleAddFriend}
+      >
+        Добавить в друзья
+      </button>
+    );
 
-  //const classSuffix = (userInfo?.role === UserRole.Coach) ? '-coach' : '';
   const classSuffix = '-coach';
-  const coachStatus = <div className={`user-card${classSuffix}__status user-card${classSuffix}__status--tag`}>
-    <svg className={`user-card${classSuffix}__icon-cup`} width="12" height="13" aria-hidden="true">
-      <use xlinkHref="#icon-cup"></use>
-    </svg><span>Тренер</span>
-  </div>
-  {
-    userInfo?.questionnaire?.isReady
-      ? <div className={`user-card-coach__status user-card-coach__status--check`}><span>Готов тренировать</span></div>
-      : <div className={`user-card-coach-2__status user-card-coach-2__status--check`}><span>Не готов тренировать</span></div>
-  };
+  const coachStatus = (
+    <>
+      <div className={`user-card${classSuffix}__status user-card${classSuffix}__status--tag`}>
+        <svg className={`user-card${classSuffix}__icon-cup`} width="12" height="13" aria-hidden="true">
+          <use xlinkHref="#icon-cup"></use>
+        </svg><span>Тренер</span>
+      </div>
+      {(userInfo?.questionnaire?.isReady)
+        ? <div className={'user-card-coach__status user-card-coach__status--check'}><span>Готов тренировать</span></div>
+        : <div className={'user-card-coach-2__status user-card-coach-2__status--check'}><span>Не готов тренировать</span></div>}
+    </>
+  );
   const sportsmanStatus = userInfo?.questionnaire?.isReady
     ? <div className="thumbnail-friend__ready-status thumbnail-friend__ready-status--is-ready"><span>Готов к тренировке</span></div>
     : <div className="thumbnail-friend__ready-status thumbnail-friend__ready-status--is-not-ready"><span>Не готов к тренировке</span></div>;
@@ -84,7 +89,7 @@ function UserCardScreen(): JSX.Element {
     dispatch(postRequestAction({
       userId: id
     }));
-  }
+  };
 
   return (
     <main>
@@ -93,7 +98,7 @@ function UserCardScreen(): JSX.Element {
           <div className="inner-page__wrapper">
             <BackButton displayMode={BackButtonDisplayMode.User} />
             <div className="inner-page__content">
-              <section className={`user-card`}>
+              <section className={'user-card'}>
                 <h1 className="visually-hidden">Карточка пользователя роль тренер</h1>
                 <div className={`user-card${classSuffix}__wrapper`}>
                   <div className={`user-card${classSuffix}__card`}>
@@ -102,9 +107,11 @@ function UserCardScreen(): JSX.Element {
                         <h2 className={`user-card${classSuffix}__title`}>{userInfo?.name}</h2>
                       </div>
                       <div className={`user-card${classSuffix}__label`}>
-                        <a href="popup-user-map.html"><svg className={`user-card${classSuffix}__icon-location`} width="12" height="14" aria-hidden="true">
-                          <use xlinkHref="#icon-location"></use>
-                        </svg><span>{userInfo?.location && UserLocationLabel[userInfo?.location]}</span></a>
+                        <a href="popup-user-map.html">
+                          <svg className={`user-card${classSuffix}__icon-location`} width="12" height="14" aria-hidden="true">
+                            <use xlinkHref="#icon-location"></use>
+                          </svg><span>{userInfo?.location && UserLocationLabel[userInfo?.location]}</span>
+                        </a>
                       </div>
                       <div className={`user-card${classSuffix}__status-container`}>
                         {(userInfo?.role === UserRole.Coach) ? coachStatus : sportsmanStatus}
@@ -117,8 +124,7 @@ function UserCardScreen(): JSX.Element {
                           <svg width="12" height="13" aria-hidden="true">
                             <use xlinkHref="#icon-teacher"></use>
                           </svg><span>Посмотреть сертификаты</span>
-                        </button>
-                      }
+                        </button>}
                       <ul className={`user-card${classSuffix}__hashtag-list`}>
                         {Object.entries(TrainingTypeLabel)
                           .map(([key, value]) => {
@@ -129,8 +135,7 @@ function UserCardScreen(): JSX.Element {
                                 </li>
                               );
                             }
-                          })
-                        }
+                          })}
                       </ul>
                       {friendButton}
                     </div>
@@ -162,12 +167,11 @@ function UserCardScreen(): JSX.Element {
                       trainings={entities}
                       trainingSliderDisplayMode={TrainingSliderDisplayMode.UserCardCoach}
                       trainingItemDisplayMode={TrainingItemDisplayMode.UserCardCoach}
-                    />
-                  }
+                    />}
                   {(userInfo?.role === UserRole.Coach) &&
                     <form className="user-card-coach__training-form">
                       <button
-                        className={`btn user-card-coach__btn-training ${!isFriend && 'is-disabled'}`}
+                        className={`btn user-card-coach__btn-training ${!isFriend ? 'is-disabled' : ''}`}
                         type="button"
                         onClick={handleCreateRequest}
                       >
@@ -177,8 +181,7 @@ function UserCardScreen(): JSX.Element {
                         <div className="custom-toggle custom-toggle--checkbox">
                         </div>
                       </div>
-                    </form>
-                  }
+                    </form>}
                 </div>
               </section>
             </div>

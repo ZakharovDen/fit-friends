@@ -1,6 +1,6 @@
-import { TrainingDuration } from "../training/training-duration.enum";
-import { TrainingType } from "../training/training-type.enum";
-import { TrainingSort } from "./training-sort";
+import { TrainingDuration } from '../training/training-duration.enum';
+import { TrainingType } from '../training/training-type.enum';
+import { TrainingSort } from './training-sort';
 
 export type TrainingFilter = {
   price: {

@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { FeedbackData } from "../../types/feedback/feedback";
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import { createFeedbackAction } from "../../store/feedback/thunks";
-import { getIsProcess, getIsSuccess } from "../../store/feedback/selectors";
+import { useEffect, useState } from 'react';
+import { FeedbackData } from '../../types/feedback/feedback';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { createFeedbackAction } from '../../store/feedback/thunks';
+import { getIsProcess, getIsSuccess } from '../../store/feedback/selectors';
 
 enum Rating {
   Min = 1,
@@ -17,8 +17,8 @@ type PopupFeedbackProps = {
 
 function PopupFeedback({ isVisible, onClose, trainingId }: PopupFeedbackProps): JSX.Element | null {
   const defaultValues: FeedbackData = {
-    rating: 5, 
-    text: '', 
+    rating: 5,
+    text: '',
     trainingId
   };
   const dispatch = useAppDispatch();
@@ -27,21 +27,21 @@ function PopupFeedback({ isVisible, onClose, trainingId }: PopupFeedbackProps): 
   const [feedback, setFeedback] = useState<FeedbackData>(defaultValues);
 
   const ratingChangeHandle = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    setFeedback({...feedback, rating: Number(evt.target.value)})
-  }
+    setFeedback({...feedback, rating: Number(evt.target.value)});
+  };
 
   const feedbackChangeHandle = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setFeedback({...feedback, text: evt.target.value})
-  }
+    setFeedback({...feedback, text: evt.target.value});
+  };
 
   const formCloseHandle = () => {
     setFeedback(defaultValues);
     onClose();
-  }
+  };
 
   const formSaveHandle = () => {
     dispatch(createFeedbackAction(feedback));
-  }
+  };
 
   useEffect(() => {
     if (isSuccess && !isProcess) {
@@ -55,10 +55,10 @@ function PopupFeedback({ isVisible, onClose, trainingId }: PopupFeedbackProps): 
       <li className="popup__rate-item" key={i}>
         <div className="popup__rate-item-wrap" key={i}>
           <label>
-            <input 
-              type="radio" 
-              name="оценка тренировки" 
-              aria-label={`оценка ${i}.`} 
+            <input
+              type="radio"
+              name="оценка тренировки"
+              aria-label={`оценка ${i}.`}
               value={i}
               onChange={ratingChangeHandle}
               checked={(feedback.rating === i)}
@@ -66,8 +66,8 @@ function PopupFeedback({ isVisible, onClose, trainingId }: PopupFeedbackProps): 
           </label>
         </div>
       </li>
-    );    
-  };
+    );
+  }
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -111,22 +111,24 @@ function PopupFeedback({ isVisible, onClose, trainingId }: PopupFeedbackProps): 
                 <div className="popup__feedback-textarea">
                   <div className="custom-textarea">
                     <label>
-                      <textarea 
-                        name="description" 
+                      <textarea
+                        name="description"
                         placeholder=" "
                         onChange={feedbackChangeHandle}
                         value={feedback.text}
-                      ></textarea>
+                      >
+                      </textarea>
                     </label>
                   </div>
                 </div>
               </div>
               <div className="popup__button">
-                <button 
-                  className="btn" 
+                <button
+                  className="btn"
                   type="button"
                   onClick={formSaveHandle}
-                >Продолжить</button>
+                >Продолжить
+                </button>
               </div>
             </div>
           </div>

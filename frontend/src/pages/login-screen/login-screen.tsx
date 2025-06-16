@@ -1,10 +1,10 @@
-import { FormEvent, useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import { UserAuth } from "../../types/user/user";
-import { loginAction } from "../../store/user/thunks";
-import { getAuthorizationStatus } from "../../store/user/selectors";
-import { useNavigate } from "react-router-dom";
-import { AppRoute, AuthorizationStatus } from "../../constant";
+import { FormEvent, useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { UserAuth } from '../../types/user/user';
+import { loginAction } from '../../store/user/thunks';
+import { getAuthorizationStatus } from '../../store/user/selectors';
+import { useNavigate } from 'react-router-dom';
+import { AppRoute, AuthorizationStatus } from '../../constant';
 
 function LoginScreen(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -17,7 +17,7 @@ function LoginScreen(): JSX.Element {
 
     const formData = new FormData(form) as Iterable<[UserAuth]>;
     const data = Object.fromEntries(formData);
-    dispatch(loginAction(data));    
+    dispatch(loginAction(data));
   };
 
   useEffect(() => {
@@ -46,13 +46,19 @@ function LoginScreen(): JSX.Element {
               <form method="get" onSubmit={handleFormSubmit}>
                 <div className="sign-in">
                   <div className="custom-input sign-in__input">
-                    <label><span className="custom-input__label">E-mail</span><span className="custom-input__wrapper">
-                      <input type="email" name="email" /></span>
+                    <label>
+                      <span className="custom-input__label">E-mail</span>
+                      <span className="custom-input__wrapper">
+                        <input type="email" name="email" />
+                      </span>
                     </label>
                   </div>
                   <div className="custom-input sign-in__input">
-                    <label><span className="custom-input__label">Пароль</span><span className="custom-input__wrapper">
-                      <input type="password" name="password" /></span>
+                    <label>
+                      <span className="custom-input__label">Пароль</span>
+                      <span className="custom-input__wrapper">
+                        <input type="password" name="password" />
+                      </span>
                     </label>
                   </div>
                   <button className="btn sign-in__button" type="submit">Продолжить</button>

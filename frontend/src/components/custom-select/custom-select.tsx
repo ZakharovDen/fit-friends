@@ -27,7 +27,7 @@ export function CustomSelect({
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
 
-  const selectedOption = options.find(option => option.value === value);
+  const selectedOption = options.find((option) => option.value === value);
 
   const handleSelect = (optionValue: string) => {
     onChange?.(optionValue);
@@ -70,7 +70,7 @@ export function CustomSelect({
 
       {!readonly && isOpen && (
         <ul className={`custom-select__list ${isOpen && 'open-up'}`} role="listbox">
-          {options.map(option => (
+          {options.map((option) => (
             <li
               key={option.value}
               className="custom-select__item"

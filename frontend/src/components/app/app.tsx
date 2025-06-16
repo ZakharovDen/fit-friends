@@ -34,7 +34,7 @@ function App(): JSX.Element {
           path={AppRoute.Main}
           element={
             <PrivateRoute restrictedFor={AuthorizationStatus.NoAuth} redirectTo={AppRoute.Intro}>
-              <PrivateRouteQuestionnaire state={true} redirectTo={AppRoute.Questionnaire}>
+              <PrivateRouteQuestionnaire state redirectTo={AppRoute.Questionnaire}>
                 <LayoutMain />
               </PrivateRouteQuestionnaire>
             </PrivateRoute>
@@ -118,7 +118,8 @@ function App(): JSX.Element {
           element={
             <PrivateRoute restrictedFor={AuthorizationStatus.Auth} redirectTo={AppRoute.Main}>
               <LoginScreen />
-            </PrivateRoute>}
+            </PrivateRoute>
+          }
         />
         <Route
           path={AppRoute.Register}

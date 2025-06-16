@@ -1,12 +1,12 @@
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import { getTrainings } from "../../store/training/selectors";
-import { useEffect, useState } from "react";
-import { TrainingQueryParams } from "../../types/training/training-query-params";
-import { fetchTrainingsAction } from "../../store/training/thunks";
-import TrainingSlider from "../../components/training-slider/training-slider";
-import { TrainingSliderDisplayMode } from "../../components/training-slider/constant";
-import { TrainingItemDisplayMode } from "../../components/training-item/constant";
-import LookForCompany from "../../components/look-for-company/look-for-company";
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { getTrainings } from '../../store/training/selectors';
+import { useEffect, useState } from 'react';
+import { TrainingQueryParams } from '../../types/training/training-query-params';
+import { fetchTrainingsAction } from '../../store/training/thunks';
+import TrainingSlider from '../../components/training-slider/training-slider';
+import { TrainingSliderDisplayMode } from '../../components/training-slider/constant';
+import { TrainingItemDisplayMode } from '../../components/training-item/constant';
+import LookForCompany from '../../components/look-for-company/look-for-company';
 
 function MainScreen(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -20,7 +20,6 @@ function MainScreen(): JSX.Element {
   useEffect(() => {
     dispatch(fetchTrainingsAction(queryParams));
   }, [dispatch, queryParams]);
-
 
 
   return (
@@ -236,10 +235,10 @@ function MainScreen(): JSX.Element {
       </section>
       <section className="popular-trainings">
         <div className="container">
-          <TrainingSlider 
-            trainings={entities} 
-            trainingSliderDisplayMode={TrainingSliderDisplayMode.Popular} 
-            trainingItemDisplayMode={TrainingItemDisplayMode.Popular} 
+          <TrainingSlider
+            trainings={entities}
+            trainingSliderDisplayMode={TrainingSliderDisplayMode.Popular}
+            trainingItemDisplayMode={TrainingItemDisplayMode.Popular}
           />
         </div>
       </section>

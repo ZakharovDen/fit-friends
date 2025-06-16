@@ -1,9 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { NameSpace } from "../const";
-import { deleteTrainingAction, fetchMyTrainingsAction, fetchTrainingsAction, getFilterValuesAction, getTrainingAction, patchTrainingAction, postTrainingAction } from "./thunks";
-import { TrainingsWithPagination } from "../../types/training/trainings-with-pagination";
-import { TrainingWithUser } from "../../types/training/training";
-import { AllowedFilterValues } from "../../types/filter/allowed-filter-values";
+import { createSlice } from '@reduxjs/toolkit';
+import { NameSpace } from '../const';
+import { deleteTrainingAction, fetchMyTrainingsAction, fetchTrainingsAction, getFilterValuesAction, getTrainingAction, patchTrainingAction, postTrainingAction } from './thunks';
+import { TrainingsWithPagination } from '../../types/training/trainings-with-pagination';
+import { TrainingWithUser } from '../../types/training/training';
+import { AllowedFilterValues } from '../../types/filter/allowed-filter-values';
 
 export type InitialState = {
   trainings: TrainingsWithPagination;
@@ -27,7 +27,7 @@ const initialState: InitialState = {
   isTrainingsDataLoading: false,
   hasError: false,
   filterValues: {
-    price: { min: undefined, max: undefined }, 
+    price: { min: undefined, max: undefined },
     calories: { min: undefined, max: undefined },
   },
   isProcess: false,
@@ -105,7 +105,7 @@ export const training = createSlice({
         state.isProcess = true;
         state.isSuccess = false;
       })
-      .addCase(patchTrainingAction.fulfilled, (state, _action) => {
+      .addCase(patchTrainingAction.fulfilled, (state) => {
         state.isProcess = false;
         state.isSuccess = true;
       })
@@ -115,6 +115,6 @@ export const training = createSlice({
       })
       .addCase(getFilterValuesAction.fulfilled, (state, action) => {
         state.filterValues = action.payload;
-      })
+      });
   },
-})
+});

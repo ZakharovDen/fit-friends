@@ -6,7 +6,7 @@ export enum TrainingType {
   Crossfit = 'crossfit',
   Aerobics = 'aerobics',
   Pilates = 'pilates'
-};
+}
 
 export const TrainingTypeLabel: Record<TrainingType, string> = {
   [TrainingType.Yoga]: 'Йога',

@@ -1,4 +1,4 @@
-import { Training } from "./training";
+import { Training } from './training';
 
 export type TrainingsWithPagination = {
   entities: Training[];

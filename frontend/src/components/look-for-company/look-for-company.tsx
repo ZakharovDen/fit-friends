@@ -1,18 +1,18 @@
-import { useNavigate } from "react-router-dom";
-import { AppRoute } from "../../constant";
-import UsersCatalogItem from "../users-catalog-item/users-catalog-item";
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import { getUsers, getUsersLoadingStatus } from "../../store/friends/selectors";
-import { useEffect, useRef } from "react";
-import { fetchUsersAction } from "../../store/friends/thunks";
-import { UserCatalogItemDisplayMode } from "../users-catalog-item/constant";
+import { useNavigate } from 'react-router-dom';
+import { AppRoute } from '../../constant';
+import UsersCatalogItem from '../users-catalog-item/users-catalog-item';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { getUsers, getUsersLoadingStatus } from '../../store/friends/selectors';
+import { useEffect, useRef } from 'react';
+import { fetchUsersAction } from '../../store/friends/thunks';
+import { UserCatalogItemDisplayMode } from '../users-catalog-item/constant';
 
 // Импортируем Swiper
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import Spinner from "../spinner/spinner";
+import Spinner from '../spinner/spinner';
 
 function LookForCompany(): JSX.Element {
   const navigate = useNavigate();

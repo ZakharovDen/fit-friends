@@ -1,15 +1,15 @@
-import FilterMinMax from "../filter-min-max/filter-min-max";
-import { FilterMinMaxDisplayMode } from "../filter-min-max/constant";
-import { useEffect, useState } from "react";
-import { TrainingType, TrainingTypeLabel } from "../../types/training/training-type.enum";
-import { TrainingFilter } from "../../types/filter/training-filter";
-import { AllowedFilterValues } from "../../types/filter/allowed-filter-values";
-import { TrainingSort, TrainingSortLabel } from "../../types/filter/training-sort";
-import SliderRange from "../slider-range/slider-range";
-import BackButton from "../back-button/back-button";
-import { BackButtonDisplayMode } from "../back-button/constant";
-import { FilterSortingDisplayMode, FilterSortingSettings } from "./constant";
-import { TrainingDuration } from "../../types/training/training-duration.enum";
+import FilterMinMax from '../filter-min-max/filter-min-max';
+import { FilterMinMaxDisplayMode } from '../filter-min-max/constant';
+import { useEffect, useState } from 'react';
+import { TrainingType, TrainingTypeLabel } from '../../types/training/training-type.enum';
+import { TrainingFilter } from '../../types/filter/training-filter';
+import { AllowedFilterValues } from '../../types/filter/allowed-filter-values';
+import { TrainingSort, TrainingSortLabel } from '../../types/filter/training-sort';
+import SliderRange from '../slider-range/slider-range';
+import BackButton from '../back-button/back-button';
+import { BackButtonDisplayMode } from '../back-button/constant';
+import { FilterSortingDisplayMode, FilterSortingSettings } from './constant';
+import { TrainingDuration } from '../../types/training/training-duration.enum';
 
 type FilterSortingProps = {
   allowedFilterValues: AllowedFilterValues;
@@ -30,24 +30,24 @@ function FilterSorting({ allowedFilterValues, onFilterChange, backButtonDisplayM
   const classPrefix = FilterSortingSettings[displayMode].classPrefix;
   const [filterValues, setFilterValues] = useState<TrainingFilter>(defaultFilter);
   useEffect(() => {
-    setFilterValues(defaultFilter)
+    setFilterValues(defaultFilter);
   }, [allowedFilterValues]);
 
   useEffect(() => {
     onFilterChange(filterValues);
-  }, [filterValues])
+  }, [filterValues, onFilterChange]);
 
   const handleChangePrice = (priceValues: TrainingFilter['price']) => {
     setFilterValues({ ...filterValues, price: { min: priceValues.min, max: priceValues.max } });
-  }
+  };
 
   const handleChangeRating = (ratingValues: TrainingFilter['rating']) => {
     setFilterValues({ ...filterValues, rating: { min: ratingValues.min, max: ratingValues.max } });
-  }
+  };
 
   const handleChangeCalories = (caloriesValues: TrainingFilter['calories']) => {
     setFilterValues({ ...filterValues, calories: { min: caloriesValues.min, max: caloriesValues.max } });
-  }
+  };
 
   const handleTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = event.target;
@@ -55,7 +55,7 @@ function FilterSorting({ allowedFilterValues, onFilterChange, backButtonDisplayM
     if (checked) {
       setFilterValues({ ...filterValues, types: [...filterValues.types, value as TrainingType] });
     } else {
-      setFilterValues((filterValues) => ({ ...filterValues, types: filterValues.types.filter((type) => type !== value) }));
+      setFilterValues({ ...filterValues, types: filterValues.types.filter((type) => type !== value) });
     }
   };
 
@@ -65,14 +65,14 @@ function FilterSorting({ allowedFilterValues, onFilterChange, backButtonDisplayM
     if (checked) {
       setFilterValues({ ...filterValues, durations: [...filterValues.durations, value as TrainingDuration] });
     } else {
-      setFilterValues((filterValues) => ({ ...filterValues, durations: filterValues.durations.filter((duration) => duration !== value) }));
+      setFilterValues({ ...filterValues, durations: filterValues.durations.filter((duration) => duration !== value) });
     }
   };
 
   const handleSortChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setFilterValues({ ...filterValues, sort: value as TrainingSort });
-  }
+  };
 
   return (
     <div className={`${classPrefix}-form`}>
@@ -117,7 +117,7 @@ function FilterSorting({ allowedFilterValues, onFilterChange, backButtonDisplayM
               className="filter-raiting"
               maxRangeValue={defaultFilter.rating.max}
               minRangeValue={defaultFilter.rating.min}
-              isShowValues={true}
+              isShowValues
               onChange={handleChangeRating}
             />
           </div>

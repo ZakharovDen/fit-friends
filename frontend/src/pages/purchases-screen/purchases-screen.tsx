@@ -1,30 +1,30 @@
-import { TrainingItemDisplayMode } from "../../components/training-item/constant";
-import TrainingItem from "../../components/training-item/training-item";
-import { Sex } from "../../types/sex.enum";
-import { Training } from "../../types/training/training";
-import { TrainingDuration } from "../../types/training/training-duration.enum";
-import { TrainingLevel } from "../../types/training/training-level.enum";
-import { TrainingType } from "../../types/training/training-type.enum";
-import BackButton from "../../components/back-button/back-button";
-import { BackButtonDisplayMode } from "../../components/back-button/constant";
+import { TrainingItemDisplayMode } from '../../components/training-item/constant';
+import TrainingItem from '../../components/training-item/training-item';
+import { Sex } from '../../types/sex.enum';
+import { Training } from '../../types/training/training';
+import { TrainingDuration } from '../../types/training/training-duration.enum';
+import { TrainingLevel } from '../../types/training/training-level.enum';
+import { TrainingType } from '../../types/training/training-type.enum';
+import BackButton from '../../components/back-button/back-button';
+import { BackButtonDisplayMode } from '../../components/back-button/constant';
 
 const mockTraining: Training = {
-  id: "0dfbda7e-fb14-4ca3-ae1d-8e111a777a66",
-  userId: "6581762309c030b503e30512",
-  title: "full body stretch",
-  image: "default/catalog-product-6.png",
-  level: TrainingLevel["Beginner"],
-  type: TrainingType["Pilates"],
-  duration: TrainingDuration["50-80"],
+  id: '0dfbda7e-fb14-4ca3-ae1d-8e111a777a66',
+  userId: '6581762309c030b503e30512',
+  title: 'full body stretch',
+  image: 'default/catalog-product-6.png',
+  level: TrainingLevel['Beginner'],
+  type: TrainingType['Pilates'],
+  duration: TrainingDuration['50-80'],
   price: 1000,
   calories: 1607,
-  description: "Знаменитый кроссфит комплекс. Синди — универсальная тренировка для развития функциональной силы.",
-  sex: Sex["Male"],
-  video: "uploads/training-video-1.mp4",
+  description: 'Знаменитый кроссфит комплекс. Синди — универсальная тренировка для развития функциональной силы.',
+  sex: Sex['Male'],
+  video: 'uploads/training-video-1.mp4',
   specialOffer: false,
   createdAt: new Date(),
   rating: 5
-}
+};
 
 function PurchasesScreen(): JSX.Element {
   return (
@@ -38,10 +38,12 @@ function PurchasesScreen(): JSX.Element {
               <div className="my-purchases__controls">
                 <div className="custom-toggle custom-toggle--switch custom-toggle--switch-right my-purchases__switch" data-validate-type="checkbox">
                   <label>
-                    <input type="checkbox" value="user-agreement-1" name="user-agreement" /><span className="custom-toggle__icon">
+                    <input type="checkbox" value="user-agreement-1" name="user-agreement" />
+                    <span className="custom-toggle__icon">
                       <svg width="9" height="6" aria-hidden="true">
                         <use xlinkHref="#arrow-check"></use>
-                      </svg></span><span className="custom-toggle__label">Только активные</span>
+                      </svg>
+                    </span><span className="custom-toggle__label">Только активные</span>
                   </label>
                 </div>
               </div>

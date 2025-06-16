@@ -1,15 +1,15 @@
-import { useState, useEffect } from "react";
-import FilterSorting from "../../components/filter-sorting/filter-sorting";
-import TrainingCatalogList from "../../components/training-catalog/training-catalog-list";
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import { getAllowedFilterValues, getTrainings } from "../../store/training/selectors";
-import { fetchTrainingsAction, getFilterValuesAction } from "../../store/training/thunks";
+import { useState, useEffect } from 'react';
+import FilterSorting from '../../components/filter-sorting/filter-sorting';
+import TrainingCatalogList from '../../components/training-catalog/training-catalog-list';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { getAllowedFilterValues, getTrainings } from '../../store/training/selectors';
+import { fetchTrainingsAction, getFilterValuesAction } from '../../store/training/thunks';
 import { COUNT_ITEMS_PER_PAGE } from './constant';
-import { TrainingFilter } from "../../types/filter/training-filter";
-import { TrainingSort } from "../../types/filter/training-sort";
-import { BackButtonDisplayMode } from "../../components/back-button/constant";
-import { FilterSortingDisplayMode } from "../../components/filter-sorting/constant";
-import { TrainingQueryParams } from "../../types/training/training-query-params";
+import { TrainingFilter } from '../../types/filter/training-filter';
+import { TrainingSort } from '../../types/filter/training-sort';
+import { BackButtonDisplayMode } from '../../components/back-button/constant';
+import { FilterSortingDisplayMode } from '../../components/filter-sorting/constant';
+import { TrainingQueryParams } from '../../types/training/training-query-params';
 
 function TrainingCatalogScreen(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -38,7 +38,7 @@ function TrainingCatalogScreen(): JSX.Element {
     if (queryParams.limit && totalItems > queryParams.limit) {
       setQueryParams({ ...queryParams, limit: queryParams.limit + COUNT_ITEMS_PER_PAGE });
     }
-  }
+  };
 
   const handleChangeFilter = (filterValues: TrainingFilter) => {
     let sortOrder: TrainingQueryParams['sortOrder'] = 'asc';
@@ -66,16 +66,16 @@ function TrainingCatalogScreen(): JSX.Element {
         <div className="container">
           <div className="inner-page__wrapper">
             <h1 className="visually-hidden">Каталог тренировок</h1>
-            <FilterSorting 
-              allowedFilterValues={allowedFilterValues} 
-              onFilterChange={handleChangeFilter} 
-              backButtonDisplayMode={BackButtonDisplayMode.Catalog} 
+            <FilterSorting
+              allowedFilterValues={allowedFilterValues}
+              onFilterChange={handleChangeFilter}
+              backButtonDisplayMode={BackButtonDisplayMode.Catalog}
               displayMode={FilterSortingDisplayMode.GymCatalog}
             />
-            <TrainingCatalogList 
-              trainings={entities} 
-              onButtonMoreClick={handleButtonMoreClick} 
-              totalItems={totalItems} 
+            <TrainingCatalogList
+              trainings={entities}
+              onButtonMoreClick={handleButtonMoreClick}
+              totalItems={totalItems}
             />
           </div>
         </div>

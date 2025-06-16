@@ -1,5 +1,5 @@
-import { TrainingDuration } from "./training-duration.enum";
-import { TrainingType } from "./training-type.enum";
+import { TrainingDuration } from './training-duration.enum';
+import { TrainingType } from './training-type.enum';
 
 export interface TrainingQueryParams {
   sortBy?: string;

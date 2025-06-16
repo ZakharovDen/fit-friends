@@ -1,8 +1,8 @@
-import { useNavigate } from "react-router-dom";
-import { BackButtonClassName, BackButtonDisplayMode } from "./constant";
+import { useNavigate } from 'react-router-dom';
+import { BackButtonClassName, BackButtonDisplayMode } from './constant';
 
 type BackButtonProps = {
-  displayMode: BackButtonDisplayMode
+  displayMode: BackButtonDisplayMode;
 }
 
 function BackButton({ displayMode }: BackButtonProps): JSX.Element {

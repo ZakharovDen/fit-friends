@@ -1,11 +1,11 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { User } from "../../types/user/user";
-import { UserQueryParams } from "../../types/user/user-query-params";
-import { AppDispatch, State } from "../../types/state";
-import { AxiosInstance } from "axios";
-import { APIRoute } from "../const";
-import { Friend, Request } from "../../types/friend/friend";
-import { RequestStatus } from "../../types/friend/request-status.enum";
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { User } from '../../types/user/user';
+import { UserQueryParams } from '../../types/user/user-query-params';
+import { AppDispatch, State } from '../../types/state';
+import { AxiosInstance } from 'axios';
+import { APIRoute } from '../const';
+import { Friend, Request } from '../../types/friend/friend';
+import { RequestStatus } from '../../types/friend/request-status.enum';
 
 export const fetchUsersAction = createAsyncThunk<User[], UserQueryParams | undefined, {
   dispatch: AppDispatch;
@@ -87,7 +87,7 @@ export const postRequestAction = createAsyncThunk<Request, { userId: string }, {
   }
 );
 
-export const patchRequestAction = createAsyncThunk<{ id: string, status: RequestStatus }, { id: string, status: RequestStatus }, {
+export const patchRequestAction = createAsyncThunk<{ id: string; status: RequestStatus }, { id: string; status: RequestStatus }, {
   dispatch: AppDispatch;
   state: State;
   extra: AxiosInstance;

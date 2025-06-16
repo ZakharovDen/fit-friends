@@ -1,5 +1,5 @@
-import { Outlet } from "react-router-dom";
-import Header from "../header/header";
+import { Outlet } from 'react-router-dom';
+import Header from '../header/header';
 
 function LayoutMain(): JSX.Element {
   return (
@@ -7,7 +7,7 @@ function LayoutMain(): JSX.Element {
       <Header />
       <Outlet />
     </div>
-  )
+  );
 }
 
 export default LayoutMain;

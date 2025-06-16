@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
-import { AppRoute } from "../../constant";
+import { Link } from 'react-router-dom';
+import { AppRoute } from '../../constant';
 
 function AccountContentCoach(): JSX.Element {
   return (
@@ -27,7 +27,8 @@ function AccountContentCoach(): JSX.Element {
                 <use xlinkHref="#icon-bag"></use>
               </svg>
             </div><span className="thumbnail-link__text">Мои друзья</span>
-          </Link>          <Link className="thumbnail-link thumbnail-link--theme-light" to={AppRoute.MyOrders}>
+          </Link>
+          <Link className="thumbnail-link thumbnail-link--theme-light" to={AppRoute.MyOrders}>
             <div className="thumbnail-link__icon thumbnail-link__icon--theme-light">
               <svg width="30" height="26" aria-hidden="true">
                 <use xlinkHref="#icon-bag"></use>

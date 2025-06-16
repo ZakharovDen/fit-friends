@@ -1,14 +1,14 @@
-import { useState, FormEvent, useEffect } from "react";
-import { editUserAction } from "../../store/user/thunks";
-import { Sex, SexUserLabel } from "../../types/sex.enum";
-import { TrainingLevel, TrainingLevelLabel } from "../../types/training/training-level.enum";
-import { TrainingTypeLabel, TrainingType } from "../../types/training/training-type.enum";
-import { User, UserUpdate } from "../../types/user/user";
-import { UserLocation, UserLocationLabel } from "../../types/user/user-location.enum";
-import { CustomSelect } from "../custom-select/custom-select";
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import { getIsProcess, getIsSuccess } from "../../store/user/selectors";
-import { UserRole } from "../../types/user/user-role.enum";
+import { useState, FormEvent, useEffect } from 'react';
+import { editUserAction } from '../../store/user/thunks';
+import { Sex, SexUserLabel } from '../../types/sex.enum';
+import { TrainingLevel, TrainingLevelLabel } from '../../types/training/training-level.enum';
+import { TrainingTypeLabel, TrainingType } from '../../types/training/training-type.enum';
+import { User, UserUpdate } from '../../types/user/user';
+import { UserLocation, UserLocationLabel } from '../../types/user/user-location.enum';
+import { CustomSelect } from '../custom-select/custom-select';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { getIsProcess, getIsSuccess } from '../../store/user/selectors';
+import { UserRole } from '../../types/user/user-role.enum';
 
 function isSex(value: string): value is Sex {
   return Object.values(Sex).includes(value as Sex);
@@ -23,7 +23,7 @@ function isLevel(value: string): value is TrainingLevel {
 }
 
 type UserInfoProps = {
-  user: User
+  user: User;
 }
 
 function UserInfo({ user }: UserInfoProps): JSX.Element {
@@ -50,16 +50,16 @@ function UserInfo({ user }: UserInfoProps): JSX.Element {
     if (!isEdited || !userData.questionnaire) {
       return;
     }
-    setUserData({ ...userData, questionnaire: { ...userData.questionnaire, isReady: (userData.questionnaire?.isReady) ? false : true } });
-  }
+    setUserData({ ...userData, questionnaire: { ...userData.questionnaire, isReady: !(userData.questionnaire?.isReady) } });
+  };
 
   const handleChangeName = (evt: React.ChangeEvent<HTMLInputElement>) => {
     setUserData({ ...userData, name: evt.target.value });
-  }
+  };
 
   const handleChangeDescription = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
     setUserData({ ...userData, description: evt.target.value });
-  }
+  };
 
   const handleLocationSelect = (location: string) => {
     if (isLocation(location)) {
@@ -71,7 +71,7 @@ function UserInfo({ user }: UserInfoProps): JSX.Element {
     if (isSex(sex)) {
       setUserData({ ...userData, sex: sex });
     }
-  }
+  };
 
   const handleLevelSelect = (level: string) => {
     if (!isEdited || !userData.questionnaire) {
@@ -80,7 +80,7 @@ function UserInfo({ user }: UserInfoProps): JSX.Element {
     if (isLevel(level)) {
       setUserData({ ...userData, questionnaire: { ...userData.questionnaire, level: level } });
     }
-  }
+  };
 
   const handleTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = event.target;
@@ -92,18 +92,18 @@ function UserInfo({ user }: UserInfoProps): JSX.Element {
     } else {
       setUserData({ ...userData, questionnaire: { ...userData.questionnaire, types: userData.questionnaire.types.filter((type) => type !== value) } });
     }
-  }
+  };
 
   const handleFormSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     dispatch(editUserAction(userData));
-  }
+  };
 
   const handleEditForm = (evt: React.MouseEvent<HTMLButtonElement>) => {
     evt.stopPropagation();
     evt.preventDefault();
     setIsEdited(true);
-  }
+  };
 
   return (
     <section className="user-info">
@@ -125,28 +125,32 @@ function UserInfo({ user }: UserInfoProps): JSX.Element {
       </div>
       <form className="user-info__form" method="post" onSubmit={handleFormSubmit}>
         {(isEdited)
-          ? (<button className="btn-flat btn-flat--underlined user-info-edit__save-button" type="submit" aria-label="Сохранить">
-            <svg width="12" height="12" aria-hidden="true">
-              <use xlinkHref="#icon-edit"></use>
-            </svg><span>Сохранить</span>
-          </button>)
-          : (<button className="btn-flat btn-flat--underlined user-info__edit-button" type="button" aria-label="Редактировать" onClick={handleEditForm}>
-            <svg width="12" height="12" aria-hidden="true">
-              <use xlinkHref="#icon-edit"></use>
-            </svg><span>Редактировать</span>
-          </button>
+          ? (
+            <button className="btn-flat btn-flat--underlined user-info-edit__save-button" type="submit" aria-label="Сохранить">
+              <svg width="12" height="12" aria-hidden="true">
+                <use xlinkHref="#icon-edit"></use>
+              </svg><span>Сохранить</span>
+            </button>)
+          : (
+            <button className="btn-flat btn-flat--underlined user-info__edit-button" type="button" aria-label="Редактировать" onClick={handleEditForm}>
+              <svg width="12" height="12" aria-hidden="true">
+                <use xlinkHref="#icon-edit"></use>
+              </svg><span>Редактировать</span>
+            </button>
           )}
         <div className="user-info__section">
           <h2 className="user-info__title">Обо мне</h2>
           <div className="custom-input custom-input--readonly user-info__input">
-            <label><span className="custom-input__label">Имя</span><span className="custom-input__wrapper">
-              <input
-                type="text"
-                name="name"
-                value={userData.name}
-                disabled={!isEdited}
-                onChange={handleChangeName}
-              /></span>
+            <label><span className="custom-input__label">Имя</span>
+              <span className="custom-input__wrapper">
+                <input
+                  type="text"
+                  name="name"
+                  value={userData.name}
+                  disabled={!isEdited}
+                  onChange={handleChangeName}
+                />
+              </span>
             </label>
           </div>
           <div className="custom-textarea custom-textarea--readonly user-info__textarea">
@@ -168,10 +172,11 @@ function UserInfo({ user }: UserInfoProps): JSX.Element {
               <span className="custom-toggle__icon">
                 <svg width="9" height="6" aria-hidden="true">
                   <use xlinkHref="#arrow-check"></use>
-                </svg></span>
-                <span className="custom-toggle__label">
-                  {(user.role === UserRole.Coach) ? `Готов тренировать` : `Готов к тренировке`}
-                </span>
+                </svg>
+              </span>
+              <span className="custom-toggle__label">
+                {(user.role === UserRole.Coach) ? 'Готов тренировать' : 'Готов к тренировке'}
+              </span>
             </label>
           </div>
         </div>

@@ -49,6 +49,6 @@ export const feedback = createSlice({
         state.feedbacks.push(action.payload);
         state.isProcess = false;
         state.isSuccess = true;
-      })
+      });
   },
 });

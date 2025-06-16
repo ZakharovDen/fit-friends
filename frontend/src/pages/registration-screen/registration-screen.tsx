@@ -1,11 +1,11 @@
-import { ChangeEvent, FormEvent, useState } from "react";
-import { useAppDispatch } from "../../hooks";
-import { registerAction } from "../../store/user/thunks";
-import { SexUserLabel } from "../../types/sex.enum";
-import { UserLocationLabel } from "../../types/user/user-location.enum";
-import { CustomSelect } from "../../components/custom-select/custom-select";
-import { UserRoleIcon, UserRoleLabel } from "./constant";
-import { UserRole } from "../../types/user/user-role.enum";
+import { ChangeEvent, FormEvent, useState } from 'react';
+import { useAppDispatch } from '../../hooks';
+import { registerAction } from '../../store/user/thunks';
+import { SexUserLabel } from '../../types/sex.enum';
+import { UserLocationLabel } from '../../types/user/user-location.enum';
+import { CustomSelect } from '../../components/custom-select/custom-select';
+import { UserRoleIcon, UserRoleLabel } from './constant';
+import { UserRole } from '../../types/user/user-role.enum';
 
 function isRole(value: string): value is UserRole {
   return Object.values(UserRole).includes(value as UserRole);
@@ -60,7 +60,7 @@ function RegistrationScreen(): JSX.Element {
         setRole(value);
       }
     }
-  }
+  };
 
   return (
     <main>
@@ -102,18 +102,27 @@ function RegistrationScreen(): JSX.Element {
                   </div>
                   <div className="sign-up__data">
                     <div className="custom-input">
-                      <label><span className="custom-input__label">Имя</span><span className="custom-input__wrapper">
-                        <input type="text" name="name" /></span>
+                      <label>
+                        <span className="custom-input__label">Имя</span>
+                        <span className="custom-input__wrapper">
+                          <input type="text" name="name" />
+                        </span>
                       </label>
                     </div>
                     <div className="custom-input">
-                      <label><span className="custom-input__label">E-mail</span><span className="custom-input__wrapper">
-                        <input type="email" name="email" /></span>
+                      <label>
+                        <span className="custom-input__label">E-mail</span>
+                        <span className="custom-input__wrapper">
+                          <input type="email" name="email" />
+                        </span>
                       </label>
                     </div>
                     <div className="custom-input">
-                      <label><span className="custom-input__label">Дата рождения</span><span className="custom-input__wrapper">
-                        <input type="date" name="birthday" max="2099-12-31" /></span>
+                      <label>
+                        <span className="custom-input__label">Дата рождения</span>
+                        <span className="custom-input__wrapper">
+                          <input type="date" name="birthday" max="2099-12-31" />
+                        </span>
                       </label>
                     </div>
                     <CustomSelect
@@ -123,8 +132,11 @@ function RegistrationScreen(): JSX.Element {
                       onChange={handleLocationSelect}
                     />
                     <div className="custom-input">
-                      <label><span className="custom-input__label">Пароль</span><span className="custom-input__wrapper">
-                        <input type="password" name="password" autoComplete="off" /></span>
+                      <label>
+                        <span className="custom-input__label">Пароль</span>
+                        <span className="custom-input__wrapper">
+                          <input type="password" name="password" autoComplete="off" />
+                        </span>
                       </label>
                     </div>
                     <div className="sign-up__radio"><span className="sign-up__label">Пол</span>
@@ -145,7 +157,7 @@ function RegistrationScreen(): JSX.Element {
                     <h2 className="sign-up__legend">Выберите роль</h2>
                     <div className="role-selector sign-up__role-selector">
                       {Object.entries(UserRoleLabel).map(([key, value]) => (
-                        <div className="role-btn">
+                        <div className="role-btn" key={key}>
                           <label>
                             <input
                               className="visually-hidden"
@@ -158,7 +170,8 @@ function RegistrationScreen(): JSX.Element {
                             <span className="role-btn__icon">
                               <svg width="12" height="13" aria-hidden="true">
                                 <use xlinkHref={UserRoleIcon[key as UserRole]}></use>
-                              </svg></span><span className="role-btn__btn">{value}</span>
+                              </svg>
+                            </span><span className="role-btn__btn">{value}</span>
                           </label>
                         </div>
                       ))}

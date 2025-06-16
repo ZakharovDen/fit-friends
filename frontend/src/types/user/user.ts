@@ -1,9 +1,9 @@
-import { Sex } from "../sex.enum";
-import { TrainingDuration } from "../training/training-duration.enum";
-import { TrainingLevel } from "../training/training-level.enum";
-import { TrainingType } from "../training/training-type.enum";
-import { UserLocation } from "./user-location.enum";
-import { UserRole } from "./user-role.enum";
+import { Sex } from '../sex.enum';
+import { TrainingDuration } from '../training/training-duration.enum';
+import { TrainingLevel } from '../training/training-level.enum';
+import { TrainingType } from '../training/training-type.enum';
+import { UserLocation } from './user-location.enum';
+import { UserRole } from './user-role.enum';
 
 export type Questionnaire = {
   level: TrainingLevel;
@@ -37,6 +37,6 @@ export type LoggedUser = User & {
 
 export type UserAuth = Pick<User, 'email'> & { password: string };
 
-export type UserRegister =  User &  { password: string };
+export type UserRegister = User & { password: string };
 
 export type UserUpdate = Omit<User, 'id' | 'email' | 'dateOfBirth' | 'role' | 'createdAt' | 'backgroundImage'>;

@@ -74,7 +74,7 @@ const getQuery = (queryParams: TrainingQueryParams) => {
     query += `&userId=${userId}`;
   }
   return query;
-}
+};
 
 export const fetchTrainingsAction = createAsyncThunk<TrainingsWithPagination, TrainingQueryParams, {
   dispatch: AppDispatch;

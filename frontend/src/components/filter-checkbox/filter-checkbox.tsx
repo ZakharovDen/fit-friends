@@ -53,6 +53,6 @@ function FilterCheckbox({
       </ul>
     </div>
   );
-};
+}
 
 export default FilterCheckbox;

@@ -96,7 +96,9 @@ function SliderRange({
 
   const calculateValue = useCallback(
     (position: number) => {
-      if (!scaleRef.current) return minRangeValue;
+      if (!scaleRef.current) {
+        return minRangeValue;
+      }
       const scaleWidth = scaleRef.current.offsetWidth;
       const value =
         (position / scaleWidth) * (maxRangeValue - minRangeValue) +

@@ -1,12 +1,12 @@
-import { Link } from "react-router-dom";
-import { Training } from "../../types/training/training";
-import { TrainingTypeLabel } from "../../types/training/training-type.enum";
-import { TrainingItemDisplayMode, TrainingItemSettings } from "./constant";
-import { AppRoute } from "../../constant";
+import { Link } from 'react-router-dom';
+import { Training } from '../../types/training/training';
+import { TrainingTypeLabel } from '../../types/training/training-type.enum';
+import { TrainingItemDisplayMode, TrainingItemSettings } from './constant';
+import { AppRoute } from '../../constant';
 
 type TrainingItemProps = {
-  training: Training,
-  displayMode: TrainingItemDisplayMode
+  training: Training;
+  displayMode: TrainingItemDisplayMode;
 }
 
 function TrainingItem({ training, displayMode }: TrainingItemProps): JSX.Element {

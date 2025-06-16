@@ -1,8 +1,8 @@
-import { Sex } from "../sex.enum";
-import { User } from "../user/user";
-import { TrainingDuration } from "./training-duration.enum";
-import { TrainingLevel } from "./training-level.enum";
-import { TrainingType } from "./training-type.enum";
+import { Sex } from '../sex.enum';
+import { User } from '../user/user';
+import { TrainingDuration } from './training-duration.enum';
+import { TrainingLevel } from './training-level.enum';
+import { TrainingType } from './training-type.enum';
 
 export type Training = {
   id: string;

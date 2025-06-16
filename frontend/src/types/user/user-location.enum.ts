@@ -12,4 +12,4 @@ export const UserLocationLabel: Record<UserLocation, string> = {
   [UserLocation.Udelnaya]: 'Удельная',
   [UserLocation.Zvezdnaya]: 'Звёздная',
   [UserLocation.Sportivnaya]: 'Спортивная',
-}
+};

@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState } from "react";
-import { Training } from "../../types/training/training";
-import { TrainingItemDisplayMode } from "../training-item/constant";
-import TrainingItem from "../training-item/training-item";
+import { useEffect, useRef, useState } from 'react';
+import { Training } from '../../types/training/training';
+import { TrainingItemDisplayMode } from '../training-item/constant';
+import TrainingItem from '../training-item/training-item';
 
 type TrainingCatalogListProps = {
-  trainings: Training[],
-  onButtonMoreClick: () => void,
-  totalItems: number,
+  trainings: Training[];
+  onButtonMoreClick: () => void;
+  totalItems: number;
 }
 
 function TrainingCatalogList({ trainings, onButtonMoreClick, totalItems }: TrainingCatalogListProps): JSX.Element {
@@ -15,7 +15,7 @@ function TrainingCatalogList({ trainings, onButtonMoreClick, totalItems }: Train
 
   const handleButtonMoreClick = () => {
     onButtonMoreClick();
-  }
+  };
 
   const handleButtonToTopClick = () => {
     if (trainingListRef.current) {
@@ -27,7 +27,7 @@ function TrainingCatalogList({ trainings, onButtonMoreClick, totalItems }: Train
     if (trainings.length > 0) {
       setShowMoreButton(totalItems > trainings.length);
     }
-  }, [trainings]);
+  }, [totalItems, trainings]);
 
   return (
     <div className="training-catalog">

@@ -1,12 +1,12 @@
-import { Link } from "react-router-dom";
-import { TrainingTypeLabel } from "../../types/training/training-type.enum";
-import { UserLocationLabel } from "../../types/user/user-location.enum";
-import { AppRoute } from "../../constant";
-import { UserRole } from "../../types/user/user-role.enum";
-import { Friend } from "../../types/friend/friend";
-import { RequestStatus } from "../../types/friend/request-status.enum";
-import { useAppDispatch } from "../../hooks";
-import { patchRequestAction, postRequestAction } from "../../store/friends/thunks";
+import { Link } from 'react-router-dom';
+import { TrainingTypeLabel } from '../../types/training/training-type.enum';
+import { UserLocationLabel } from '../../types/user/user-location.enum';
+import { AppRoute } from '../../constant';
+import { UserRole } from '../../types/user/user-role.enum';
+import { Friend } from '../../types/friend/friend';
+import { RequestStatus } from '../../types/friend/request-status.enum';
+import { useAppDispatch } from '../../hooks';
+import { patchRequestAction, postRequestAction } from '../../store/friends/thunks';
 
 type FriendsListItemProps = {
   friend: Friend;
@@ -25,55 +25,63 @@ function FriendsListItem({ friend, userRole }: FriendsListItemProps): JSX.Elemen
       id: incoming.id,
       status
     }));
-  }
-  
+  };
+
   const handleCreateRequest = () => {
     dispatch(postRequestAction({
       userId: id
     }));
-  }
-  
+  };
+
   const trainingCaption = (userRole === UserRole.Coach)
     ? 'Запрос на персональную тренировку'
     : 'Запрос на совместную тренировку';
   let requestElement: JSX.Element = <></>;
   if (incoming.status === RequestStatus.pending) {
     requestElement =
-      <div className="thumbnail-friend__request-status thumbnail-friend__request-status--role-user">
-        <p className="thumbnail-friend__request-text">{trainingCaption}</p>
-        <div className="thumbnail-friend__button-wrapper">
-          <button
-            className="btn btn--medium btn--dark-bg thumbnail-friend__button"
-            type="button"
-            onClick={() => handleAcceptRequest(RequestStatus.accepted)}
-          >
+      (
+        <div className="thumbnail-friend__request-status thumbnail-friend__request-status--role-user">
+          <p className="thumbnail-friend__request-text">{trainingCaption}</p>
+          <div className="thumbnail-friend__button-wrapper">
+            <button
+              className="btn btn--medium btn--dark-bg thumbnail-friend__button"
+              type="button"
+              onClick={() => handleAcceptRequest(RequestStatus.accepted)}
+            >
             Принять
-          </button>
-          <button
-            className="btn btn--medium btn--outlined btn--dark-bg thumbnail-friend__button"
-            type="button"
-            onClick={() => handleAcceptRequest(RequestStatus.rejected)}
-          >
+            </button>
+            <button
+              className="btn btn--medium btn--outlined btn--dark-bg thumbnail-friend__button"
+              type="button"
+              onClick={() => handleAcceptRequest(RequestStatus.rejected)}
+            >
             Отклонить
-          </button>
+            </button>
+          </div>
         </div>
-      </div>;
+      );
   } else if (outgoing.status === RequestStatus.pending) {
     requestElement =
-      <div className="thumbnail-friend__request-status thumbnail-friend__request-status--role-user">
-        <p className="thumbnail-friend__request-text">{`${trainingCaption} отправлен`}</p>
-      </div>;
+      (
+        <div className="thumbnail-friend__request-status thumbnail-friend__request-status--role-user">
+          <p className="thumbnail-friend__request-text">{`${trainingCaption} отправлен`}</p>
+        </div>
+      );
   } else if (outgoing.status === RequestStatus.accepted || incoming.status === RequestStatus.accepted) {
     requestElement =
-      <div className="thumbnail-friend__request-status thumbnail-friend__request-status--role-user">
-        <p className="thumbnail-friend__request-text">{`${trainingCaption} принят`}</p>
-      </div>;
+      (
+        <div className="thumbnail-friend__request-status thumbnail-friend__request-status--role-user">
+          <p className="thumbnail-friend__request-text">{`${trainingCaption} принят`}</p>
+        </div>
+      );
   } else if (outgoing.status === RequestStatus.rejected || incoming.status === RequestStatus.rejected) {
     requestElement =
-      <div className="thumbnail-friend__request-status thumbnail-friend__request-status--role-user">
-        <p className="thumbnail-friend__request-text">{`${trainingCaption} отклонён`}</p>
-      </div>
-  };
+      (
+        <div className="thumbnail-friend__request-status thumbnail-friend__request-status--role-user">
+          <p className="thumbnail-friend__request-text">{`${trainingCaption} отклонён`}</p>
+        </div>
+      );
+  }
 
   const disableInvite = !questionnaire?.isReady || incoming || outgoing;
 
@@ -102,23 +110,28 @@ function FriendsListItem({ friend, userRole }: FriendsListItemProps): JSX.Elemen
           </Link>
           <ul className="thumbnail-friend__training-types-list">
             {questionnaire?.types.map((type) =>
-              <li key={type}>
-                <div className="hashtag thumbnail-friend__hashtag">
-                  <span>{`#${TrainingTypeLabel[type].toLowerCase()}`}</span>
-                </div>
-              </li>
+              (
+                <li key={type}>
+                  <div className="hashtag thumbnail-friend__hashtag">
+                    <span>{`#${TrainingTypeLabel[type].toLowerCase()}`}</span>
+                  </div>
+                </li>
+              )
             )}
           </ul>
           <div className="thumbnail-friend__activity-bar">
             {(questionnaire?.isReady)
-              ? <div className="thumbnail-friend__ready-status thumbnail-friend__ready-status--is-ready">
+              ?
+              <div className="thumbnail-friend__ready-status thumbnail-friend__ready-status--is-ready">
                 <span>Готов к&nbsp;тренировке</span>
               </div>
-              : <div className="thumbnail-friend__ready-status thumbnail-friend__ready-status--is-not-ready">
+              :
+              <div className="thumbnail-friend__ready-status thumbnail-friend__ready-status--is-not-ready">
                 <span>Не&nbsp;готов к&nbsp;тренировке</span>
               </div>}
             {(userRole === UserRole.Sportsman)
-              ? <button
+              ?
+              <button
                 className={`thumbnail-friend__invite-button ${disableInvite && 'is-disabled'}`}
                 type="button"
                 onClick={handleCreateRequest}

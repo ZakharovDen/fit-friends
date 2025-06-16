@@ -1,14 +1,14 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { CustomSelect } from "../../components/custom-select/custom-select";
-import { TrainingLevel, TrainingLevelLabel } from "../../types/training/training-level.enum";
-import { TrainingCrateData } from "../../types/training/training";
-import { TrainingDuration } from "../../types/training/training-duration.enum";
-import { TrainingType, TrainingTypeLabel } from "../../types/training/training-type.enum";
-import { Sex, SexCreateTrainingLabel } from "../../types/sex.enum";
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import { postTrainingAction } from "../../store/training/thunks";
-import { useNavigate } from "react-router-dom";
-import { getTrainingSaveIsProcess, getTrainingSaveIsSuccess } from "../../store/training/selectors";
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { CustomSelect } from '../../components/custom-select/custom-select';
+import { TrainingLevel, TrainingLevelLabel } from '../../types/training/training-level.enum';
+import { TrainingCrateData } from '../../types/training/training';
+import { TrainingDuration } from '../../types/training/training-duration.enum';
+import { TrainingType, TrainingTypeLabel } from '../../types/training/training-type.enum';
+import { Sex, SexCreateTrainingLabel } from '../../types/sex.enum';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { postTrainingAction } from '../../store/training/thunks';
+import { useNavigate } from 'react-router-dom';
+import { getTrainingSaveIsProcess, getTrainingSaveIsSuccess } from '../../store/training/selectors';
 
 function isLevel(value: string): value is TrainingLevel {
   return Object.values(TrainingLevel).includes(value as TrainingLevel);
@@ -38,19 +38,19 @@ function CreateTrainingScreen(): JSX.Element {
     if (isLevel(level)) {
       setTrainingData({ ...trainingData, level });
     }
-  }
+  };
 
   const handleDurationSelect = (duration: string) => {
     if (isDuration(duration)) {
       setTrainingData({ ...trainingData, duration });
     }
-  }
+  };
 
   const handleTypeSelect = (type: string) => {
     if (isType(type)) {
       setTrainingData({ ...trainingData, type });
     }
-  }
+  };
 
   const handleSexSelect = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = evt.target;
@@ -60,12 +60,12 @@ function CreateTrainingScreen(): JSX.Element {
     if (isSex(value)) {
       setTrainingData({ ...trainingData, sex: value });
     }
-  }
+  };
 
   const handleChangeDescription = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = evt.target;
-    setTrainingData({ ...trainingData, description: value })
-  }
+    setTrainingData({ ...trainingData, description: value });
+  };
 
   const handleFormSubmit = async (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
@@ -93,7 +93,7 @@ function CreateTrainingScreen(): JSX.Element {
     if (isSuccess && !isProcess) {
       navigate(-1);
     }
-  }, [isProcess, isSuccess]);
+  }, [isProcess, isSuccess, navigate]);
 
   return (
     <main>
@@ -110,8 +110,10 @@ function CreateTrainingScreen(): JSX.Element {
                     <div className="create-training__block">
                       <h2 className="create-training__legend">Название тренировки</h2>
                       <div className="custom-input create-training__input">
-                        <label><span className="custom-input__wrapper">
-                          <input type="text" name="training-name" /></span>
+                        <label>
+                          <span className="custom-input__wrapper">
+                            <input type="text" name="training-name" />
+                          </span>
                         </label>
                       </div>
                     </div>
@@ -125,8 +127,10 @@ function CreateTrainingScreen(): JSX.Element {
                           onChange={handleTypeSelect}
                         />
                         <div className="custom-input custom-input--with-text-right">
-                          <label><span className="custom-input__label">Сколько калорий потратим</span><span className="custom-input__wrapper">
-                            <input type="number" name="calories" /><span className="custom-input__text">ккал</span></span>
+                          <label><span className="custom-input__label">Сколько калорий потратим</span>
+                            <span className="custom-input__wrapper">
+                              <input type="number" name="calories" /><span className="custom-input__text">ккал</span>
+                            </span>
                           </label>
                         </div>
                         <CustomSelect
@@ -136,8 +140,10 @@ function CreateTrainingScreen(): JSX.Element {
                           onChange={handleDurationSelect}
                         />
                         <div className="custom-input custom-input--with-text-right">
-                          <label><span className="custom-input__label">Стоимость тренировки</span><span className="custom-input__wrapper">
-                            <input type="number" name="price" /><span className="custom-input__text">₽</span></span>
+                          <label><span className="custom-input__label">Стоимость тренировки</span>
+                            <span className="custom-input__wrapper">
+                              <input type="number" name="price" /><span className="custom-input__text">₽</span>
+                            </span>
                           </label>
                         </div>
                         <CustomSelect
@@ -180,13 +186,15 @@ function CreateTrainingScreen(): JSX.Element {
                     <div className="create-training__block">
                       <h2 className="create-training__legend">Загрузите видео-тренировку</h2>
                       <div className="drag-and-drop create-training__drag-and-drop">
-                        <label><span className="drag-and-drop__label" tabIndex={0}>
-                          {selectedFile
-                            ? `Выбран файл: ${selectedFile.name}`
-                            : 'Загрузите сюда файлы формата MOV, AVI или MP4'}
-                          <svg width="20" height="20" aria-hidden="true">
-                            <use xlinkHref="#icon-import-video"></use>
-                          </svg></span>
+                        <label>
+                          <span className="drag-and-drop__label" tabIndex={0}>
+                            {selectedFile
+                              ? `Выбран файл: ${selectedFile.name}`
+                              : 'Загрузите сюда файлы формата MOV, AVI или MP4'}
+                            <svg width="20" height="20" aria-hidden="true">
+                              <use xlinkHref="#icon-import-video"></use>
+                            </svg>
+                          </span>
                           <input type="file" name="import" tabIndex={-1} accept=".mov, .avi, .mp4" onChange={handleFileChange} />
                         </label>
                       </div>

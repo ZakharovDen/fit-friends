@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
-import { BackButtonDisplayMode } from "../../components/back-button/constant";
-import { FilterSortingDisplayMode } from "../../components/filter-sorting/constant";
-import FilterSorting from "../../components/filter-sorting/filter-sorting";
-import { useAppDispatch, useAppSelector } from "../../hooks";
-import { getAllowedFilterValues, getTrainings } from "../../store/training/selectors";
-import { TrainingFilter } from "../../types/filter/training-filter";
-import { TrainingQueryParams } from "../../types/training/training-query-params";
-import { COUNT_ITEMS_PER_PAGE } from "../training-catalog-screen/constant";
-import TrainingCatalogList from "../../components/training-catalog/training-catalog-list";
-import { fetchMyTrainingsAction, getFilterValuesAction } from "../../store/training/thunks";
-import { getUser } from "../../store/user/selectors";
+import { useEffect, useState } from 'react';
+import { BackButtonDisplayMode } from '../../components/back-button/constant';
+import { FilterSortingDisplayMode } from '../../components/filter-sorting/constant';
+import FilterSorting from '../../components/filter-sorting/filter-sorting';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { getAllowedFilterValues, getTrainings } from '../../store/training/selectors';
+import { TrainingFilter } from '../../types/filter/training-filter';
+import { TrainingQueryParams } from '../../types/training/training-query-params';
+import { COUNT_ITEMS_PER_PAGE } from '../training-catalog-screen/constant';
+import TrainingCatalogList from '../../components/training-catalog/training-catalog-list';
+import { fetchMyTrainingsAction, getFilterValuesAction } from '../../store/training/thunks';
+import { getUser } from '../../store/user/selectors';
 
 function MyTrainingsScreen(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -44,7 +44,7 @@ function MyTrainingsScreen(): JSX.Element {
 
   useEffect(() => {
     dispatch(getFilterValuesAction(user?.id));
-  }, [dispatch]);
+  }, [dispatch, user?.id]);
 
   useEffect(() => {
     dispatch(fetchMyTrainingsAction(queryParams));
